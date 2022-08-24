@@ -1,0 +1,67 @@
+{
+  "name": "@nuxthq/studio",
+  "version": "0.1.0",
+  "homepage": "https://github.com/nuxtlabs/studio.nuxt.com/tree/dev/modules/studio",
+  "repository": "https://github.com/nuxtlabs/studio.nuxt.com",
+  "keywords": [
+    "nuxt",
+    "studio"
+  ],
+  "license": "UNLICENSED",
+  "files": [
+    "ui",
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
+    }
+  },
+  "main": "./dist/module.cjs",
+  "types": "./dist/types.d.ts",
+  "scripts": {
+    "play": "nuxi dev playground",
+    "dev": "nuxi dev ui",
+    "dev:prepare": "nuxi prepare ui",
+    "build": "yarn dev:prepare && yarn build:module && yarn build:ui",
+    "build:ui": "NITRO_PRESET=node nuxi build ui",
+    "build:module": "nuxt-module-build"
+  },
+  "dependencies": {
+    "@nuxt/kit": "npm:@nuxt/kit-edge@latest",
+    "nuxt-component-meta": "^0.1.9"
+  },
+  "devDependencies": {
+    "@milkdown/core": "^6.3.2",
+    "@milkdown/ctx": "^6.3.2",
+    "@milkdown/plugin-collaborative": "^6.3.2",
+    "@milkdown/plugin-cursor": "^6.3.2",
+    "@milkdown/plugin-emoji": "^6.3.2",
+    "@milkdown/plugin-history": "^6.3.2",
+    "@milkdown/plugin-listener": "^6.3.2",
+    "@milkdown/plugin-math": "^6.3.2",
+    "@milkdown/plugin-slash": "^6.3.2",
+    "@milkdown/plugin-tooltip": "^6.3.2",
+    "@milkdown/plugin-trailing": "^6.3.2",
+    "@milkdown/preset-commonmark": "^6.3.2",
+    "@milkdown/preset-gfm": "^6.3.2",
+    "@milkdown/prose": "^6.3.2",
+    "@milkdown/theme-pack-helper": "^6.3.2",
+    "@milkdown/utils": "^6.3.2",
+    "@milkdown/vue": "^6.3.2",
+    "@nuxt-themes/elements-edge": "^0.0.1-ac24120",
+    "@nuxt/content": "npm:@nuxt/content-edge@latest",
+    "@nuxt/module-builder": "^0.1.7",
+    "@nuxthq/ui": "npm:@nuxthq/ui-edge@latest",
+    "jiti": "^1.14.0",
+    "nuxt": "npm:nuxt3@latest",
+    "remark-mdc": "^1.0.4",
+    "shiki-es": "^0.1.2",
+    "socket.io-client": "^4.5.1",
+    "splitpanes": "^3.1.1",
+    "y-websocket": "^1.4.3",
+    "yjs": "^13.5.40"
+  }
+}

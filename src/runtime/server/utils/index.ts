@@ -1,0 +1,1 @@
+export { contentSource } from './storage'
