@@ -1,10 +1,10 @@
 # Nuxt Studio
 
-[![npm version][npm-version-src]][npm-version-href]
+<!-- [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![Github Actions CI][github-actions-ci-src]][github-actions-ci-href]
 [![Codecov][codecov-src]][codecov-href]
-[![License][license-src]][license-href]
+[![License][license-src]][license-href] -->
 
 A new experience to build content-driven website with Nuxt.
 
@@ -75,8 +75,8 @@ Copyright (c) NuxtLabs
 [npm-downloads-src]: https://img.shields.io/npm/dm/@nuxthq/studio.svg
 [npm-downloads-href]: https://npmjs.com/package/@nuxthq/studio
 
-[github-actions-ci-src]: https://github.com/nuxtlabs/studio/workflows/ci/badge.svg
-[github-actions-ci-href]: https://github.com/nuxtlabs/studio/actions?query=workflow%3Aci
+[github-actions-ci-src]: https://github.com/nuxtlabs/studio/workflows/studio/badge.svg
+[github-actions-ci-href]: https://github.com/nuxtlabs/studio/actions/workflows/studio.yml
 
 [codecov-src]: https://img.shields.io/codecov/c/github/@nuxthq/studio.svg
 [codecov-href]: https://codecov.io/gh/@nuxthq/studio
