@@ -1,17 +1,11 @@
 name: Publish Studio (dev)
-
 on:
   push:
     branches:
       - dev
     paths:
-      - '.github/workflows/studio.yaml'
-      - 'modules/studio/**'
-
-defaults:
-  run:
-    working-directory: modules/studio
-
+      - '.github/workflows/studio.yml'
+      - '**'
 jobs:
   ci:
     strategy:
@@ -30,9 +24,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
-          cache-dependency-path: |
-            yarn.lock
-            modules/studio/yarn.lock
+          cache-dependency-path: yarn.lock
           cache: 'yarn'
 
       - name: Install dependencies
