@@ -1,56 +1,32 @@
-<script lang="ts">
-import { defineComponent, defineAsyncComponent, computed, useAttrs } from 'vue'
+<script setup lang="ts">
 import type { UnwrapOptions } from '../composables/useEditor/types'
+import { VueEditor } from '@milkdown/vue'
+import { useEditor } from '../composables/useEditor'
 
-export default defineComponent({
+const props = defineProps({
+  content: {
+    type: Object as () => UnwrapOptions['content'],
+    required: true
+  },
   components: {
-    VueEditor: defineAsyncComponent(async () => {
-      const { VueEditor } = await import('@milkdown/vue')
-      return VueEditor
-    })
-  },
-  inheritAttrs: false,
-  props: {
-    content: {
-      type: Object as () => UnwrapOptions['content'],
-      required: true
-    },
-    components: {
-      type: Array as () => UnwrapOptions['components'],
-      default: () => []
-    }
-  },
-  emits: ['update'],
-  async setup (props, { emit }) {
-    const attrs = useAttrs()
-
-    if (process.server) {
-      return { editor: null }
-    }
-
-    const { useEditor } = await import('../composables/useEditor')
-
-    const editor = useEditor({
-      components: computed(() => [...props.components]),
-      content: computed(() => props.content),
-      onChanged: (markdown: string) => emit('update', markdown)
-    })
-
-    return {
-      attrs,
-      editor
-    }
+    type: Array as () => UnwrapOptions['components'],
+    default: () => []
   }
+})
+
+const emit = defineEmits<{
+  (event: 'update', markdown:string): void
+}>()
+
+const editor = useEditor({
+  components: computed(() => [...props.components]),
+  content: computed(() => props.content),
+  onChanged: (markdown: string) => emit('update', markdown)
 })
 </script>
 
 <template>
-  <ClientOnly>
-    <VueEditor v-if="editor" v-bind="{ ...attrs, editor }" />
-    <template #fallback>
-      <slot name="loading" />
-    </template>
-  </ClientOnly>
+  <VueEditor :editor="editor" />
 </template>
 
 <style>
