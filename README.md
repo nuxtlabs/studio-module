@@ -56,7 +56,7 @@ The module will expose the Studio UI in development on `/_studio/`.
 
 In this directory, after running `yarn install`:
 - Run `yarn play` to start the playground, you can extends both [content-wind](https://github.com/Atinux/content-wind) or [docus](https://github.com/nuxt-themes/docus) so far.
-- Copy `ui/.env.example` to `ui/.env` and ajust based on playground port',
+- Copy `ui/.env.example` to `ui/.env` and adjust based on playground port',
 - Run `yarn dev` on another terminal and open Studio url
 
 To develop the Nuxt Studio UI in your project, install `@nuxthq/studio` on your project and run `nuxi dev` in your project instead of `yarn play`.
