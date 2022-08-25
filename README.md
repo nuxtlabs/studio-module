@@ -14,12 +14,11 @@ A new experience to build content-driven website with Nuxt.
 
 ## Features
 
-- 👌&nbsp; Zero configuration to start *([see video](https://tailwindcss.nuxtjs.org/#quick-start))*
-- 🪄&nbsp; Includes [CSS Nesting](https://drafts.csswg.org/css-nesting-1/) with [postcss-nesting](https://github.com/csstools/postcss-nesting)
-- 🎨&nbsp; Discover your Tailwind Colors *([see video](https://tailwindcss.nuxtjs.org/#tailwind-colors))*
-- ⚙️&nbsp; Reference your Tailwind config in your app
-- 📦&nbsp; Extendable by [Nuxt modules](https://modules.nuxtjs.org/)
-- 🚀&nbsp; [Nuxt 3](https://v3.nuxtjs.org) support
+- 👌&nbsp; Zero configuration to start, works with any [Nuxt 3](https://v3.nuxtjs.org) project
+- 🪄&nbsp; Write your [Content](https://content.nuxt.org) with our Notion-like editor, powered by [Milkdown](https://milkdown.dev)
+- 🎨&nbsp; Edit your [Design tokens](https://design-tokens.nuxtjs.org) with generated forms
+- ⚙️&nbsp; Define your [project options](https://v3.nuxtjs.org/guide/features/app-config)
+- 🚀&nbsp; Works both in development and production with live preview
 
 ## Installation
 
@@ -76,8 +75,8 @@ Copyright (c) NuxtLabs
 [npm-downloads-src]: https://img.shields.io/npm/dm/@nuxthq/studio.svg
 [npm-downloads-href]: https://npmjs.com/package/@nuxthq/studio
 
-[github-actions-ci-src]: https://github.com/nuxt-community/tailwindcss-module/workflows/ci/badge.svg
-[github-actions-ci-href]: https://github.com/nuxt-community/tailwindcss-module/actions?query=workflow%3Aci
+[github-actions-ci-src]: https://github.com/nuxtlabs/studio/workflows/ci/badge.svg
+[github-actions-ci-href]: https://github.com/nuxtlabs/studio/actions?query=workflow%3Aci
 
 [codecov-src]: https://img.shields.io/codecov/c/github/@nuxthq/studio.svg
 [codecov-href]: https://codecov.io/gh/@nuxthq/studio
