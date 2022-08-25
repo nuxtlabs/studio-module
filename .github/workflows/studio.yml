@@ -28,7 +28,6 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        working-directory: ./
         run: yarn install --frozen-lockfile
 
       - name: Build
@@ -37,7 +36,7 @@ jobs:
       - name: Release Edge
         if: github.event_name == 'push'
         run: |
-          yarn jiti ../../.github/scripts/bump-edge
+          yarn jiti .github/scripts/bump-edge
           npm publish -q --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
