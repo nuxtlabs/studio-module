@@ -30,7 +30,7 @@ export default defineNuxtConfig({
       }
     }
   },
-  autoImports: {
+  imports: {
     dirs: [
       // Scan composables from nested directories
       'composables/useEditor',
