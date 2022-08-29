@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, defineAsyncComponent, computed, useAttrs } from 'vue'
+import { defineComponent, defineAsyncComponent, computed } from 'vue'
 import type { UnwrapOptions } from '../composables/useEditor/types'
 
 export default defineComponent({
@@ -22,8 +22,6 @@ export default defineComponent({
   },
   emits: ['update'],
   async setup (props, { emit }) {
-    const attrs = useAttrs()
-
     if (process.server) {
       return { editor: null }
     }
@@ -37,16 +35,19 @@ export default defineComponent({
     })
 
     return {
-      attrs,
       editor
     }
   }
 })
 </script>
 
+<script lang="ts">
+
+</script>
+
 <template>
   <ClientOnly>
-    <VueEditor v-if="editor" v-bind="{ ...attrs, editor }" />
+    <VueEditor v-if="editor" v-bind="{ ...$attrs, editor }" />
     <template #fallback>
       <slot name="loading" />
     </template>

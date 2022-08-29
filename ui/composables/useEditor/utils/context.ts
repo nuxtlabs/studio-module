@@ -41,6 +41,9 @@ export default (options: Options, renderVue: RenderVue): MilkdownPlugin => {
         if (prevMarkdown === null) {
           return
         }
+        if (markdown.trim() === prevMarkdown.trim()) {
+          return
+        }
 
         const { key, markdown: base } = unref(options.content) ?? { key: '', markdown: '', matter: {} }
 
