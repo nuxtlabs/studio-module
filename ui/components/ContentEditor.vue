@@ -25,6 +25,10 @@ const editor = useEditor({
 })
 </script>
 
+<script lang="ts">
+
+</script>
+
 <template>
   <VueEditor :editor="editor" />
 </template>

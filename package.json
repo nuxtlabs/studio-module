@@ -31,7 +31,8 @@
   },
   "dependencies": {
     "@nuxt/kit": "npm:@nuxt/kit-edge@latest",
-    "nuxt-component-meta": "^0.1.9"
+    "nuxt-component-meta": "^0.1.9",
+    "socket.io-client": "^4.5.1"
   },
   "devDependencies": {
     "@milkdown/core": "^6.3.2",
@@ -59,7 +60,6 @@
     "nuxt": "npm:nuxt3@latest",
     "remark-mdc": "^1.0.4",
     "shiki-es": "^0.1.2",
-    "socket.io-client": "^4.5.1",
     "splitpanes": "^3.1.1",
     "y-websocket": "^1.4.3",
     "yjs": "^13.5.40"
