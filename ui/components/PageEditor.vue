@@ -25,12 +25,17 @@
           <p><span class="font-bold u-text-gray-400 text-xs">title</span> {{ file.title }}</p>
           <p><span class="font-bold u-text-gray-400 text-xs">description</span> {{ file.description }}</p>
         </div>
-        <ContentEditor
-          :components="components"
-          :content="{ markdown: file.content, key: file.id, matter: {} }"
-          class="px-4 py-6 min-h-screen"
-          @update="onMarkdownUpdate"
-        />
+        <ClientOnly>
+          <ContentEditor
+            :components="components"
+            :content="{ markdown: file.content, key: file.id, matter: {} }"
+            class="px-4 py-6 min-h-screen"
+            @update="onMarkdownUpdate"
+          />
+          <template #fallback>
+            Loading...
+          </template>
+        </ClientOnly>
       </pane>
       <pane size="70">
         <iframe class="w-full min-h-screen" src="http://localhost:3000" />
@@ -42,6 +47,12 @@
 <!-- Content Editor -->
 <script setup lang="ts">
 import { Splitpanes, Pane } from 'splitpanes'
+
+const ContentEditor = defineAsyncComponent(async () => 
+  process.server
+    ? { render: () => null }
+    : await import('./ContentEditor.vue').then(r => r.default)
+)
 
 const file = ref({
   id: '',

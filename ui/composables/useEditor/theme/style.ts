@@ -12,7 +12,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
   const selection = css`
     .ProseMirror-selectednode {
-      outline: ${manager.get(ThemeSize, 'lineWidth')} solid ${line};
+      outline: none;
     }
 
     li.ProseMirror-selectednode {
