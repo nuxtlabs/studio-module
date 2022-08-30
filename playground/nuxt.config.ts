@@ -12,5 +12,5 @@ export default defineNuxtConfig({
     highlight: {
       theme: 'dracula'
     }
-  },
+  }
 })
