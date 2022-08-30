@@ -1,0 +1,41 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "ui",
+			"problemMatcher": [],
+			"label": "Studio UI",
+			"isBackground": true,
+			"icon": {
+				"id": "layout-sidebar-left",
+				"color": "terminal.ansiGreen"
+			}
+		},
+		{
+			"type": "npm",
+			"script": "play",
+			"problemMatcher": [],
+			"label": "Playground",
+			"isBackground": true,
+			"icon": {
+				"id": "layout-sidebar-right",
+				"color": "terminal.ansiGreen"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "start",
+			"dependsOn": [
+				"Studio UI",
+				"Playground"
+			],
+			"detail": "Start playground and UI at once",
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": {
+				"isDefault": true
+			}
+		}
+	]
+}
