@@ -5249,10 +5249,10 @@ nth-check@^2.0.1:
   optionalDependencies:
     fsevents "~2.3.2"
 
-nuxt-component-meta@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/nuxt-component-meta/-/nuxt-component-meta-0.2.1.tgz#c6af2b025005df902a02ed1ee2606edbb2129aa7"
-  integrity sha512-NBT0Ls1FdMHgYIZE/nMPJb69VKjVfdC0ypXLyEnwXTo7K0/j5IH2QTWgk//LTe0z55+ZvPFlDSnTHhwdAlM63w==
+nuxt-component-meta@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/nuxt-component-meta/-/nuxt-component-meta-0.2.2.tgz#c43967c34282bbf755760987ac4fbe793c68826e"
+  integrity sha512-qKSy4v8xJU/UvDePYbcJwTefGHQB4CEnCCishwPXN2IukeH7Qm0d3P7IIEDrFcLuz4xpx2RsI4ShDEmP6m40TQ==
   dependencies:
     "@nuxt/kit" "^3.0.0-rc.3"
     scule "^0.3.2"
