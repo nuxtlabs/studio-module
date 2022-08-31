@@ -22,8 +22,9 @@
   "main": "./dist/module.cjs",
   "types": "./dist/types.d.ts",
   "scripts": {
+    "dev": "echo 'Press F5 in VS Code instead'",
     "play": "nuxi dev playground",
-    "dev": "nuxi dev ui",
+    "ui": "PORT=3100 nuxi dev ui --open",
     "dev:prepare": "nuxi prepare ui",
     "build": "yarn dev:prepare && yarn build:module && yarn build:ui",
     "build:ui": "NITRO_PRESET=node nuxi build ui",

@@ -37,9 +37,6 @@ export default defineNuxtConfig({
       'composables/useEditorScroll'
     ]
   },
-  experimental: {
-    viteNode: true
-  },
   hooks: {
     'modules:before': () => {
       if (process.env.NODE_ENV === 'development') {
