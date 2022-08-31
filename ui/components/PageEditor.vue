@@ -28,7 +28,7 @@
         <ClientOnly>
           <ContentEditor
             :components="components"
-            :content="{ markdown: file.content, key: file.id, matter: {} }"
+            :content="content"
             class="px-4 py-6 min-h-screen"
             @update="onMarkdownUpdate"
           />
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { Splitpanes, Pane } from 'splitpanes'
 
-const ContentEditor = defineAsyncComponent(async () => 
+const ContentEditor = defineAsyncComponent(async () =>
   process.server
     ? { render: () => null }
     : await import('./ContentEditor.vue').then(r => r.default)
@@ -60,6 +60,13 @@ const file = ref({
   content: '',
   source: ''
 })
+
+const content = computed(() => ({
+  key: file.value.id,
+  markdown: file.value.content,
+  matter: {}
+}))
+
 const { apiURL } = useRuntimeConfig().public.studio
 const { data: files } = await useFetch<any[]>('/content/files', { baseURL: apiURL })
 const { data: components } = await useFetch<any[]>('/components', { baseURL: apiURL })
