@@ -18,7 +18,7 @@ export default defineComponent({
           delete props[name]
           delete props[`:${name}`]
         } else {
-          props[type === 'String' ? name : `:${name}`] = value
+          props[type === 'string' ? name : `:${name}`] = value
         }
         return { props }
       })

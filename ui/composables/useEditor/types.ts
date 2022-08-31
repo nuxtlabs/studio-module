@@ -2,7 +2,7 @@ import type { Ref, UnwrapRef } from 'vue'
 
 type MaybeRef<T> = Ref<T> |T
 
-export type PropType = 'String' | 'Number' | 'Boolean' | { type: 'Array' | 'Object' | 'Function' }
+export type PropType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 'function'
 export type PropDefaultType = String | Number | Boolean | Array<any> | Object | Function
 
 export interface ComponentPropSchema {
