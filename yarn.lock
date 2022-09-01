@@ -806,31 +806,7 @@
     unimport "^0.4.5"
     untyped "^0.4.4"
 
-"@nuxt/kit@^3.0.0-rc.3", "@nuxt/kit@^3.0.0-rc.5", "@nuxt/kit@^3.0.0-rc.6", "@nuxt/kit@^3.0.0-rc.8":
-  version "3.0.0-rc.8"
-  resolved "https://registry.yarnpkg.com/@nuxt/kit/-/kit-3.0.0-rc.8.tgz#e65e739e986abf5bfe99fa44a3bf44bacc66a35a"
-  integrity sha512-FkbO7DPkJxuLqeiWEMUI8OWXaQ4qzmreIjslIPrc9buYdB9nbJqVVzQRicxcKzF09R7VwpJTiG6onIZq6iGuDQ==
-  dependencies:
-    "@nuxt/schema" "3.0.0-rc.8"
-    c12 "^0.2.9"
-    consola "^2.15.3"
-    defu "^6.0.0"
-    globby "^13.1.2"
-    hash-sum "^2.0.0"
-    ignore "^5.2.0"
-    jiti "^1.14.0"
-    knitwork "^0.1.2"
-    lodash.template "^4.5.0"
-    mlly "^0.5.12"
-    pathe "^0.3.4"
-    pkg-types "^0.3.3"
-    scule "^0.3.2"
-    semver "^7.3.7"
-    unctx "^2.0.1"
-    unimport "^0.6.7"
-    untyped "^0.4.5"
-
-"@nuxt/kit@npm:@nuxt/kit-edge@3.0.0-rc.8-27689472.403e0e6":
+"@nuxt/kit@^3.0.0-rc.3", "@nuxt/kit@^3.0.0-rc.5", "@nuxt/kit@^3.0.0-rc.6", "@nuxt/kit@^3.0.0-rc.8", "@nuxt/kit@npm:@nuxt/kit-edge@3.0.0-rc.8-27689472.403e0e6", "@nuxt/kit@npm:@nuxt/kit-edge@latest":
   version "3.0.0-rc.8-27689472.403e0e6"
   resolved "https://registry.yarnpkg.com/@nuxt/kit-edge/-/kit-edge-3.0.0-rc.8-27689472.403e0e6.tgz#5d3838f7685c178206579fef8ca87b8fd5fe0843"
   integrity sha512-guP1uS670tK7RDzgxj/FKqZkkksooND/0PCLMbMUZs5ueXe5E7BKmEYFBc4XIw+11Dx4S8HRkVRKGDb5o+abug==
@@ -853,30 +829,6 @@
     unctx "^2.0.1"
     unimport "^0.6.7"
     untyped "^0.4.5"
-
-"@nuxt/kit@npm:@nuxt/kit-edge@latest":
-  version "3.0.0-rc.9-27700502.62e38cd"
-  resolved "https://registry.yarnpkg.com/@nuxt/kit-edge/-/kit-edge-3.0.0-rc.9-27700502.62e38cd.tgz#eff61b9c3b1d09bef2c3b313fb204df7ffcc11f2"
-  integrity sha512-Hz33TrQc4LfmwpxFv43ScqKEKBPtFyWLu0+eXspo/9iLshq3LNjcf0ugJ6CZeKRC8VawS2WpBmGC6YlQo8GL6g==
-  dependencies:
-    "@nuxt/schema" "npm:@nuxt/schema-edge@3.0.0-rc.9-27700502.62e38cd"
-    c12 "^0.2.10"
-    consola "^2.15.3"
-    defu "^6.1.0"
-    globby "^13.1.2"
-    hash-sum "^2.0.0"
-    ignore "^5.2.0"
-    jiti "^1.14.0"
-    knitwork "^0.1.2"
-    lodash.template "^4.5.0"
-    mlly "^0.5.14"
-    pathe "^0.3.5"
-    pkg-types "^0.3.4"
-    scule "^0.3.2"
-    semver "^7.3.7"
-    unctx "^2.0.2"
-    unimport "^0.6.7"
-    untyped "^0.4.7"
 
 "@nuxt/module-builder@^0.1.7":
   version "0.1.7"
@@ -903,7 +855,7 @@
     postcss-url "^10.1.1"
     semver "^7.3.4"
 
-"@nuxt/schema@3.0.0-rc.8", "@nuxt/schema@^3.0.0-rc.6":
+"@nuxt/schema@^3.0.0-rc.6":
   version "3.0.0-rc.8"
   resolved "https://registry.yarnpkg.com/@nuxt/schema/-/schema-3.0.0-rc.8.tgz#d8fab177f4b58fcdb83bd530a887d3b4acea90b7"
   integrity sha512-ODl9cmjH8fupvXjzITIvYT4OzapNvLrvWq9QUUgLhgv3Uxl2iX2J03oLj2aCQgfhte4mJhgHsBrtXvDLF/1GwA==
@@ -925,22 +877,6 @@
   integrity sha512-gtecVWUYmwL+TSf02Yo2G23LnBw8LXE7X0k7kfrzNk1Egd2h5Ac49S211BZ1A4s1w/dWD/N3LiLBeUJkiiVywg==
   dependencies:
     c12 "^0.2.9"
-    create-require "^1.1.1"
-    defu "^6.1.0"
-    jiti "^1.14.0"
-    pathe "^0.3.5"
-    postcss-import-resolver "^2.0.0"
-    scule "^0.3.2"
-    std-env "^3.2.1"
-    ufo "^0.8.5"
-    unimport "^0.6.7"
-
-"@nuxt/schema@npm:@nuxt/schema-edge@3.0.0-rc.9-27700502.62e38cd":
-  version "3.0.0-rc.9-27700502.62e38cd"
-  resolved "https://registry.yarnpkg.com/@nuxt/schema-edge/-/schema-edge-3.0.0-rc.9-27700502.62e38cd.tgz#0064a4f4c16bf03e0cc9481d56e85fcd2faf15a8"
-  integrity sha512-jbgs7IMqLpDmkUoYYJflaV3SytlP064uHNf3prQDQXOCXk7D+Z7QR7S5pe2YiamDBFGUYms40cxG0XyRSKM5FQ==
-  dependencies:
-    c12 "^0.2.10"
     create-require "^1.1.1"
     defu "^6.1.0"
     jiti "^1.14.0"
@@ -2031,7 +1967,7 @@ builtin-modules@^3.3.0:
   resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-3.3.0.tgz#cae62812b89801e9656336e46223e030386be7b6"
   integrity sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==
 
-c12@^0.2.10, c12@^0.2.8, c12@^0.2.9:
+c12@^0.2.8, c12@^0.2.9:
   version "0.2.10"
   resolved "https://registry.yarnpkg.com/c12/-/c12-0.2.10.tgz#c3117f3e213297cd661b94858ab9b8b977b3813b"
   integrity sha512-9QcNp918N40QCLHymuzxlVSR/S5ef79vbuODSrIbOUQRGPqWivPf5UUbpL0KRvBn3S2wtszP37Ee8VMTO+s3cQ==
@@ -7270,7 +7206,7 @@ unctx@^1.1.4:
     magic-string "^0.26.1"
     unplugin "^0.6.1"
 
-unctx@^2.0.1, unctx@^2.0.2:
+unctx@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/unctx/-/unctx-2.0.2.tgz#7d14d9290e0879aa7be697b7f35066cffec4ffc4"
   integrity sha512-3lcXTlDoOaguRVC1GqG3mrawy17yoycSAQDDnUayQYZ17v9to+Gn6Zyssroc/GD2ppJ0wF5V8adOcKkrNKVWow==
