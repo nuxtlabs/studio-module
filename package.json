@@ -32,7 +32,6 @@
   },
   "dependencies": {
     "@nuxt/kit": "npm:@nuxt/kit-edge@latest",
-    "@nuxtjs/design-tokens": "npm:@nuxtjs/design-tokens-edge@latest",
     "nuxt-component-meta": "^0.2.2",
     "socket.io-client": "^4.5.1"
   },
@@ -54,7 +53,7 @@
     "@milkdown/theme-pack-helper": "^6.3.2",
     "@milkdown/utils": "^6.3.2",
     "@milkdown/vue": "^6.3.2",
-    "@nuxt-themes/elements-edge": "^0.0.1-ac24120",
+    "@nuxt-themes/elements-edge": "^0.0.1-4c9259d",
     "@nuxt/content": "npm:@nuxt/content-edge@latest",
     "@nuxt/module-builder": "^0.1.7",
     "@nuxthq/ui": "npm:@nuxthq/ui-edge@latest",
