@@ -33,13 +33,15 @@
             @update="onMarkdownUpdate"
           />
           <template #fallback>
-            <div class="min-h-full">Loading...</div>
+            <div class="min-h-full">
+              Loading...
+            </div>
           </template>
         </ClientOnly>
       </div>
     </Pane>
     <Pane size="70" class="h-full">
-      <PreviewViewer v-model:url="previewUrl"/>
+      <PreviewViewer v-model:url="previewUrl" />
     </Pane>
   </Splitpanes>
 </template>

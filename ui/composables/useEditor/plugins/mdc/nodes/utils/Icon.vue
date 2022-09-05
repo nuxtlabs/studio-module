@@ -1,21 +1,15 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { paths, PathKey } from './icons'
 
-export default defineComponent({
-  props: {
-    name: {
-      type: String as () => PathKey,
-      required: true,
-      validator: (name: string) => Boolean(paths[name as PathKey])
-    }
-  },
-  setup (props) {
-    return {
-      path: paths[props.name]
-    }
+const props = defineProps({
+  name: {
+    type: String as () => PathKey,
+    required: true,
+    validator: (name: string) => Boolean(paths[name as PathKey])
   }
 })
+
+const path = computed(() => paths[props.name])
 </script>
 
 <template>

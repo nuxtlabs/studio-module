@@ -2,6 +2,7 @@
 import { onMounted, ref, onUnmounted } from 'vue'
 import { refreshNuxtData } from '#imports'
 
+// eslint-disable-next-line vue/no-setup-props-destructure
 const { previewToken, apiURL } = defineProps({
   previewToken: {
     type: Object,

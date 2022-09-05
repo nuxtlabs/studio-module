@@ -1,42 +1,33 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { pascalCase } from 'scule'
 import type { ComponentPropSchema } from '../../../../types'
 
-export default defineComponent({
-  props: {
-    schema: {
-      type: Object as () => ComponentPropSchema,
-      required: true
-    },
-    value: {
-      type: [String, Boolean, Number],
-      default: (props: { schema: ComponentPropSchema }) => {
-        return typeof props.schema.default !== 'undefined' && props.schema.default !== null
-          ? props.schema.default
-          : undefined
-      }
-    }
+const props = defineProps({
+  schema: {
+    type: Object as () => ComponentPropSchema,
+    required: true
   },
-  emits: ['change'],
-  setup (props, { emit }) {
-    const { name, type } = props.schema
-    const label = pascalCase(name)
-
-    const emitChange = (value) => {
-      emit('change', value)
-    }
-
-    // TODO: Find a fix for `modelValue` types in template
-
-    return {
-      name,
-      label,
-      type,
-      emitChange
+  value: {
+    type: [String, Boolean, Number],
+    default: (props: { schema: ComponentPropSchema }) => {
+      return typeof props.schema.default !== 'undefined' && props.schema.default !== null
+        ? props.schema.default
+        : undefined
     }
   }
 })
+
+const emit = defineEmits<{
+  (event: 'change', ...args: any[]): void
+}>()
+
+const name = computed(() => props.schema.name)
+const type = computed(() => props.schema.type)
+const label = computed(() => pascalCase(name.value))
+
+const emitChange = (value) => {
+  emit('change', value)
+}
 </script>
 
 <template>

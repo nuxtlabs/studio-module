@@ -85,7 +85,7 @@ export const containerComponent = createVueNode({
     group: 'block',
     content: 'block*',
     attrs,
-    parseDOM: [{ tag: 'div '}],
+    parseDOM: [{ tag: 'div ' }],
     toDOM: () => ['div'],
     parseMarkdown: parseMarkdown(ctx, 'containerComponent'),
     toMarkdown: toMarkdown('containerComponent')

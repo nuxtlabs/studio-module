@@ -17,15 +17,15 @@ watch(
 )
 
 const { canRedo, canUndo, redo, undo } = useRefHistory(computed({
-  get() {
+  get () {
     return props.url
   },
-  set(v) {
+  set (v) {
     go(v)
   }
 }))
 
-function go(url: string) {
+function go (url: string) {
   emit('update:url', url)
 }
 </script>
@@ -33,8 +33,22 @@ function go(url: string) {
 <template>
   <div class="grid grid-rows-[max-content_1fr] h-full overflow-hidden">
     <div class="flex p-2 gap-2 border-b border-gray-400">
-      <UButton @click="undo()" :disabled="!canUndo" square icon="heroicons-outline:arrow-left" size="xs" variant="gray" />
-      <UButton @click="redo()" :disabled="!canRedo" square icon="heroicons-outline:arrow-right" size="xs" variant="gray" />
+      <UButton
+        :disabled="!canUndo"
+        square
+        icon="heroicons-outline:arrow-left"
+        size="xs"
+        variant="gray"
+        @click="undo()"
+      />
+      <UButton
+        :disabled="!canRedo"
+        square
+        icon="heroicons-outline:arrow-right"
+        size="xs"
+        variant="gray"
+        @click="redo()"
+      />
       <UInput
         v-model="urlInput"
         name="url"
