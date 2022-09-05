@@ -14,7 +14,8 @@ export default defineNuxtConfig({
     baseURL: '/_studio/'
   },
   modules: [
-    '@nuxthq/ui'
+    '@nuxthq/ui',
+    '@vueuse/nuxt'
   ],
   ui: {
     preset,

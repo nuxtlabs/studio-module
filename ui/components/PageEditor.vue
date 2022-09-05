@@ -1,23 +1,23 @@
 <template>
-  <div class="w-full">
-    <splitpanes class="default-theme">
-      <!-- <pane class="p-4" min-size="8" size="10">
-        <ContentTree v-if="tree" :tree="tree" :current="file.id" @select="selectFile" />
-      </pane> -->
-      <pane size="30">
-        <!-- <div class="flex justify-between items-center p-4">
-          <USelect
-            v-model="selectedFileId"
-            name="file"
-            :options="files"
-            placeholder="Select a page"
-            text-attribute="_path"
-            value-attribute="_file"
-            size="sm"
-            class="w-full"
-          />
-          <UButton square size="sm" icon="octicon:plus-24" class="ml-4" />
-        </div> -->
+  <Splitpanes class="default-theme h-full overflow-hidden">
+    <!-- <pane class="p-4" min-size="8" size="10">
+      <ContentTree v-if="tree" :tree="tree" :current="file.id" @select="selectFile" />
+    </pane> -->
+    <Pane size="30">
+      <!-- <div class="flex justify-between items-center p-4">
+        <USelect
+          v-model="selectedFileId"
+          name="file"
+          :options="files"
+          placeholder="Select a page"
+          text-attribute="_path"
+          value-attribute="_file"
+          size="sm"
+          class="w-full"
+        />
+        <UButton square size="sm" icon="octicon:plus-24" class="ml-4" />
+      </div> -->
+      <div class="h-full overflow-y-auto">
         <div class="border-b u-border-gray-100 p-4 text-sm overflow-hidden">
           <!-- TODO: get the meta image from app config as well (fallback state) -->
           <img v-if="file.image" :src="file.image" class="aspect-video float-right">
@@ -29,19 +29,19 @@
           <ContentEditor
             :components="components"
             :content="content"
-            class="px-4 py-6 min-h-screen"
+            class="px-4 py-6 min-h-full"
             @update="onMarkdownUpdate"
           />
           <template #fallback>
-            Loading...
+            <div class="min-h-full">Loading...</div>
           </template>
         </ClientOnly>
-      </pane>
-      <pane size="70">
-        <iframe class="w-full min-h-screen" src="http://localhost:3000" />
-      </pane>
-    </splitpanes>
-  </div>
+      </div>
+    </Pane>
+    <Pane size="70" class="h-full">
+      <PreviewViewer v-model:url="previewUrl"/>
+    </Pane>
+  </Splitpanes>
 </template>
 
 <!-- Content Editor -->
@@ -53,6 +53,8 @@ const ContentEditor = defineAsyncComponent(async () =>
     ? { render: () => null }
     : await import('./ContentEditor.vue').then(r => r.default)
 )
+
+const previewUrl = ref('http://localhost:3000')
 
 const file = ref({
   id: '',
