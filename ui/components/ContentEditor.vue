@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { UnwrapOptions } from '../composables/useEditor/types'
 import { VueEditor } from '@milkdown/vue'
+import type { UnwrapOptions } from '../composables/useEditor/types'
 import { useEditor } from '../composables/useEditor'
 
 const props = defineProps({
