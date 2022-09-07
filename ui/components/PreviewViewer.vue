@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { IframePayload } from '~/../types'
+import { createBirpc } from 'birpc'
+import { IframeClientFunctions, StudioFunctions } from '~/../types'
 
 const props = defineProps<{
   base: string,
@@ -13,20 +14,31 @@ const emit = defineEmits<{
 const iframe = ref(null)
 const router = useRouter()
 
-useEventListener('message', (event) => {
-  if (!event?.data?.nuxtStudio) {
-    return
+const rpc = createBirpc<IframeClientFunctions, StudioFunctions>(
+  // rpc functions to be called by the iframe
+  {
+    onRouteChanged (route) {
+      emit('update:path', route)
+      router.replace({ query: { path: route } })
+    }
+  },
+  // messaging options
+  {
+    on (fn) {
+      useEventListener('message', (event) => {
+        if (event?.data?.__nuxtStudio) {
+          fn(event.data.data)
+        }
+      })
+    },
+    post (data) {
+      iframe.value.contentWindow.postMessage({ __nuxtStudio: true, data }, '*')
+    }
   }
+)
 
-  const data = event.data as IframePayload
-  if (data.type === 'router') {
-    emit('update:path', event.data.path)
-    router.replace({ query: { path: data.path } })
-  }
-})
-
-watch(() => props.path, () => {
-  iframe.value.contentWindow.postMessage({ nuxtStudio: true, type: 'router', path: props.path }, '*')
+watch(() => props.path, (route) => {
+  rpc.onRouteChanged(route)
 })
 </script>
 
