@@ -90,6 +90,7 @@ async function selectFile (id: string) {
   }
   file.value = await $fetch<any>(`/content/${id}`, { baseURL: apiURL })
   previewPath.value = file.value._path
+  selectedFileId.value = file.value._file
 }
 
 const selectedFileId = ref(null)
