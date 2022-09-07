@@ -1,4 +1,5 @@
 import { defineNuxtPlugin, useRouter } from '#imports'
+import { IframePayload } from '~/../types'
 
 export default defineNuxtPlugin(() => {
   const router = useRouter()
@@ -28,9 +29,14 @@ export default defineNuxtPlugin(() => {
   const { page } = useContent()
   if (window.self !== window.parent) {
     // Send message to parent about page changes
+
+    function postMessage (msg: IframePayload) {
+      window.parent.postMessage(msg, '*')
+    }
+
     router?.afterEach((to: any) => {
       console.log('currentPage', page.value._file)
-      window.parent?.postMessage({ nuxtStudio: true, type: 'router', path: to.path }, '*')
+      postMessage({ nuxtStudio: true, type: 'router', path: to.path })
     })
   }
 })

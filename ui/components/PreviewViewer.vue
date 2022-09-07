@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { IframePayload } from '~/../types'
+
 const props = defineProps<{
   url: string,
 }>()
@@ -13,11 +15,12 @@ const router = useRouter()
 
 function ready () {
   window.addEventListener('message', (event) => {
-    if (event?.data?.nuxtStudio) {
-      if (event.data.type === 'router') {
-        // emit('update:url', event.data.path)
-        router.replace({ query: { path: event.data.path } })
-      }
+    if (!event?.data?.nuxtStudio) { return }
+    const data = event.data as IframePayload
+
+    if (data.type === 'router') {
+      // emit('update:url', event.data.path)
+      router.replace({ query: { path: data.path } })
     }
   })
 }
