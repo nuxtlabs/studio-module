@@ -4,7 +4,7 @@
       <ContentTree v-if="tree" :tree="tree" :current="file.id" @select="selectFile" />
     </pane> -->
     <Pane size="30">
-      <!-- <div class="flex justify-between items-center p-4">
+      <div class="flex justify-between items-center p-4">
         <USelect
           v-model="selectedFileId"
           name="file"
@@ -16,7 +16,7 @@
           class="w-full"
         />
         <UButton square size="sm" icon="octicon:plus-24" class="ml-4" />
-      </div> -->
+      </div>
       <div class="h-full overflow-y-auto">
         <div class="border-b u-border-gray-100 p-4 text-sm overflow-hidden">
           <!-- TODO: get the meta image from app config as well (fallback state) -->
@@ -57,7 +57,7 @@ const ContentEditor = defineAsyncComponent(async () =>
 )
 
 const { query } = useRoute()
-const previewUrl = ref('http://localhost:3000' + (query.path || '/'))
+const previewUrl = ref(query.path || '/')
 
 const file = ref({
   id: '',
@@ -78,6 +78,7 @@ const { data: components } = await useFetch<any[]>('/components', { baseURL: api
 
 async function selectFile (id: string) {
   file.value = await $fetch<any>(`/content/${id}`, { baseURL: apiURL })
+  previewUrl.value = file.value._path
 }
 const selectedFileId = ref(null)
 if (files.value?.length) {

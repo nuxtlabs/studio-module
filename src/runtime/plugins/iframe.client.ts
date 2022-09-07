@@ -9,15 +9,11 @@ export default defineNuxtPlugin(() => {
     if (!trustedOrigins.includes(e.origin)) {
       return
     }
-    if (e.origin === window.location.origin) {
-      return
-    }
 
-    if (typeof e.data !== 'string') { return }
-    const [action, ...args] = e.data.split(':')
+    if (!e.data?.nuxtStudio) { return }
 
-    if (action === 'push') {
-      const path = args[0]
+    if (e.data.type === 'router') {
+      const path = e.data.path
 
       try {
         const resolvedRoute = router.resolve(path)
@@ -29,10 +25,12 @@ export default defineNuxtPlugin(() => {
   }, false)
 
   // Ensure window have a parent
+  const { page } = useContent()
   if (window.self !== window.parent) {
     // Send message to parent about page changes
     router?.afterEach((to: any) => {
-      window.parent?.postMessage({ nuxt_studio: true, type: 'router', path: to.path }, '*')
+      console.log('currentPage', page.value._file)
+      window.parent?.postMessage({ nuxtStudio: true, type: 'router', path: to.path }, '*')
     })
   }
 })
