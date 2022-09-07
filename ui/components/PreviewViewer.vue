@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { IframePayload } from '~/../types'
+
 const props = defineProps<{
   url: string,
 }>()
@@ -7,12 +9,19 @@ const emit = defineEmits<{
   (event: 'update:url', v: string): void
 }>()
 
+const iframe = ref<HTMLIFrameElement>()
+const iframeUrl = ref(props.url)
 const urlInput = ref(props.url)
+let skipNext = false
 
 watch(
   () => props.url,
   (v) => {
     urlInput.value = v
+    if (!skipNext) {
+      iframeUrl.value = v
+    }
+    skipNext = false
   }
 )
 
@@ -28,6 +37,27 @@ const { canRedo, canUndo, redo, undo } = useRefHistory(computed({
 function go (url: string) {
   emit('update:url', url)
 }
+
+useEventListener('message', (e) => {
+  if (!iframe.value) {
+    return
+  }
+  if (e.source !== iframe.value.contentWindow) {
+    return
+  }
+
+  const data = JSON.parse(e.data) as IframePayload
+  if (data.type === 'push') {
+    nextTick(() => {
+      if (data.url !== props.url) {
+        skipNext = true
+        go(data.url)
+      }
+    })
+  }
+
+  console.log('message from iframe', data)
+})
 </script>
 
 <template>
@@ -59,7 +89,7 @@ function go (url: string) {
       />
     </div>
     <div class="w-full h-full overflow-auto">
-      <iframe class="w-full min-h-full" :src="props.url" />
+      <iframe ref="iframe" class="w-full min-h-full" :src="iframeUrl" />
     </div>
   </div>
 </template>

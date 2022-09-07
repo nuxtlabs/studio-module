@@ -1,8 +1,14 @@
 import { defineNuxtPlugin, useRouter } from '#imports'
+import { IframePayload } from '~/../types'
+
+const trustedOrigins = [
+  'http://localhost:3000',
+  'https://dev-studio.nuxt.com',
+  'https://studio.nuxt.com'
+]
 
 export default defineNuxtPlugin(() => {
   const router = useRouter()
-  const trustedOrigins = ['http://localhost:3000', 'https://dev-studio.nuxt.com', 'https://studio.nuxt.com']
 
   window.addEventListener('message', (e) => {
     if (!trustedOrigins.includes(e.origin)) {
@@ -27,10 +33,20 @@ export default defineNuxtPlugin(() => {
     }
   }, false)
 
-  // Ensure window have a parent
-  if (window.self !== window.parent) {
-    router?.afterEach((to: any) => {
-      window.parent?.postMessage(`push_${to.path}`, '*')
-    })
+  // Not inside an iframe
+  if (!window.parent || window.self === window.parent) {
+    return
   }
+
+  function postMessage (payload: IframePayload) {
+    window.parent.postMessage(JSON.stringify(payload), '*')
+  }
+
+  router.afterEach((to) => {
+    postMessage({
+      type: 'push',
+      url: location.origin + to.fullPath,
+      route: to
+    })
+  })
 })
