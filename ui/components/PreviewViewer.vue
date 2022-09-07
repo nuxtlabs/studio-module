@@ -6,60 +6,23 @@ const props = defineProps<{
 const emit = defineEmits<{
   (event: 'update:url', v: string): void
 }>()
+const iframe = ref(null)
+const router = useRouter()
 
-const urlInput = ref(props.url)
-
-watch(
-  () => props.url,
-  (v) => {
-    urlInput.value = v
-  }
-)
-
-const { canRedo, canUndo, redo, undo } = useRefHistory(computed({
-  get () {
-    return props.url
-  },
-  set (v) {
-    go(v)
-  }
-}))
-
-function go (url: string) {
-  emit('update:url', url)
+function ready () {
+  window.addEventListener('message', (event) => {
+    if (event?.data?.nuxt_studio) {
+      if (event.data.type === 'router') {
+        // emit('update:url', event.data.path)
+        router.replace({ query: { path: event.data.path } })
+      }
+    }
+  })
 }
 </script>
 
 <template>
-  <div class="grid grid-rows-[max-content_1fr] h-full overflow-hidden">
-    <div class="flex p-2 gap-2 border-b border-gray-400">
-      <UButton
-        :disabled="!canUndo"
-        square
-        icon="heroicons-outline:arrow-left"
-        size="xs"
-        variant="gray"
-        @click="undo()"
-      />
-      <UButton
-        :disabled="!canRedo"
-        square
-        icon="heroicons-outline:arrow-right"
-        size="xs"
-        variant="gray"
-        @click="redo()"
-      />
-      <UInput
-        v-model="urlInput"
-        name="url"
-        size="xs"
-        placeholder="Enter text"
-        class="w-full"
-        @keypress.enter="go(urlInput)"
-      />
-    </div>
-    <div class="w-full h-full overflow-auto">
-      <iframe class="w-full min-h-full" :src="props.url" />
-    </div>
+  <div class="w-full h-full overflow-auto">
+    <iframe ref="iframe" class="w-full min-h-full" :src="props.url" @load="ready" />
   </div>
 </template>

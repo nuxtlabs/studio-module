@@ -2,8 +2,9 @@ import { defineNuxtPlugin, useRouter } from '#imports'
 
 export default defineNuxtPlugin(() => {
   const router = useRouter()
-  const trustedOrigins = ['http://localhost:3000', 'https://dev-studio.nuxt.com', 'https://studio.nuxt.com']
+  const trustedOrigins = ['http://localhost:3100']
 
+  // Receive an order to change the page
   window.addEventListener('message', (e) => {
     if (!trustedOrigins.includes(e.origin)) {
       return
@@ -29,8 +30,9 @@ export default defineNuxtPlugin(() => {
 
   // Ensure window have a parent
   if (window.self !== window.parent) {
+    // Send message to parent about page changes
     router?.afterEach((to: any) => {
-      window.parent?.postMessage(`push_${to.path}`, '*')
+      window.parent?.postMessage({ nuxt_studio: true, type: 'router', path: to.path }, '*')
     })
   }
 })

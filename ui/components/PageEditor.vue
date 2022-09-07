@@ -56,7 +56,8 @@ const ContentEditor = defineAsyncComponent(async () =>
     : await import('./ContentEditor.vue').then(r => r.default)
 )
 
-const previewUrl = ref('http://localhost:3000')
+const { query } = useRoute()
+const previewUrl = ref('http://localhost:3000' + (query.path || '/'))
 
 const file = ref({
   id: '',
