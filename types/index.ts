@@ -1,1 +1,1 @@
-export * from './iframe'
+export * from './rpc'
