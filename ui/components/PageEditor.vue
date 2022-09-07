@@ -41,7 +41,10 @@
       </div>
     </Pane>
     <Pane size="70" class="h-full">
-      <PreviewViewer v-model:url="previewUrl" />
+      <PreviewViewer
+        v-model:path="previewPath"
+        :base="previewBase"
+      />
     </Pane>
   </Splitpanes>
 </template>
@@ -57,13 +60,18 @@ const ContentEditor = defineAsyncComponent(async () =>
 )
 
 const { query } = useRoute()
-const previewUrl = ref(query.path || '/')
+
+// TODO: remove localhost when not in dev
+const previewBase = ref('http://localhost:3000')
+const previewPath = ref(query.path as string || '/')
 
 const file = ref({
   id: '',
   data: {},
   content: '',
-  source: ''
+  source: '',
+  _path: '/',
+  _file: ''
 })
 
 const content = computed(() => ({
@@ -77,9 +85,13 @@ const { data: files } = await useFetch<any[]>('/content/files', { baseURL: apiUR
 const { data: components } = await useFetch<any[]>('/components', { baseURL: apiURL })
 
 async function selectFile (id: string) {
+  if (file.value._file === id) {
+    return
+  }
   file.value = await $fetch<any>(`/content/${id}`, { baseURL: apiURL })
-  previewUrl.value = file.value._path
+  previewPath.value = file.value._path
 }
+
 const selectedFileId = ref(null)
 if (files.value?.length) {
   selectedFileId.value = files.value[0]._file
@@ -99,6 +111,9 @@ const onMarkdownUpdate = async (md) => {
 }
 watch(selectedFileId, (id: string) => {
   selectFile(id)
+})
+watch(previewPath, (path) => {
+  selectFile(files.value.find(i => i._path === path)._file)
 })
 </script>
 
