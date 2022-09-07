@@ -41,7 +41,7 @@
       </div>
     </Pane>
     <Pane size="70" class="h-full">
-      <PreviewViewer v-model:url="previewUrl" />
+      <PreviewViewer v-model:path="previewPath" :base="previewBase" />
     </Pane>
   </Splitpanes>
 </template>
@@ -56,7 +56,9 @@ const ContentEditor = defineAsyncComponent(async () =>
     : await import('./ContentEditor.vue').then(r => r.default)
 )
 
-const previewUrl = ref('http://localhost:3000')
+const previewBase = ref('http://localhost:3000')
+const previewPath = ref('/')
+const selectedFileId = ref(null)
 
 const file = ref({
   id: '',
@@ -75,15 +77,28 @@ const { apiURL } = useRuntimeConfig().public.studio
 const { data: files } = await useFetch<any[]>('/content/files', { baseURL: apiURL })
 const { data: components } = await useFetch<any[]>('/components', { baseURL: apiURL })
 
-async function selectFile (id: string) {
-  file.value = await $fetch<any>(`/content/${id}`, { baseURL: apiURL })
-}
-const selectedFileId = ref(null)
 if (files.value?.length) {
-  selectedFileId.value = files.value[0]._file
   await selectFile(files.value[0]._file)
 }
-const onMarkdownUpdate = async (md) => {
+
+watch(previewPath, async (path) => {
+  await selectPath(path)
+})
+
+async function selectFile (id: string) {
+  if (selectedFileId.value === id) {
+    return
+  }
+  selectedFileId.value = id
+  file.value = await $fetch<any>(`/content/${id}`, { baseURL: apiURL })
+}
+async function selectPath (path: string) {
+  const id = files.value.find(f => f._path === path)?._file
+  if (id) {
+    await selectFile(id)
+  }
+}
+async function onMarkdownUpdate (md) {
   if (!file.value.id) { return }
   const parts = file.value.source.split(/---\n/)
   const matter = parts.length >= 2 ? `---\n${parts[1]}---\n\n` : ''
@@ -95,9 +110,6 @@ const onMarkdownUpdate = async (md) => {
     }
   })
 }
-watch(selectedFileId, (id: string) => {
-  selectFile(id)
-})
 </script>
 
 <style lang="postcss">

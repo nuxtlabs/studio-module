@@ -2,24 +2,25 @@
 import type { IframePayload } from '~/../types'
 
 const props = defineProps<{
-  url: string,
+  path: string,
+  base: string
 }>()
 
 const emit = defineEmits<{
-  (event: 'update:url', v: string): void
+  (event: 'update:path', v: string): void
 }>()
 
 const iframe = ref<HTMLIFrameElement>()
-const iframeUrl = ref(props.url)
-const urlInput = ref(props.url)
+const iframePath = ref(props.path)
+const pathInput = ref(props.path)
 let skipNext = false
 
 watch(
-  () => props.url,
+  () => props.path,
   (v) => {
-    urlInput.value = v
+    pathInput.value = v
     if (!skipNext) {
-      iframeUrl.value = v
+      iframePath.value = v
     }
     skipNext = false
   }
@@ -27,15 +28,15 @@ watch(
 
 const { canRedo, canUndo, redo, undo } = useRefHistory(computed({
   get () {
-    return props.url
+    return props.path
   },
   set (v) {
     go(v)
   }
 }))
 
-function go (url: string) {
-  emit('update:url', url)
+function go (path: string) {
+  emit('update:path', path)
 }
 
 useEventListener('message', (e) => {
@@ -49,9 +50,9 @@ useEventListener('message', (e) => {
   const data = JSON.parse(e.data) as IframePayload
   if (data.type === 'push') {
     nextTick(() => {
-      if (data.url !== props.url) {
+      if (data.route.fullPath !== props.path) {
         skipNext = true
-        go(data.url)
+        go(data.route.fullPath)
       }
     })
   }
@@ -80,16 +81,16 @@ useEventListener('message', (e) => {
         @click="redo()"
       />
       <UInput
-        v-model="urlInput"
+        v-model="pathInput"
         name="url"
         size="xs"
-        placeholder="Enter text"
+        placeholder="Enter path"
         class="w-full"
-        @keypress.enter="go(urlInput)"
+        @keypress.enter="go(pathInput)"
       />
     </div>
     <div class="w-full h-full overflow-auto">
-      <iframe ref="iframe" class="w-full min-h-full" :src="iframeUrl" />
+      <iframe ref="iframe" class="w-full min-h-full" :src="base + iframePath" />
     </div>
   </div>
 </template>
