@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@nuxt/kit": "npm:@nuxt/kit-edge@latest",
+    "birpc": "^0.2.3",
     "nuxt-component-meta": "^0.1.9",
     "socket.io-client": "^4.5.1"
   },
@@ -61,7 +62,6 @@
     "@nuxtjs/eslint-config-typescript": "^11.0.0",
     "@vueuse/core": "^9.2.0",
     "@vueuse/nuxt": "^9.2.0",
-    "birpc": "^0.2.3",
     "eslint": "^8.23.0",
     "jiti": "^1.14.0",
     "nuxt": "npm:nuxt3@latest",
