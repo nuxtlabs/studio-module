@@ -29,8 +29,6 @@ yarn add --dev @nuxthq/studio
 Then, register the module in your `nuxt.config.ts`:
 
 ```js
-import { defineNuxtConfig } from 'nuxt'
-
 export default defineNuxtConfig({
   modules: [
     '@nuxthq/studio'

@@ -33,7 +33,7 @@ const emitChange = (value) => {
 <template>
   <UFormGroup :name="name" :label="label" label-class="text-xs font-medium u-text-gray-900">
     <UCheckbox
-      v-if="type === 'Boolean'"
+      v-if="type === 'boolean'"
       :name="name"
       :model-value="value"
       size="xs"
@@ -50,7 +50,7 @@ const emitChange = (value) => {
     <UInput
       v-else
       :name="name"
-      :type="type === 'Number' ? 'number' : 'text'"
+      :type="type === 'number' ? 'number' : 'text'"
       :model-value="value"
       size="xs"
       @update:model-value="emitChange"

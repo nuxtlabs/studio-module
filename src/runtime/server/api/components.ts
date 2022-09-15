@@ -6,7 +6,7 @@ export default defineEventHandler((event) => {
   // TODO: Replace via downstream config
   appendHeader(event, 'Access-Control-Allow-Origin', '*')
 
-  return components
+  return Object.values(components)
     .filter(c => c.global)
     .filter(c => !c.name.startsWith('Content'))
     .filter(c => !c.name.startsWith('DocumentDriven'))
