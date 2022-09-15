@@ -1,4 +1,3 @@
-import { defineNuxtConfig } from 'nuxt'
 import * as preset from './ui.preset'
 
 export default defineNuxtConfig({

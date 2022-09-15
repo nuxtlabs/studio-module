@@ -1,4 +1,3 @@
-import { defineNuxtConfig } from 'nuxt'
 import nuxtStudio from '../src/module'
 
 export default defineNuxtConfig({
