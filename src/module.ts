@@ -75,27 +75,20 @@ export default defineNuxtModule<ModuleOptions>({
         route: '/api/_studio/content/tree',
         handler: resolve('./runtime/server/api/content/tree.get')
       })
-      addServerHandler({
-        method: 'get',
-        route: '/api/_studio/content/**:id',
-        handler: resolve('./runtime/server/api/content/[id].get')
-      })
-      // TODO: sould be removed, seems that /api/_studio/content/1.index.md sends back a 405
-      addServerHandler({
-        method: 'get',
-        route: '/api/_studio/content/:id',
-        handler: resolve('./runtime/server/api/content/[id].get')
-      })
-      addServerHandler({
-        method: 'post',
-        route: '/api/_studio/content/:id',
-        handler: resolve('./runtime/server/api/content/[id].post')
-      })
-      addServerHandler({
-        method: 'delete',
-        route: '/api/_studio/content/:id',
-        handler: resolve('./runtime/server/api/content/[id].delete')
-      })
+
+      for (const method of ['get', 'post', 'delete']) {
+        const handler = resolve(`./runtime/server/api/content/[id].${method}`)
+        addServerHandler({
+          method,
+          route: '/api/_studio/content/**:id',
+          handler
+        })
+        addServerHandler({
+          method,
+          route: '/api/_studio/content/:id',
+          handler
+        })
+      }
     }
 
     addPlugin(resolve('./runtime/plugins/iframe.client'))

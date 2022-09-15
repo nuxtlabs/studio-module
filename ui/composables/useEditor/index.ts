@@ -11,7 +11,6 @@ import { useEditor as useMilkdownEditor } from '@milkdown/vue'
 import { computed, isRef, ref, unref, watch } from 'vue'
 
 // Types
-import { useRuntimeConfig } from '#imports'
 import type { Options } from './types'
 
 // Internal context
@@ -29,6 +28,9 @@ import trailing from './plugins/trailing'
 
 // Theme
 import { dark, light } from './theme'
+
+// Nuxt
+import { useRuntimeConfig } from '#imports'
 
 const useTheme = () => {
   // @ts-ignore

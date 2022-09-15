@@ -1,23 +1,23 @@
 <template>
-  <div class="w-full">
-    <splitpanes class="default-theme">
-      <!-- <pane class="p-4" min-size="8" size="10">
-        <ContentTree v-if="tree" :tree="tree" :current="file.id" @select="selectFile" />
-      </pane> -->
-      <pane size="30">
-        <!-- <div class="flex justify-between items-center p-4">
-          <USelect
-            v-model="selectedFileId"
-            name="file"
-            :options="files"
-            placeholder="Select a page"
-            text-attribute="_path"
-            value-attribute="_file"
-            size="sm"
-            class="w-full"
-          />
-          <UButton square size="sm" icon="octicon:plus-24" class="ml-4" />
-        </div> -->
+  <Splitpanes class="default-theme h-full overflow-hidden">
+    <!-- <pane class="p-4" min-size="8" size="10">
+      <ContentTree v-if="tree" :tree="tree" :current="file.id" @select="selectFile" />
+    </pane> -->
+    <Pane size="30">
+      <div class="flex justify-between items-center p-4">
+        <USelect
+          v-model="selectedFileId"
+          name="file"
+          :options="files"
+          placeholder="Select a page"
+          text-attribute="_path"
+          value-attribute="_file"
+          size="sm"
+          class="w-full"
+        />
+        <UButton square size="sm" icon="octicon:plus-24" class="ml-4" />
+      </div>
+      <div class="h-full overflow-y-auto">
         <div class="border-b u-border-gray-100 p-4 text-sm overflow-hidden">
           <!-- TODO: get the meta image from app config as well (fallback state) -->
           <img v-if="file.image" :src="file.image" class="aspect-video float-right">
@@ -29,19 +29,24 @@
           <ContentEditor
             :components="components"
             :content="content"
-            class="px-4 py-6 min-h-screen"
+            class="px-4 py-6 min-h-full"
             @update="onMarkdownUpdate"
           />
           <template #fallback>
-            Loading...
+            <div class="min-h-full">
+              Loading...
+            </div>
           </template>
         </ClientOnly>
-      </pane>
-      <pane size="70">
-        <iframe class="w-full min-h-screen" src="http://localhost:3000" />
-      </pane>
-    </splitpanes>
-  </div>
+      </div>
+    </Pane>
+    <Pane size="70" class="h-full">
+      <PreviewViewer
+        v-model:path="previewPath"
+        :base="previewBase"
+      />
+    </Pane>
+  </Splitpanes>
 </template>
 
 <!-- Content Editor -->
@@ -54,11 +59,19 @@ const ContentEditor = defineAsyncComponent(async () =>
     : await import('./ContentEditor.vue').then(r => r.default)
 )
 
+const { query } = useRoute()
+
+// TODO: remove localhost when not in dev
+const previewBase = ref('http://localhost:3000')
+const previewPath = ref(query.path as string || '/')
+
 const file = ref({
   id: '',
   data: {},
   content: '',
-  source: ''
+  source: '',
+  _path: '/',
+  _file: ''
 })
 
 const content = computed(() => ({
@@ -72,8 +85,14 @@ const { data: files } = await useFetch<any[]>('/content/files', { baseURL: apiUR
 const { data: components } = await useFetch<any[]>('/components', { baseURL: apiURL })
 
 async function selectFile (id: string) {
+  if (file.value._file === id) {
+    return
+  }
   file.value = await $fetch<any>(`/content/${id}`, { baseURL: apiURL })
+  previewPath.value = file.value._path
+  selectedFileId.value = file.value._file
 }
+
 const selectedFileId = ref(null)
 if (files.value?.length) {
   selectedFileId.value = files.value[0]._file
@@ -93,6 +112,9 @@ const onMarkdownUpdate = async (md) => {
 }
 watch(selectedFileId, (id: string) => {
   selectFile(id)
+})
+watch(previewPath, (path) => {
+  selectFile(files.value.find(i => i._path === path)._file)
 })
 </script>
 
