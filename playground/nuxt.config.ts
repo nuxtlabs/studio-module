@@ -1,7 +1,7 @@
 import nuxtStudio from '../src/module'
 
 export default defineNuxtConfig({
-  extends: '@nuxt-themes/elements-edge',
+  // extends: '@nuxt-themes/elements-edge',
   modules: [
     '@nuxt/content',
     nuxtStudio
