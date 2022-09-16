@@ -17,28 +17,37 @@
         />
         <UButton square size="sm" icon="octicon:plus-24" class="ml-4" />
       </div>
-      <div class="h-full overflow-y-auto">
-        <div class="border-b u-border-gray-100 p-4 text-sm overflow-hidden">
-          <!-- TODO: get the meta image from app config as well (fallback state) -->
-          <img v-if="file.image" :src="file.image" class="aspect-video float-right">
-          <EmptyImage v-else class="w-40 aspect-video float-right rounded" />
-          <p><span class="font-bold u-text-gray-400 text-xs">title</span> {{ file.title }}</p>
-          <p><span class="font-bold u-text-gray-400 text-xs">description</span> {{ file.description }}</p>
+      <template v-if="editor === 'raw'">
+        <MarkdownEditor
+          :model-value="content.source"
+          class="px-4 h-full"
+          @update:model-value="onMarkdownUpdate"
+        />
+      </template>
+      <template v-else>
+        <div class="h-full overflow-y-auto">
+          <div class="border-b u-border-gray-100 p-4 text-sm overflow-hidden">
+            <!-- TODO: get the meta image from app config as well (fallback state) -->
+            <img v-if="file.image" :src="file.image" class="aspect-video float-right">
+            <EmptyImage v-else class="w-40 aspect-video float-right rounded" />
+            <p><span class="font-bold u-text-gray-400 text-xs">title</span> {{ file.title }}</p>
+            <p><span class="font-bold u-text-gray-400 text-xs">description</span> {{ file.description }}</p>
+          </div>
+          <ClientOnly>
+            <ContentEditor
+              :components="components"
+              :content="content"
+              class="px-4 py-6 min-h-full"
+              @update="onMarkdownUpdate"
+            />
+            <template #fallback>
+              <div class="min-h-full">
+                Loading...
+              </div>
+            </template>
+          </ClientOnly>
         </div>
-        <ClientOnly>
-          <ContentEditor
-            :components="components"
-            :content="content"
-            class="px-4 py-6 min-h-full"
-            @update="onMarkdownUpdate"
-          />
-          <template #fallback>
-            <div class="min-h-full">
-              Loading...
-            </div>
-          </template>
-        </ClientOnly>
-      </div>
+      </template>
     </Pane>
     <Pane size="70" class="h-full">
       <PreviewViewer
@@ -73,10 +82,12 @@ const file = ref({
   _path: '/',
   _file: ''
 })
+const editor = ref('raw') // raw | component
 
 const content = computed(() => ({
   key: file.value.id,
   markdown: file.value.content,
+  source: file.value.source,
   matter: {}
 }))
 
@@ -100,13 +111,16 @@ if (files.value?.length) {
 }
 const onMarkdownUpdate = async (md) => {
   if (!file.value.id) { return }
-  const parts = file.value.source.split(/---\n/)
-  const matter = parts.length >= 2 ? `---\n${parts[1]}---\n\n` : ''
+  if (editor.value === 'component') {
+    const parts = file.value.source.split(/---\n/)
+    const matter = parts.length >= 2 ? `---\n${parts[1]}---\n\n` : ''
+    md = matter + md
+  }
   await $fetch<any>(`content/${file.value.id}`, {
     baseURL: apiURL,
     method: 'POST',
     body: {
-      content: matter + md
+      content: md
     }
   })
 }

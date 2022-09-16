@@ -64,6 +64,7 @@
     "@vueuse/nuxt": "^9.2.0",
     "eslint": "^8.23.1",
     "jiti": "^1.14.0",
+    "monaco-editor-core": "^0.34.0",
     "nuxt": "npm:nuxt3@latest",
     "remark-mdc": "^1.0.4",
     "shiki-es": "^0.1.2",
