@@ -20,7 +20,7 @@
       <template v-if="editor === 'raw'">
         <MarkdownEditor
           :model-value="content.source"
-          class="px-4 h-full"
+          class="h-full"
           @update:model-value="onMarkdownUpdate"
         />
       </template>
