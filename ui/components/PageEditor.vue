@@ -74,6 +74,8 @@ const { query } = useRoute()
 const previewBase = ref('http://localhost:3000')
 const previewPath = ref(query.path as string || '/')
 
+console.log('previewPath', previewPath.value)
+
 const file = ref({
   id: '',
   data: {},
@@ -106,8 +108,13 @@ async function selectFile (id: string) {
 
 const selectedFileId = ref(null)
 if (files.value?.length) {
-  selectedFileId.value = files.value[0]._file
-  await selectFile(files.value[0]._file)
+  const file = files.value.find(i => i._path === previewPath.value)._file
+  if (file) {
+    selectFile(file)
+  } else {
+    selectedFileId.value = files.value[0]._file
+    await selectFile(files.value[0]._file)
+  }
 }
 const onMarkdownUpdate = async (md) => {
   if (!file.value.id) { return }
