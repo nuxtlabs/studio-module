@@ -35,12 +35,10 @@ export default defineNuxtModule<ModuleOptions>({
       nitroConfig.alias['#studio/server/utils'] = resolve('./runtime/server/utils')
     })
 
-
     // TODO: All below could be simplified with `extends: @nuxt/studio` with a separate chunk
     await addComponentsDir({
       path: resolve('./runtime/components')
     })
-
 
     // @ts-ignore
     await installModule(meta)
