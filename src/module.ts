@@ -35,12 +35,25 @@ export default defineNuxtModule<ModuleOptions>({
       nitroConfig.alias['#studio/server/utils'] = resolve('./runtime/server/utils')
     })
 
+    // In local developement, the playground and studio are in different domains
+    // Forward this to make iframe window accessible
+    if (process.env.NUXT_STUDIO_DEV_PROXY) {
+      nuxt.hook('vite:extendConfig', (config) => {
+        config.server = config.server || {}
+        config.server.proxy = config.server.proxy || {}
+        config.server.proxy['/_studio'] = {
+          target: 'http://localhost:3100/_studio',
+          changeOrigin: true,
+          followRedirects: true,
+          rewrite: path => path.replace(/^\/_studio/, '')
+        }
+      })
+    }
 
     // TODO: All below could be simplified with `extends: @nuxt/studio` with a separate chunk
     await addComponentsDir({
       path: resolve('./runtime/components')
     })
-
 
     // @ts-ignore
     await installModule(meta)
