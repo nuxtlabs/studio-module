@@ -2016,11 +2016,6 @@ bindings@^1.4.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-birpc@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/birpc/-/birpc-0.2.3.tgz#19f7532602a2070074d123502d1ad4ba747c7bf4"
-  integrity sha512-mG7m06C2JkfuHSaLRHhtHtMEvyT1P1nUyyuk5W/7LMT2p7YYX/tfzJzD2ynZZHem3JTi6yJve0nHPdrs/gpXYg==
-
 bl@^4.0.3:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/bl/-/bl-4.1.0.tgz#451535264182bec2fbbc83a62ab98cf11d9f7b3a"
@@ -4747,6 +4742,11 @@ jiti@^1.12.14, jiti@^1.12.9, jiti@^1.14.0, jiti@^1.15.0:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.15.0.tgz#cfa7ebfe4a60d77cf3bd4f8630cd99225b638417"
   integrity sha512-cClBkETOCVIpPMjX3ULlivuBvmt8l2Xtz+SHrULO06OqdtV0QFR2cuhc4FJnXByjUUX4CY0pl1nph0aFh9D3yA==
 
+jiti@^1.16.0:
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.16.0.tgz#f72065954446ad1866fa8d6bcc3bed3cc1cebdaa"
+  integrity sha512-L3BJStEf5NAqNuzrpfbN71dp43mYIcBUlCRea/vdyv5dW/AYa1d4bpelko4SHdY3I6eN9Wzyasxirj1/vv5kmg==
+
 joycon@^3.0.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/joycon/-/joycon-3.1.1.tgz#bce8596d6ae808f8b68168f5fc69280996894f03"
@@ -7237,7 +7237,7 @@ remark-math@^5.1.0:
     micromark-extension-math "^2.0.0"
     unified "^10.0.0"
 
-remark-mdc@^1.0.4, remark-mdc@^1.0.7:
+remark-mdc@^1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/remark-mdc/-/remark-mdc-1.0.7.tgz#eca877a6e1e7320df7bfe367b157254cb9e5127e"
   integrity sha512-qKIvlYQz7mCZlzAf30sgLfZAxw9mQfVq4CoL1K3X4DK5V/ABYyFc6i4S3gbZjQJTv+DF1OMNJ0Zct+yGdGI0Xw==
@@ -7662,7 +7662,7 @@ snake-case@^3.0.4:
     dot-case "^3.0.4"
     tslib "^2.0.3"
 
-socket.io-client@^4.5.1:
+socket.io-client@^4.5.2:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-4.5.2.tgz#9481518c560388c980c88b01e3cf62f367f04c96"
   integrity sha512-naqYfFu7CLDiQ1B7AlLhRXKX3gdeaIMfgigwavDzgJoIUYulc1qHH5+2XflTsXTPY7BlPH5rppJyUjhjrKQKLg==
@@ -8837,7 +8837,7 @@ y-protocols@^1.0.5:
   dependencies:
     lib0 "^0.2.42"
 
-y-websocket@^1.4.3:
+y-websocket@^1.4.5:
   version "1.4.5"
   resolved "https://registry.yarnpkg.com/y-websocket/-/y-websocket-1.4.5.tgz#8da81b466997bcc4660059f542d0a6ce62581478"
   integrity sha512-5d9LTSy0GQKqSd/FKRo5DMBlsiTlCipbKcIgPLlno+5xHtfT8bm3uQdcbY9JvLfckojilLZWauXJu0vzDZX05w==
@@ -8887,7 +8887,7 @@ yargs@^17.2.1, yargs@^17.5.1:
     y18n "^5.0.5"
     yargs-parser "^21.0.0"
 
-yjs@^13.5.40:
+yjs@^13.5.41:
   version "13.5.41"
   resolved "https://registry.yarnpkg.com/yjs/-/yjs-13.5.41.tgz#105041cd56bdef154704441c381d80723e072bbe"
   integrity sha512-4eSTrrs8OeI0heXKKioRY4ag7V5Bk85Z4MeniUyown3o3y0G7G4JpAZWrZWfTp7pzw2b53GkAQWKqHsHi9j9JA==

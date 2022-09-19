@@ -1,1 +1,1 @@
-export * from './rpc'
+export * from './communication'

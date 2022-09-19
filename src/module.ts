@@ -129,16 +129,29 @@ export default defineNuxtModule<ModuleOptions>({
         // eslint-disable-next-line no-console
         console.log(`  > Studio: \`${viewerUrl}\`\n`)
       })
+    } else if (process.env.NUXT_STUDIO_DEV_PROXY) {
+      // In local developement, the playground and studio are in different domains
+      // Forward this to make iframe window accessible
+      nuxt.hook('vite:extendConfig', (config) => {
+        config.server = config.server || {}
+        config.server.proxy = config.server.proxy || {}
+        config.server.proxy['/_studio'] = {
+          target: 'http://localhost:3100/_studio',
+          changeOrigin: true,
+          followRedirects: true,
+          rewrite: path => path.replace(/^\/_studio/, '')
+        }
+      })
+      console.log('  > Studio: `http://localhost:3000/_studio/`\n')
     } else {
       // Studio Development mode
       // TODO: would be possible with extends supporting an separate app entrypoint
       log.warn('Could not inject Nuxt Studio application, please run `yarn build`')
       log.info([
         'To develop Nuxt Studio:',
-        '  - Change directory to `./module`',
-        '  - Run `yarn play`',
-        '  - Copy `app/.env.example` to `app/.env` and adjust based on playground port',
-        '  - Run `yarn dev` on another terminal and open studio url',
+        '  - Copy `ui/.env.example` to `ui/.env`',
+        '  - Run `yarn ui`',
+        '  - Run `yarn play` on another terminal and open studio url',
         ''
       ].join('\n'))
     }
