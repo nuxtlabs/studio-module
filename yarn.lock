@@ -2057,11 +2057,6 @@ bindings@^1.4.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-birpc@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/birpc/-/birpc-0.2.3.tgz#19f7532602a2070074d123502d1ad4ba747c7bf4"
-  integrity sha512-mG7m06C2JkfuHSaLRHhtHtMEvyT1P1nUyyuk5W/7LMT2p7YYX/tfzJzD2ynZZHem3JTi6yJve0nHPdrs/gpXYg==
-
 bl@^4.0.3:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/bl/-/bl-4.1.0.tgz#451535264182bec2fbbc83a62ab98cf11d9f7b3a"

@@ -24,7 +24,7 @@
   "scripts": {
     "dev": "echo 'Press F5 in VS Code instead'",
     "play": "NUXT_STUDIO_DEV_PROXY=true nuxi dev playground",
-    "ui": "PORT=3100 nuxi dev ui --open",
+    "ui": "PORT=3100 nuxi dev ui",
     "dev:prepare": "nuxi prepare ui",
     "lint": "eslint --ext .vue,.ts,.js,.mjs .",
     "build": "yarn dev:prepare && yarn build:module && yarn build:ui",
@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@nuxt/kit": "npm:@nuxt/kit-edge@latest",
-    "birpc": "^0.2.3",
     "nuxt-component-meta": "^0.2.2",
     "socket.io-client": "^4.5.1"
   },

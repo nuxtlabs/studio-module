@@ -1,6 +1,5 @@
-import { createBirpc } from 'birpc'
 import { defineNuxtPlugin, useRouter } from '#imports'
-import { IframeClientFunctions, StudioFunctions } from '~/../types'
+import { NuxtStudioClient, NuxtStudioEditor } from '~/../types'
 
 export default defineNuxtPlugin(() => {
   // Not in an iframe
@@ -9,31 +8,20 @@ export default defineNuxtPlugin(() => {
   }
 
   const router = useRouter()
-  const trustedOrigins = ['http://localhost:3100']
+  let editor: NuxtStudioEditor | undefined
 
-  const rpc = createBirpc<StudioFunctions, IframeClientFunctions>(
-    // rpc functions to be called by studio
-    {
-      onRouteChanged (route) {
-        router.push(route)
-      }
+  const client: NuxtStudioClient = {
+    updateEditor (_editor) {
+      editor = _editor
     },
-    // messaging options
-    {
-      on (fn) {
-        window.addEventListener('message', (e) => {
-          if (trustedOrigins.includes(e.origin) && e.data?.__nuxtStudio) {
-            fn(e.data.data)
-          }
-        }, false)
-      },
-      post (data) {
-        window.parent.postMessage({ __nuxtStudio: true, data }, '*')
-      }
+    onRouteChanged (route) {
+      router.push(route)
     }
-  )
+  }
+
+  window.__NUXT_STUDIO__ = client
 
   router?.afterEach((to: any) => {
-    rpc.onRouteChanged(to.path)
+    editor?.onRouteChanged(to.path)
   })
 })
