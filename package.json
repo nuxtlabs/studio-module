@@ -32,9 +32,12 @@
     "build:module": "nuxt-module-build"
   },
   "dependencies": {
-    "@nuxt/kit": "npm:@nuxt/kit-edge@latest",
+    "@nuxt/kit": "^3.0.0-rc.10",
+    "@nuxt/schema": "^3.0.0-rc.10",
+    "defu": "^6.1.0",
     "nuxt-component-meta": "^0.2.2",
-    "socket.io-client": "^4.5.1"
+    "socket.io-client": "^4.5.1",
+    "ufo": "^0.8.5"
   },
   "devDependencies": {
     "@milkdown/core": "^6.4.1",
