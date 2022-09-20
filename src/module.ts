@@ -73,33 +73,9 @@ export default defineNuxtModule<ModuleOptions>({
       nuxt.options.nitro.alias['#studio/server/utils'] = resolve('./runtime/server/utils')
       addServerHandler({
         method: 'get',
-        route: '/api/_studio/content/files',
-        handler: resolve('./runtime/server/api/content/files.get')
-      })
-      addServerHandler({
-        method: 'get',
         route: '/api/_studio/content/navigation',
         handler: resolve('./runtime/server/api/content/navigation.get')
       })
-      addServerHandler({
-        method: 'get',
-        route: '/api/_studio/content/tree',
-        handler: resolve('./runtime/server/api/content/tree.get')
-      })
-
-      for (const method of ['get', 'post', 'delete']) {
-        const handler = resolve(`./runtime/server/api/content/[id].${method}`)
-        addServerHandler({
-          method,
-          route: '/api/_studio/content/**:id',
-          handler
-        })
-        addServerHandler({
-          method,
-          route: '/api/_studio/content/:id',
-          handler
-        })
-      }
     }
 
     addPlugin(resolve('./runtime/plugins/iframe.client'))
