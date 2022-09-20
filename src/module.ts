@@ -18,9 +18,22 @@ export default defineNuxtModule<ModuleOptions>({
   async setup (_options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
+    nuxt.options.runtimeConfig.studio = nuxt.options.runtimeConfig.studio || {}
     nuxt.options.runtimeConfig.public.studio = defu(nuxt.options.runtimeConfig.public.studio, {
       apiURL: process.env.NUXT_PUBLIC_STUDIO_API_URL || 'https://api.nuxt.com'
     })
+
+    if (nuxt.options.dev) {
+      nuxt.options.runtimeConfig.studio.rootDir = nuxt.options.rootDir
+      addServerHandler({
+        handler: resolve('./runtime/server/api/files'),
+        route: '/api/_studio/files'
+      })
+      addServerHandler({
+        handler: resolve('./runtime/server/api/files'),
+        route: '/api/_studio/files/**:path'
+      })
+    }
 
     nuxt.hook('nitro:config', (nitroConfig) => {
       nitroConfig.storage = nitroConfig.storage || {}

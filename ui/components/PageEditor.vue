@@ -3,20 +3,18 @@
     <!-- <pane class="p-4" min-size="8" size="10">
       <ContentTree v-if="tree" :tree="tree" :current="file.id" @select="selectFile" />
     </pane> -->
-    <Pane size="30">
-      <div class="flex justify-between items-center p-4">
-        <USelect
-          v-model="selectedFileId"
-          name="file"
-          :options="files"
-          placeholder="Select a page"
-          text-attribute="_path"
-          value-attribute="_file"
-          size="sm"
-          class="w-full"
+    <Pane size="15">
+      <div>
+        <FileTree
+          :tree="tree"
+          :expanded-dirs="{ content: true }"
+          @select="selectFile"
+          @delete="deleteFile"
+          @create="createFile"
         />
-        <UButton square size="sm" icon="octicon:plus-24" class="ml-4" />
       </div>
+    </Pane>
+    <Pane size="35">
       <template v-if="editor === 'raw'">
         <MarkdownEditor
           :model-value="content.source"
@@ -49,7 +47,7 @@
         </div>
       </template>
     </Pane>
-    <Pane size="70" class="h-full">
+    <Pane size="50" class="h-full">
       <PreviewViewer
         v-model:path="previewPath"
         :base="previewBase"
@@ -74,8 +72,6 @@ const { query } = useRoute()
 const previewBase = ref('http://localhost:3000')
 const previewPath = ref(query.path as string || '/')
 
-console.log('previewPath', previewPath.value)
-
 const file = ref({
   id: '',
   data: {},
@@ -94,28 +90,35 @@ const content = computed(() => ({
 }))
 
 const { apiURL } = useRuntimeConfig().public.studio
-const { data: files } = await useFetch<any[]>('/content/files', { baseURL: apiURL })
+const { data: tree, refresh: refreshTree } = await useFetch<any[]>('/files', { baseURL: apiURL })
 const { data: components } = await useFetch<any[]>('/components', { baseURL: apiURL })
 
 async function selectFile (id: string) {
-  if (file.value._file === id) {
+  if (file.value.id === id) {
     return
   }
-  file.value = await $fetch<any>(`/content/${id}`, { baseURL: apiURL })
-  previewPath.value = file.value._path
-  selectedFileId.value = file.value._file
+
+  file.value = await $fetch<any>(`/files/${id}`, { baseURL: apiURL })
 }
 
-const selectedFileId = ref(null)
-if (files.value?.length) {
-  const file = files.value.find(i => i._path === previewPath.value)._file
-  if (file) {
-    selectFile(file)
-  } else {
-    selectedFileId.value = files.value[0]._file
-    await selectFile(files.value[0]._file)
-  }
+async function deleteFile (id) {
+  await $fetch<any>(`/files/${id}`, {
+    baseURL: apiURL,
+    method: 'DELETE'
+  })
+  // TODO: update the tree
+  await refreshTree()
 }
+
+async function createFile (id) {
+  await $fetch<any>(`/files/${id}`, {
+    baseURL: apiURL,
+    method: 'PUT'
+  })
+  // TODO: update the tree
+  await refreshTree()
+}
+
 const onMarkdownUpdate = async (md) => {
   if (!file.value.id) { return }
   if (editor.value === 'component') {
@@ -123,20 +126,25 @@ const onMarkdownUpdate = async (md) => {
     const matter = parts.length >= 2 ? `---\n${parts[1]}---\n\n` : ''
     md = matter + md
   }
-  await $fetch<any>(`content/${file.value.id}`, {
+  await $fetch<any>(`files/${file.value.id}`, {
     baseURL: apiURL,
     method: 'POST',
     body: {
-      content: md
+      source: md
     }
   })
 }
-watch(selectedFileId, (id: string) => {
-  selectFile(id)
-})
-watch(previewPath, (path) => {
-  selectFile(files.value.find(i => i._path === path)._file)
-})
+
+if (tree.value) {
+  const contentDirectory = tree.value.find(item => item.path === 'content')
+  if (contentDirectory) {
+    const file = contentDirectory.children[0]
+
+    if (file) {
+      selectFile(file.id)
+    }
+  }
+}
 </script>
 
 <style lang="postcss">
