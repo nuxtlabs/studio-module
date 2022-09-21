@@ -16,11 +16,17 @@
     </Pane>
     <Pane size="35">
       <template v-if="editor === 'raw'">
-        <MarkdownEditor
+        <LazyMarkdownEditor
           :model-value="content.source"
           class="h-full"
           @update:model-value="onMarkdownUpdate"
-        />
+        >
+          <template #fallback>
+            <div h-full>
+              Loading...
+            </div>
+          </template>
+        </LazyMarkdownEditor>
       </template>
       <template v-else>
         <div class="h-full overflow-y-auto">
@@ -31,19 +37,18 @@
             <p><span class="font-bold u-text-gray-400 text-xs">title</span> {{ file.title }}</p>
             <p><span class="font-bold u-text-gray-400 text-xs">description</span> {{ file.description }}</p>
           </div>
-          <ClientOnly>
-            <ContentEditor
-              :components="components"
-              :content="content"
-              class="px-4 py-6 min-h-full"
-              @update="onMarkdownUpdate"
-            />
+          <LazyContentEditor
+            :components="components"
+            :content="content"
+            class="px-4 py-6 min-h-full"
+            @update="onMarkdownUpdate"
+          >
             <template #fallback>
-              <div class="min-h-full">
+              <div h-full>
                 Loading...
               </div>
             </template>
-          </ClientOnly>
+          </LazyContentEditor>
         </div>
       </template>
     </Pane>
@@ -60,27 +65,24 @@
 <script setup lang="ts">
 import { Splitpanes, Pane } from 'splitpanes'
 
-const ContentEditor = defineAsyncComponent(async () =>
-  process.server
-    ? { render: () => null }
-    : await import('./ContentEditor.vue').then(r => r.default)
-)
-
 const { query } = useRoute()
 
 // TODO: remove localhost when not in dev
 const previewBase = ref('http://localhost:3000')
 const previewPath = ref(query.path as string || '/')
 
+const editor = ref('raw') // raw | component
 const file = ref({
   id: '',
   data: {},
   content: '',
   source: '',
   _path: '/',
-  _file: ''
+  _file: '',
+  image: '',
+  title: '',
+  description: ''
 })
-const editor = ref('raw') // raw | component
 
 const content = computed(() => ({
   key: file.value.id,
@@ -150,7 +152,6 @@ if (tree.value) {
 <style lang="postcss">
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons+Outlined';
 @import 'https://unpkg.com/prism-themes@1.9.0/themes/prism-one-dark.css';
-@import 'https://unpkg.com/splitpanes/dist/splitpanes.css';
 
 body {
   @apply antialiased font-sans text-gray-700 dark:text-gray-200;

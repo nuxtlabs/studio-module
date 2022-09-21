@@ -10,8 +10,13 @@ node_modules
 .cache
 
 # Yarn
-**/.yarn/cache
-**/.yarn/*state*
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # Generated dirs
 dist
