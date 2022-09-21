@@ -1,8 +1,9 @@
 import { stat } from 'fs/promises'
 import { withoutTrailingSlash } from 'ufo'
 import { defu } from 'defu'
-import { defineNuxtModule, installModule, addServerHandler, addPlugin, extendViteConfig, addComponentsDir, createResolver, logger } from '@nuxt/kit'
+import { defineNuxtModule, installModule, addServerHandler, addPlugin, extendViteConfig, addComponentsDir, createResolver, logger, addDevServerHandler } from '@nuxt/kit'
 import meta from 'nuxt-component-meta'
+import createFilesHandler from './runtime/server/dev-api/files'
 
 const log = logger.withScope('@nuxt/studio')
 
@@ -23,17 +24,12 @@ export default defineNuxtModule<ModuleOptions>({
       apiURL: process.env.NUXT_PUBLIC_STUDIO_API_URL || 'https://api.nuxt.com'
     })
 
-    if (nuxt.options.dev) {
-      nuxt.options.runtimeConfig.studio.rootDir = nuxt.options.rootDir
-      addServerHandler({
-        handler: resolve('./runtime/server/api/files'),
-        route: '/api/_studio/files'
+    addDevServerHandler({
+      route: '/api/_studio/files',
+      handler: createFilesHandler({
+        rootDir: nuxt.options.rootDir
       })
-      addServerHandler({
-        handler: resolve('./runtime/server/api/files'),
-        route: '/api/_studio/files/**:path'
-      })
-    }
+    })
 
     nuxt.hook('nitro:config', (nitroConfig) => {
       nitroConfig.storage = nitroConfig.storage || {}

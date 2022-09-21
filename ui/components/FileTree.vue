@@ -59,6 +59,7 @@
 import { withBase } from 'ufo'
 import type { PropType } from 'vue'
 import type { File } from '~/types'
+
 const props = defineProps({
   level: {
     type: Number,
@@ -138,12 +139,14 @@ const selectFile = (file: File) => {
 }
 
 const createFile = (path) => {
+  // TODO: open modal
   const name = prompt('Enter File Name')
   if (name) {
     emit('create', withBase(name, path))
   }
 }
 const deleteFile = (path) => {
+  // TODO: open modal
   if (confirm('Are you sure you want to delete this file?')) {
     emit('delete', path)
   }

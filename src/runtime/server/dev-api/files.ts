@@ -2,11 +2,16 @@ import { resolve } from 'path'
 import fsp from 'fs/promises'
 import anymatch from 'anymatch'
 import { eventHandler, isMethod, readBody } from 'h3'
-import { useRuntimeConfig } from '#imports'
+import { withoutLeadingSlash } from 'ufo'
 
-export default eventHandler(async (event) => {
-  const { path } = event.context.params
-  const { rootDir } = useRuntimeConfig().studio
+interface FilesHandlerOptions {
+  rootDir: string
+}
+
+export default (option: FilesHandlerOptions) => eventHandler(async (event) => {
+  const path = withoutLeadingSlash(event.req.url)
+
+  const { rootDir } = option
 
   if (isMethod(event, 'POST')) {
     const body = await readBody(event)
@@ -30,7 +35,7 @@ export default eventHandler(async (event) => {
     }
   }
 
-  if (!path) {
+  if (path === '/') {
     const ignore = anymatch([
       '**/node_modules/**',
       '**/.git/**',
