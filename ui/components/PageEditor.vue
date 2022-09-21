@@ -4,6 +4,12 @@
       <ContentTree v-if="tree" :tree="tree" :current="file.id" @select="selectFile" />
     </pane> -->
     <Pane size="30">
+      <!-- Temporary switcher -->
+      <div class="px-4 py-1">
+        <UButton size="xs" @click="editor = editor === 'raw' ? 'component' : 'raw'">
+          {{ editor }}
+        </UButton>
+      </div>
       <div class="flex justify-between items-center p-4">
         <USelect
           v-model="selectedFileId"
