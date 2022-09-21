@@ -32,10 +32,10 @@
     "build:module": "nuxt-module-build"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.0.0-rc.10",
-    "@nuxt/schema": "^3.0.0-rc.10",
+    "@nuxt/kit": "^3.0.0-rc.11",
+    "@nuxt/schema": "^3.0.0-rc.11",
     "defu": "^6.1.0",
-    "nuxt-component-meta": "^0.2.2",
+    "nuxt-component-meta": "^0.2.3",
     "socket.io-client": "^4.5.2",
     "ufo": "^0.8.5"
   },
@@ -48,7 +48,7 @@
     "@milkdown/plugin-history": "^6.4.1",
     "@milkdown/plugin-listener": "^6.4.1",
     "@milkdown/plugin-math": "^6.4.1",
-    "@milkdown/plugin-slash": "^6.4.1",
+    "@milkdown/plugin-slash": "^6.4.3",
     "@milkdown/plugin-tooltip": "^6.4.1",
     "@milkdown/plugin-trailing": "^6.4.1",
     "@milkdown/preset-commonmark": "^6.4.2",
@@ -67,7 +67,7 @@
     "eslint": "^8.23.1",
     "jiti": "^1.16.0",
     "monaco-editor-core": "^0.34.0",
-    "nuxt": "npm:nuxt3@latest",
+    "nuxt": "^3.0.0-rc.11",
     "remark-mdc": "^1.0.7",
     "shiki-es": "^0.1.2",
     "splitpanes": "^3.1.1",

@@ -1,8 +1,10 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
   content: [
-    'ui/*.ts',
+    'ui.preset.ts',
     'content/**/*.md'
   ],
   theme: {
@@ -21,9 +23,22 @@ module.exports = {
           900: '#001238'
         }
       },
+      animation: {
+        gradient: 'gradient 15s ease infinite'
+      },
+      keyframes: {
+        gradient: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' }
+        }
+      },
       maxWidth: {
         '8xl': '88rem',
         '9xl': '96rem'
+      },
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans]
       }
     }
   }

@@ -2,16 +2,13 @@ import * as preset from './ui.preset'
 
 export default defineNuxtConfig({
   ssr: false,
-  extends: [
-    // '../../shared'
-  ],
-  components: [
-    '~/components',
-    '../../platform/components'
-  ],
   app: {
     baseURL: '/_studio/'
   },
+  components: [
+    '~/components',
+    { path: '~/views', global: true }
+  ],
   modules: [
     '@nuxthq/ui',
     '@vueuse/nuxt'
@@ -29,13 +26,6 @@ export default defineNuxtConfig({
         apiURL: process.env.API_URL || '/api/_studio'
       }
     }
-  },
-  imports: {
-    dirs: [
-      // Scan composables from nested directories
-      'composables/useEditor',
-      'composables/useEditorScroll'
-    ]
   },
   hooks: {
     'modules:before': () => {
