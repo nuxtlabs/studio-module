@@ -1,3 +1,7 @@
+<script>
+import 'splitpanes/dist/splitpanes.css'
+</script>
+
 <template>
   <div class="h-screen w-screen grid grid-rows-[max-content_1fr] overflow-hidden">
     <main class="h-screen overflow-hidden">
