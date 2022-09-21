@@ -8,27 +8,56 @@
 import { useMonaco } from '~/monaco-editor/useMonacoEditor'
 
 const props = defineProps({
+  filename: {
+    type: String,
+    default: ''
+  },
   modelValue: {
     type: String,
     required: true
   },
   language: {
     type: String,
-    default: 'mdc'
+    default: ''
   }
 })
 
 const target = ref()
 
-const { setContent } = useMonaco(target, {
-  language: props.language,
+const language = computed(() => {
+  if (props.language) {
+    return props.language
+  }
+  const ext = props.filename.split('.').pop()
+  switch (ext) {
+    case 'vue':
+      return 'html'
+    case 'js':
+      return 'javascript'
+    case 'ts':
+      return 'typescript'
+    case 'json':
+      return 'json'
+    default:
+      return 'mdc'
+  }
+})
+
+const { setContent, setLanguage } = useMonaco(target, {
+  language: language.value,
   code: props.modelValue,
   readOnly: false,
   onChanged (content: string) {
-    emit('update:modelValue', content)
+    if (props.modelValue !== content) {
+      emit('update:modelValue', content)
+    }
   },
   onDidCreateEditor () {
   }
+})
+
+watch(() => language.value, (lang) => {
+  setLanguage(lang)
 })
 
 watch(

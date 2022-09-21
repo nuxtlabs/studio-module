@@ -77,7 +77,7 @@ const props = defineProps({
 
 const emit = defineEmits(['select', 'delete', 'create'])
 const useSelectedFile = (options) => {
-  const selectedFile = ref<File | null>(null)
+  const selectedFile = useState('selectedFile')
   const select = (file: File) => {
     selectedFile.value = file
   }

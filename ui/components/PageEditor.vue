@@ -17,6 +17,7 @@
     <Pane size="35">
       <template v-if="editor === 'raw'">
         <LazyMarkdownEditor
+          :filename="content.key"
           :model-value="content.source"
           class="h-full"
           @update:model-value="onMarkdownUpdate"
