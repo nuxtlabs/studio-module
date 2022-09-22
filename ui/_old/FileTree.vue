@@ -77,7 +77,7 @@ const props = defineProps({
 
 const emit = defineEmits(['select', 'delete', 'create'])
 const useSelectedFile = (options) => {
-  const selectedFile = useState<File>('selectedFile')
+  const selectedFile = ref<File | null>(null)
   const select = (file: File) => {
     selectedFile.value = file
   }
@@ -139,14 +139,12 @@ const selectFile = (file: File) => {
 }
 
 const createFile = (path) => {
-  // TODO: open modal
   const name = prompt('Enter File Name')
   if (name) {
     emit('create', withBase(name, path))
   }
 }
 const deleteFile = (path) => {
-  // TODO: open modal
   if (confirm('Are you sure you want to delete this file?')) {
     emit('delete', path)
   }

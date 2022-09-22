@@ -1,0 +1,48 @@
+@import 'splitpanes/dist/splitpanes.css';
+
+html, body, #__nuxt {
+  @apply h-full bg-white dark:bg-gray-900;
+}
+
+.studio-scrollbars {
+  & ::-webkit-scrollbar {
+    width: 0.6em;
+    height: 0.6em;
+    @apply bg-transparent;
+  }
+
+  & ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+
+  & ::-webkit-scrollbar-thumb {
+    border-radius: 0.6em;
+    @apply bg-gray-300 hover:bg-gray-400;
+  }
+
+  &.dark {
+    & ::-webkit-scrollbar-track {
+      @apply bg-gray-800;
+    }
+
+    & ::-webkit-scrollbar-thumb {
+      @apply bg-gray-700 hover:bg-gray-600;
+    }
+  }
+}
+
+.splitpanes.default-theme .splitpanes__pane {
+  @apply bg-transparent;
+}
+.splitpanes.default-theme .splitpanes__pane.preview {
+  @apply bg-white;
+}
+.splitpanes.default-theme .splitpanes__splitter {
+  @apply u-bg-gray-100
+}
+.default-theme.splitpanes--vertical>.splitpanes__splitter, .default-theme .splitpanes--vertical>.splitpanes__splitter {
+  @apply u-border-gray-200;
+}
+.splitpanes.default-theme .splitpanes__splitter:before, .splitpanes.default-theme .splitpanes__splitter:after {
+  @apply u-bg-gray-300;
+}

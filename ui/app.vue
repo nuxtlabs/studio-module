@@ -1,27 +1,24 @@
-<script>
-import 'splitpanes/dist/splitpanes.css'
+<script setup lang="ts">
+import { Splitpanes, Pane } from 'splitpanes'
+
+const studio = useStudio()
 </script>
 
 <template>
-  <div class="h-screen w-screen grid grid-rows-[max-content_1fr] overflow-hidden">
-    <main class="h-screen overflow-hidden">
-      <PageEditor />
-    </main>
-  </div>
+  <Splitpanes class="default-theme h-full overflow-hidden">
+    <Pane size="30" min-size="15">
+      <component :is="studio.currentView">
+        <p class="p-4 italic">
+          View {{ studio.currentView }} not found.
+        </p>
+      </component>
+    </Pane>
+    <Pane size="70" class="preview">
+      <Preview />
+    </Pane>
+  </Splitpanes>
 </template>
 
-<style scoped>
-html, body {
-  height: 100%;
-  overflow: hidden;
-  overscroll-behavior-y: none;
-}
-.dark header {
-  background: rgb(0,0,0,0.8);
-}
-header {
-  backdrop-filter: saturate(180%) blur(20px);
-  background: rgb(255,255,255,0.8);
-  border-bottom: 1px rgb(125,125,125,0.5) solid;
-}
+<style lang="postcss">
+@import '~/assets/css/main.css';
 </style>
