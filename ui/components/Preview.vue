@@ -3,11 +3,9 @@ import { NuxtStudioClient, NuxtStudioEditor } from '~/../types'
 
 const studio = useStudio()
 const initialUrl = studio.value.previewPath
-const emit = defineEmits<{
-  (event: 'update:path', v: string): void
-}>()
 const iframe = ref<HTMLIFrameElement>()
 const router = useRouter()
+
 let client: NuxtStudioClient | undefined
 const editor: NuxtStudioEditor = {
   nuxt: useNuxtApp(),

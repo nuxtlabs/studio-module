@@ -3,7 +3,7 @@ import { Node } from '@milkdown/prose/model'
 import { slashPlugin, slash, createDropdownItem, defaultActions } from '@milkdown/plugin-slash'
 import { kebabCase } from 'scule'
 import { componentSchemasCtx } from '../utils/context'
-import { isComponentNode, isSlotNode } from '../plugins/mdc/nodes'
+import { isComponentNode, isSlotNode } from './mdc/nodes'
 import { TurnIntoComponent } from './mdc/nodes/component'
 import { TurnIntoSlot } from './mdc/nodes/slot'
 

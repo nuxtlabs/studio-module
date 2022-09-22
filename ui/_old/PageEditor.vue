@@ -33,7 +33,7 @@
           <div class="border-b u-border-gray-100 p-4 text-sm overflow-hidden">
             <!-- TODO: get the meta image from app config as well (fallback state) -->
             <img v-if="file.image" :src="file.image" class="aspect-video float-right">
-            <EmptyImage v-else class="w-40 aspect-video float-right rounded" />
+            <IconEmptyImage v-else class="w-40 aspect-video float-right rounded" />
             <p><span class="font-bold u-text-gray-400 text-xs">title</span> {{ file.title }}</p>
             <p><span class="font-bold u-text-gray-400 text-xs">description</span> {{ file.description }}</p>
           </div>

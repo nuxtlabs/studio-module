@@ -58,7 +58,8 @@
 <script setup lang="ts">
 import { withBase } from 'ufo'
 import type { PropType } from 'vue'
-import type { File } from '~/types'
+import type { File } from '~/../types'
+
 const props = defineProps({
   level: {
     type: Number,

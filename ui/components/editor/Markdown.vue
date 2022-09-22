@@ -5,8 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import { useMonaco } from '~/monaco-editor/useMonacoEditor'
-
 const props = defineProps({
   filename: {
     type: String,

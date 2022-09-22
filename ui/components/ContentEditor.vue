@@ -1,89 +1,50 @@
+<!-- eslint-disable vue/no-multiple-template-root -->
 <template>
-  <Splitpanes class="default-theme h-full overflow-hidden">
-    <!-- <pane class="p-4" min-size="8" size="10">
-      <ContentTree v-if="tree" :tree="tree" :current="file.id" @select="selectFile" />
-    </pane> -->
-    <Pane size="15">
-      <div>
-        <FileTree
-          :tree="tree"
-          :expanded-dirs="{ content: true }"
-          @select="selectFile"
-          @delete="deleteFile"
-          @create="createFile"
-        />
-      </div>
-    </Pane>
-    <Pane size="35">
-      <template v-if="editor === 'raw'">
-        <LazyMarkdownEditor
-          :filename="content.key"
-          :model-value="content.source"
-          class="h-full"
-          @update:model-value="onMarkdownUpdate"
-        >
-          <template #fallback>
-            <div h-full>
-              Loading...
-            </div>
-          </template>
-        </LazyMarkdownEditor>
-      </template>
-      <template v-else>
-        <div class="h-full overflow-y-auto">
-          <div class="border-b u-border-gray-100 p-4 text-sm overflow-hidden">
-            <!-- TODO: get the meta image from app config as well (fallback state) -->
-            <img v-if="file.image" :src="file.image" class="aspect-video float-right">
-            <EmptyImage v-else class="w-40 aspect-video float-right rounded" />
-            <p><span class="font-bold u-text-gray-400 text-xs">title</span> {{ file.title }}</p>
-            <p><span class="font-bold u-text-gray-400 text-xs">description</span> {{ file.description }}</p>
-          </div>
-          <LazyContentEditor
-            :components="components"
-            :content="content"
-            class="px-4 py-6 min-h-full"
-            @update="onMarkdownUpdate"
-          >
-            <template #fallback>
-              <div h-full>
-                Loading...
-              </div>
-            </template>
-          </LazyContentEditor>
+  <template v-if="!file" />
+  <template v-else-if="editor === 'raw'">
+    <LazyEditorMarkdown
+      :filename="content.key"
+      :model-value="content.source"
+      class="h-full"
+      @update:model-value="onMarkdownUpdate"
+    >
+      <template #fallback>
+        <div h-full>
+          Loading...
         </div>
       </template>
-    </Pane>
-    <Pane size="50" class="h-full">
-      <PreviewViewer
-        v-model:path="previewPath"
-        :base="previewBase"
-      />
-    </Pane>
-  </Splitpanes>
+    </LazyEditorMarkdown>
+  </template>
+  <template v-else>
+    <div class="h-full overflow-y-auto">
+      <div class="border-b u-border-gray-100 p-4 text-sm overflow-hidden">
+        <!-- TODO: get the meta image from app config as well (fallback state) -->
+        <img v-if="file.image" :src="file.image" class="aspect-video float-right">
+        <IconEmptyImage v-else class="w-40 aspect-video float-right rounded" />
+        <p><span class="font-bold u-text-gray-400 text-xs">title</span> {{ file.title }}</p>
+        <p><span class="font-bold u-text-gray-400 text-xs">description</span> {{ file.description }}</p>
+      </div>
+      <LazyEditorContent
+        :components="components"
+        :content="content"
+        class="px-4 py-6 min-h-full"
+        @update="onMarkdownUpdate"
+      >
+        <template #fallback>
+          <div h-full>
+            Loading...
+          </div>
+        </template>
+      </LazyEditorContent>
+    </div>
+  </template>
 </template>
 
 <!-- Content Editor -->
 <script setup lang="ts">
-import { Splitpanes, Pane } from 'splitpanes'
-
-const { query } = useRoute()
-
-// TODO: remove localhost when not in dev
-const previewBase = ref('http://localhost:3000')
-const previewPath = ref(query.path as string || '/')
-
 const editor = ref('raw') // raw | component
-const file = ref({
-  id: '',
-  data: {},
-  content: '',
-  source: '',
-  _path: '/',
-  _file: '',
-  image: '',
-  title: '',
-  description: ''
-})
+const studio = useStudio()
+const file = computed(() => studio.value.currentFile)
 
 const content = computed(() => ({
   key: file.value.id,
@@ -97,11 +58,10 @@ const { data: tree, refresh: refreshTree } = await useFetch<any[]>('/files', { b
 const { data: components } = await useFetch<any[]>('/components', { baseURL: apiURL })
 
 async function selectFile (id: string) {
-  if (file.value.id === id) {
+  if (file.value?.id === id) {
     return
   }
-
-  file.value = await $fetch<any>(`/files/${id}`, { baseURL: apiURL })
+  studio.value.currentFile = await $fetch<any>(`/files/${id}`, { baseURL: apiURL })
 }
 
 async function deleteFile (id) {

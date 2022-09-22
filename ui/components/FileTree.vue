@@ -58,7 +58,7 @@
 <script setup lang="ts">
 import { withBase } from 'ufo'
 import type { PropType } from 'vue'
-import type { File } from '~/types'
+import type { File } from '~/../types'
 
 const props = defineProps({
   level: {
@@ -77,7 +77,7 @@ const props = defineProps({
 
 const emit = defineEmits(['select', 'delete', 'create'])
 const useSelectedFile = (options) => {
-  const selectedFile = useState('selectedFile')
+  const selectedFile = useState<File>('selectedFile')
   const select = (file: File) => {
     selectedFile.value = file
   }

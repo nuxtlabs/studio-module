@@ -4,12 +4,9 @@ const studio = useStudio()
 
 <template>
   <div class="flex-col overflow-auto">
-    <div class="flex justify-between items-center p-4 mb-2">
-      <Logo class="h-5" alt="Nuxt Studio" />
-      <ColorModeToggle class="h-4" />
-    </div>
+    <NavBar />
     <div class="p-2 flex-col space-y-2 flex-1">
-      <div class="menu_item group" @click="setStudioView('ContentTree')">
+      <div class="menu_item group" @click="setStudioView('Content')">
         <IconContent />
         <span class="menu_item_text">Content</span>
         <UIcon name="ph:caret-right-bold" class="menu_item_caret" />

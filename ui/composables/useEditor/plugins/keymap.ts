@@ -1,8 +1,8 @@
 import { chainCommands, createParagraphNear, newlineInCode, splitBlock } from '@milkdown/prose/commands'
 import { keymap } from '@milkdown/prose/keymap'
 import { $prose } from '@milkdown/utils'
-import { isComponentOrSlotNode } from '../plugins/mdc/nodes'
-import { remove } from '../plugins/mdc/nodes/utils/transactions'
+import { isComponentOrSlotNode } from './mdc/nodes'
+import { remove } from './mdc/nodes/utils/transactions'
 
 export default $prose(() => keymap({
   Backspace: (state, dispatch, view) => {
