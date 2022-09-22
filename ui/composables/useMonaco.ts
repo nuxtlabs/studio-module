@@ -68,9 +68,13 @@ export function useMonaco (
     if (editor) { editor.setValue(content) }
   }
 
+  let setLanguage = (language: string) => {}
+
   const init = async () => {
     const { monaco } = await setupMonaco()
-
+    setLanguage = (language: string) => {
+      monaco.editor.setModelLanguage(editor.getModel(), language)
+    }
     watch(
       target,
       () => {
@@ -124,6 +128,7 @@ export function useMonaco (
   init()
 
   return {
-    setContent
+    setContent,
+    setLanguage
   }
 }

@@ -1,8 +1,9 @@
 import { stat } from 'fs/promises'
 import { withoutTrailingSlash } from 'ufo'
 import { defu } from 'defu'
-import { defineNuxtModule, installModule, addServerHandler, addPlugin, extendViteConfig, addComponentsDir, createResolver, logger } from '@nuxt/kit'
+import { defineNuxtModule, installModule, addServerHandler, addPlugin, extendViteConfig, addComponentsDir, createResolver, logger, addDevServerHandler } from '@nuxt/kit'
 import meta from 'nuxt-component-meta'
+import createFilesHandler from './runtime/server/dev-api/files'
 
 const log = logger.withScope('@nuxt/studio')
 
@@ -18,8 +19,16 @@ export default defineNuxtModule<ModuleOptions>({
   async setup (_options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
+    nuxt.options.runtimeConfig.studio = nuxt.options.runtimeConfig.studio || {}
     nuxt.options.runtimeConfig.public.studio = defu(nuxt.options.runtimeConfig.public.studio, {
       apiURL: process.env.NUXT_PUBLIC_STUDIO_API_URL || 'https://api.nuxt.com'
+    })
+
+    addDevServerHandler({
+      route: '/api/_studio/files',
+      handler: createFilesHandler({
+        rootDir: nuxt.options.rootDir
+      })
     })
 
     nuxt.hook('nitro:config', (nitroConfig) => {
@@ -60,33 +69,9 @@ export default defineNuxtModule<ModuleOptions>({
       nuxt.options.nitro.alias['#studio/server/utils'] = resolve('./runtime/server/utils')
       addServerHandler({
         method: 'get',
-        route: '/api/_studio/content/files',
-        handler: resolve('./runtime/server/api/content/files.get')
-      })
-      addServerHandler({
-        method: 'get',
         route: '/api/_studio/content/navigation',
         handler: resolve('./runtime/server/api/content/navigation.get')
       })
-      addServerHandler({
-        method: 'get',
-        route: '/api/_studio/content/tree',
-        handler: resolve('./runtime/server/api/content/tree.get')
-      })
-
-      for (const method of ['get', 'post', 'delete']) {
-        const handler = resolve(`./runtime/server/api/content/[id].${method}`)
-        addServerHandler({
-          method,
-          route: '/api/_studio/content/**:id',
-          handler
-        })
-        addServerHandler({
-          method,
-          route: '/api/_studio/content/:id',
-          handler
-        })
-      }
     }
 
     addPlugin(resolve('./runtime/plugins/iframe.client'))
