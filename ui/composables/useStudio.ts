@@ -21,6 +21,9 @@ export const useStudio = () => {
 
 export const setStudioView = (view: string) => {
   useStudio().value.currentView = view
+  if (view !== 'content') {
+    useStudio().value.currentFile = undefined
+  }
 }
 
 export const quitStudio = () => {

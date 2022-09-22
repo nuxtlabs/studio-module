@@ -2,50 +2,54 @@ import { resolve } from 'path'
 import fsp from 'fs/promises'
 import anymatch from 'anymatch'
 import { eventHandler, isMethod, readBody } from 'h3'
-import { withoutLeadingSlash } from 'ufo'
+import { withoutLeadingSlash, withoutTrailingSlash } from 'ufo'
 
 interface FilesHandlerOptions {
   rootDir: string
 }
 
 export default (option: FilesHandlerOptions) => eventHandler(async (event) => {
-  const path = withoutLeadingSlash(event.req.url)
-
+  const path = event.req.url
   const { rootDir } = option
+  const filePath = withoutTrailingSlash(rootDir + path)
 
   if (isMethod(event, 'POST')) {
     const body = await readBody(event)
-    await fsp.writeFile(resolve(rootDir, path), body.source, 'utf-8')
+    await fsp.writeFile(filePath, body.source, 'utf-8')
     return {
       id: path
     }
   }
 
   if (isMethod(event, 'PUT')) {
-    await fsp.writeFile(resolve(rootDir, path), '', 'utf-8').catch(ignoreNotfound)
+    await fsp.writeFile(filePath, '', 'utf-8').catch(ignoreNotfound)
     return {
       id: path
     }
   }
 
   if (isMethod(event, 'DELETE')) {
-    await fsp.unlink(resolve(rootDir, path)).catch(ignoreNotfound)
+    await fsp.unlink(filePath).catch(ignoreNotfound)
     return {
       id: path
     }
   }
 
-  if (path === '/') {
+  const stats = await fsp.stat(filePath).catch(ignoreNotfound)
+  if (stats.isDirectory()) {
     const ignore = anymatch([
       '**/node_modules/**',
       '**/.git/**',
       '**/.nuxt/**'
     ])
 
-    return readdirRecursive(rootDir, ignore)
+    return readdirRecursive(filePath, ignore, {
+      id: withoutLeadingSlash(path === '/' ? '' : path),
+      children: []
+    })
   }
 
-  const source = await fsp.readFile(resolve(rootDir, path), 'utf-8').catch(ignoreNotfound)
+  const source = await fsp.readFile(filePath, 'utf-8').catch(ignoreNotfound)
   return {
     id: path,
     source

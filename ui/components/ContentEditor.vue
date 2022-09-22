@@ -89,6 +89,7 @@ const onMarkdownUpdate = async (md) => {
     const matter = parts.length >= 2 ? `---\n${parts[1]}---\n\n` : ''
     md = matter + md
   }
+
   await $fetch<any>(`files/${file.value.id}`, {
     baseURL: apiURL,
     method: 'POST',
@@ -96,17 +97,6 @@ const onMarkdownUpdate = async (md) => {
       source: md
     }
   })
-}
-
-if (tree.value) {
-  const contentDirectory = tree.value.find(item => item.path === 'content')
-  if (contentDirectory) {
-    const file = contentDirectory.children[0]
-
-    if (file) {
-      selectFile(file.id)
-    }
-  }
 }
 </script>
 

@@ -2,7 +2,7 @@
 const studio = useStudio()
 
 const { apiURL } = useRuntimeConfig().public.studio
-const { data: tree, refresh: refreshTree } = await useFetch<any[]>('/files', { baseURL: apiURL })
+const { data: tree, refresh: refreshTree } = await useFetch<any[]>('/files/content', { baseURL: apiURL })
 
 async function selectFile (id: string) {
   if (studio.value.currentFile?.id === id) {
