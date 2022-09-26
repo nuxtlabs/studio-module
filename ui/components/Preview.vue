@@ -34,5 +34,11 @@ watch(() => studio.previewPath, (route) => {
 <template>
   <div class="w-full h-full overflow-auto">
     <iframe ref="iframe" class="w-full min-h-full" :src="initialUrl" @load="updateClient" />
+    <div class="fixed bottom-4 ml-4">
+      <!-- TODO: Display the button if document driven mode + leverage useContent().page._file -->
+      <UButton variant="gray" size="sm">
+        Edit this page
+      </UButton>
+    </div>
   </div>
 </template>
