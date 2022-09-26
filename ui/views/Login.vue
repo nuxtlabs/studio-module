@@ -1,8 +1,5 @@
 <script setup lang="ts">
 const studio = useStudio()
-const quitStudio = () => {
-  window.location.href = studio.value.previewPath
-}
 </script>
 
 <template>
@@ -12,7 +9,7 @@ const quitStudio = () => {
       <ColorModeToggle class="h-4" />
     </div>
     <div class="p-4">
-      <UButton variant="gray" to="https://dev-station.nuxt.com" @click="quitStudio">
+      <UButton variant="gray" to="https://dev-station.nuxt.com" @click="studio.quit()">
         Login with Nuxt Station
       </UButton>
     </div>

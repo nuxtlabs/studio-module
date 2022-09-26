@@ -1,13 +1,6 @@
 <script setup lang="ts">
 const studio = $(useStudio())
 
-async function selectFile (id: string) {
-  if (studio.currentFile?.id === id) {
-    return
-  }
-  studio.currentFile = await $fetch<any>(`/files/${id}`, { baseURL: studio.apiURL })
-}
-
 async function deleteFile (id) {
   await $fetch<any>(`/files/${id}`, {
     baseURL: studio.apiURL,
@@ -35,7 +28,7 @@ async function createFile (id) {
     <FileTree
       :tree="studio.contentTree"
       :expanded-dirs="{ content: true }"
-      @select="selectFile"
+      @select="studio.selectFile"
       @delete="deleteFile"
       @create="createFile"
     />

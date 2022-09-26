@@ -7,7 +7,7 @@ function createStudio () {
   const { data: contentTree, refresh: refreshContentTree, then: getContentTree } = useFetch<any[]>('/files/content', { baseURL: apiURL })
   const { data: components, refresh: refreshComponents, then: getComponents } = useFetch<any[]>('/components', { baseURL: apiURL })
 
-  const state = reactive({
+  const studio = reactive({
     apiURL,
 
     contentTree,
@@ -24,18 +24,33 @@ function createStudio () {
     currentFile: undefined as File | undefined,
 
     quit () {
-      window.location.href = state.previewPath
+      window.location.href = studio.previewPath
     },
 
     setView (view: string) {
-      state.currentView = view
+      studio.currentView = view
       if (view !== 'Content') {
-        state.currentFile = undefined
+        studio.currentFile = undefined
       }
+    },
+
+    async selectFile (id: string) {
+      if (studio.currentFile?.id === id) {
+        return
+      }
+      studio.currentFile = {
+        ...studio.contentTree.find(i => i.id === id),
+        ...await $fetch<any>(`/files/${id}`, { baseURL: studio.apiURL })
+      }
+      // state.previewPath = '/' + state.currentFile.path
     }
   })
 
-  return state
+  if (process.dev) {
+    console.log('Nuxt Studio', studio)
+  }
+
+  return studio
 }
 
 export const useStudio = () => {
