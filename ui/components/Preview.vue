@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { NuxtStudioClient, NuxtStudioEditor } from '~/../types'
 
-const studio = useStudio()
-const initialUrl = studio.value.previewPath
+const studio = $(useStudio())
+const initialUrl = studio.previewPath
 const iframe = ref<HTMLIFrameElement>()
 const router = useRouter()
 
@@ -10,13 +10,13 @@ let client: NuxtStudioClient | undefined
 const editor: NuxtStudioEditor = {
   nuxt: useNuxtApp(),
   onRouteChanged (route) {
-    studio.value.previewPath = route
+    studio.previewPath = route
     router.replace({ query: { path: route } })
   }
 }
 
 function updateClient () {
-  client = studio.value.previewClient = iframe.value?.contentWindow.__NUXT_STUDIO__
+  client = studio.previewClient = iframe.value?.contentWindow.__NUXT_STUDIO__
   if (!client) {
     setTimeout(updateClient, 100)
   } else {
@@ -26,7 +26,7 @@ function updateClient () {
 
 onMounted(updateClient)
 
-watch(() => studio.value.previewPath, (route) => {
+watch(() => studio.previewPath, (route) => {
   client?.onRouteChanged(route)
 })
 </script>

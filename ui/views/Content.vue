@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const studio = useStudio()
+const studio = $(useStudio())
 
 function goBack () {
-  if (studio.value.currentFile) {
-    studio.value.currentFile = undefined
+  if (studio.currentFile) {
+    studio.currentFile = undefined
   } else {
-    setStudioView('Home')
+    studio.setView('Home')
   }
 }
 </script>
