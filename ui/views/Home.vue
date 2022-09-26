@@ -26,6 +26,16 @@ const studio = useStudio()
         <span class="menu_item_text">Design</span>
         <UIcon name="ph:caret-right-bold" class="menu_item_caret" />
       </div>
+      <div class="menu_item group">
+        <IconConfig />
+        <span class="menu_item_text">App Config</span>
+        <UIcon name="ph:caret-right-bold" class="menu_item_caret" />
+      </div>
+      <div class="menu_item group">
+        <IconDevtools />
+        <span class="menu_item_text">Devtools</span>
+        <UIcon name="ph:caret-right-bold" class="menu_item_caret" />
+      </div>
     </div>
     <div class="flex items-center p-4">
       <UButton variant="gray" icon="ph:x-duotone" size="xxs" @click="quitStudio">
