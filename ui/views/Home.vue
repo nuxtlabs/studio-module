@@ -6,7 +6,7 @@ const studio = useStudio()
   <div class="flex-col overflow-auto">
     <NavBar />
     <div class="p-2 flex-col space-y-2 flex-1">
-      <div class="menu_item group" @click="setStudioView('Content')">
+      <div class="menu_item group" @click="studio.setView('Content')">
         <IconContent />
         <span class="menu_item_text">Content</span>
         <UIcon name="ph:caret-right-bold" class="menu_item_caret" />
@@ -38,7 +38,7 @@ const studio = useStudio()
       </div>
     </div>
     <div class="flex items-center p-4">
-      <UButton variant="gray" icon="ph:x-duotone" size="xxs" @click="quitStudio">
+      <UButton variant="gray" icon="ph:x-duotone" size="xxs" @click="studio.quit()">
         Close Studio
       </UButton>
       <UTooltip :text="studio.previewClient ? 'Connected to preview' : 'Connecting...'">

@@ -5,6 +5,9 @@ export default defineNuxtConfig({
   app: {
     baseURL: '/_studio/'
   },
+  experimental: {
+    reactivityTransform: true
+  },
   components: [
     '~/components',
     { path: '~/views', global: true }

@@ -1,44 +1,34 @@
 <script setup lang="ts">
-const studio = useStudio()
-
-const { apiURL } = useRuntimeConfig().public.studio
-const { data: tree, refresh: refreshTree } = await useFetch<any[]>('/files/content', { baseURL: apiURL })
-
-async function selectFile (id: string) {
-  if (studio.value.currentFile?.id === id) {
-    return
-  }
-  studio.value.currentFile = await $fetch<any>(`/files/${id}`, { baseURL: apiURL })
-}
+const studio = $(useStudio())
 
 async function deleteFile (id) {
   await $fetch<any>(`/files/${id}`, {
-    baseURL: apiURL,
+    baseURL: studio.apiURL,
     method: 'DELETE'
   })
   // TODO: update the tree
-  await refreshTree()
-  if (studio.value.currentFile?.id === id) {
-    studio.value.currentFile = undefined
+  await studio.refreshContentTree()
+  if (studio.currentFile?.id === id) {
+    studio.currentFile = undefined
   }
 }
 
 async function createFile (id) {
   await $fetch<any>(`/files/${id}`, {
-    baseURL: apiURL,
+    baseURL: studio.apiURL,
     method: 'PUT'
   })
   // TODO: update the tree
-  await refreshTree()
+  await studio.refreshContentTree()
 }
 </script>
 
 <template>
   <div>
     <FileTree
-      :tree="tree"
+      :tree="studio.contentTree"
       :expanded-dirs="{ content: true }"
-      @select="selectFile"
+      @select="studio.selectFile"
       @delete="deleteFile"
       @create="createFile"
     />

@@ -25,7 +25,7 @@
         <p><span class="font-bold u-text-gray-400 text-xs">description</span> {{ file.description }}</p>
       </div>
       <LazyEditorContent
-        :components="components"
+        :components="studio.components"
         :content="content"
         class="px-4 py-6 min-h-full"
         @update="onMarkdownUpdate"
@@ -42,9 +42,9 @@
 
 <!-- Content Editor -->
 <script setup lang="ts">
-const editor = ref('raw') // raw | component
-const studio = useStudio()
-const file = computed(() => studio.value.currentFile)
+const studio = $(useStudio())
+const editor = ref<'raw' | 'component'>('raw') // raw | component
+const file = computed(() => studio.currentFile)
 
 const content = computed(() => ({
   key: file.value.id,
@@ -52,35 +52,6 @@ const content = computed(() => ({
   source: file.value.source,
   matter: {}
 }))
-
-const { apiURL } = useRuntimeConfig().public.studio
-const { data: tree, refresh: refreshTree } = await useFetch<any[]>('/files', { baseURL: apiURL })
-const { data: components } = await useFetch<any[]>('/components', { baseURL: apiURL })
-
-async function selectFile (id: string) {
-  if (file.value?.id === id) {
-    return
-  }
-  studio.value.currentFile = await $fetch<any>(`/files/${id}`, { baseURL: apiURL })
-}
-
-async function deleteFile (id) {
-  await $fetch<any>(`/files/${id}`, {
-    baseURL: apiURL,
-    method: 'DELETE'
-  })
-  // TODO: update the tree
-  await refreshTree()
-}
-
-async function createFile (id) {
-  await $fetch<any>(`/files/${id}`, {
-    baseURL: apiURL,
-    method: 'PUT'
-  })
-  // TODO: update the tree
-  await refreshTree()
-}
 
 const onMarkdownUpdate = async (md) => {
   if (!file.value.id) { return }
@@ -91,7 +62,7 @@ const onMarkdownUpdate = async (md) => {
   }
 
   await $fetch<any>(`files/${file.value.id}`, {
-    baseURL: apiURL,
+    baseURL: studio.apiURL,
     method: 'POST',
     body: {
       source: md
