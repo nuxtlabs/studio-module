@@ -24,7 +24,7 @@ export default defineNuxtModule<ModuleOptions>({
     // Check Content module version
     const contentModuleVersion = await import('@nuxt/content').then((m: any) => m.getMeta()).then(m => m.version).catch(() => '0')
     if (contentModuleVersion < '2.1.1') {
-      log.warn('Please update `@nuxt/content` to version 2.1.2 or higher to use preview mode.')
+      log.warn('Please update `@nuxt/content` to version 2.1.2 or higher to enable preview mode.')
       return
     }
 
