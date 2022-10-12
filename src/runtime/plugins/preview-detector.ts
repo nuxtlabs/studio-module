@@ -18,8 +18,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
 
     // Show loading
-    // eslint-disable-next-line no-console
-    console.info('👀 Preview mode activated:', previewToken.value)
     const el = document.createElement('div')
     el.id = '__nuxt_preview_wrapper'
     document.body.appendChild(el)
