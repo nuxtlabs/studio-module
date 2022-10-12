@@ -18,7 +18,7 @@ export default defineNuxtModule<ModuleOptions>({
       !nuxt.options.runtimeConfig.content &&
       !nuxt.options.modules.includes('@nuxt/content')
     ) {
-      log.warn('Could not find `@nuxt/content` module. Please install it to use preview mode.')
+      log.warn('Could not find `@nuxt/content` module. Please install it to enable preview mode.')
       return
     }
     // Check Content module version
