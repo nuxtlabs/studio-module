@@ -13,16 +13,21 @@ export default defineNuxtModule<ModuleOptions>({
   },
   defaults: {},
   async setup (_options, nuxt) {
+    const contentModule = '@nuxt/content'
     // Check Content module is installed
     if (
       !nuxt.options.runtimeConfig.content &&
-      !nuxt.options.modules.includes('@nuxt/content')
+      !nuxt.options.modules.includes(contentModule)
     ) {
       log.warn('Could not find `@nuxt/content` module. Please install it to enable preview mode.')
       return
     }
     // Check Content module version
-    const contentModuleVersion = await import('@nuxt/content').then((m: any) => m.getMeta()).then(m => m.version).catch(() => '0')
+    const contentModuleVersion = await import(contentModule)
+      .then(m => m.default || m)
+      .then((m: any) => m.getMeta())
+      .then(m => m.version)
+      .catch(() => '0')
     if (contentModuleVersion < '2.1.1') {
       log.warn('Please update `@nuxt/content` to version 2.1.2 or higher to enable preview mode.')
       return
