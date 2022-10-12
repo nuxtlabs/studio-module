@@ -1,9 +1,7 @@
 <script setup>
-import { onMounted, ref, onUnmounted } from 'vue'
-import { refreshNuxtData } from '#imports'
-
-// eslint-disable-next-line vue/no-setup-props-destructure
-const { previewToken, apiURL } = defineProps({
+import { onMounted, ref, onUnmounted, nextTick } from 'vue'
+import { refreshNuxtData, useCookie, useRoute, navigateTo } from '#imports'
+const props = defineProps({
   previewToken: {
     type: Object,
     required: true
@@ -14,36 +12,36 @@ const { previewToken, apiURL } = defineProps({
   }
 })
 
+const emit = defineEmits(['refresh'])
 const previewClasses = ['__nuxt_preview', '__preview_enabled']
 const open = ref(true)
 const refreshing = ref(false)
 const ready = ref(false)
+const closePreviewMode = async () => {
+  useCookie('previewToken').value = ''
+  useRoute().query.preview = ''
+  await navigateTo(useRoute().path)
+  nextTick(() => {
+    refreshNuxtData()
+  })
 
-const closePreviewMode = () => {
   open.value = false
-  // TODO: refactor this to use composable for closing the preview mode
-  // eslint-disable-next-line vue/no-mutating-props
-  previewToken.value = null
-
   // Cleans up body classes for live preview
   document.body.classList.remove(...previewClasses)
-
-  refreshNuxtData()
 }
 
 onMounted(async () => {
   const io = await import('socket.io-client')
-  const socket = io.connect(`${apiURL}/preview:${previewToken.value}`, {
+  const socket = io.connect(`${props.apiURL}/preview:${props.previewToken.value}`, {
     transports: ['websocket', 'polling']
   })
   ready.value = true
 
   // Adds body classes for live preview
   document.body.classList.add(...previewClasses)
-
-  socket.on('draft:update', async () => {
+  socket.on('draft:update', () => {
     refreshing.value = true
-    await refreshNuxtData()
+    emit('refresh')
     refreshing.value = false
   })
 })
