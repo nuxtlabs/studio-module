@@ -1,5 +1,5 @@
 import { defu } from 'defu'
-import { defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir } from '@nuxt/kit'
+import { defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler } from '@nuxt/kit'
 
 const log = logger.withScope('@nuxt/studio')
 
@@ -54,6 +54,21 @@ export default defineNuxtModule<ModuleOptions>({
     // Register components
     addComponentsDir({
       path: resolve('./runtime/components')
+    })
+
+    // Add server route to know Studio is enabled
+    addServerHandler({
+      method: 'get',
+      route: '/_studio_enabled.json',
+      handler: resolve('./runtime/server/routes/enabled')
+    })
+    // With RC13
+    // addPrerenderRoute('/_studio_enabled.json')
+    nuxt.hook('nitro:config', (nitroConfig) => {
+      // Init Nitro context
+      nitroConfig.prerender = nitroConfig.prerender || {}
+      nitroConfig.prerender.routes = nitroConfig.prerender.routes || []
+      nitroConfig.prerender.routes.unshift('/_studio_enabled.json')
     })
   }
 })
