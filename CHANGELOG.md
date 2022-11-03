@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.1.3...v0.1.4) (2022-11-03)
+
+
+### Features
+
+* add /_studio_enabled.json route ([2e24f0a](https://github.com/nuxtlabs/studio.nuxt.com/commit/2e24f0acf766e05d19b0aaf7532383e5b51648ce)), closes [#56](https://github.com/nuxtlabs/studio.nuxt.com/issues/56)
+
 ### [0.1.3](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.1.2...v0.1.3) (2022-11-03)
 
 
