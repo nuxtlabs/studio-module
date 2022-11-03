@@ -35,7 +35,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     const { resolve } = createResolver(import.meta.url)
 
-    const apiURL = process.env.NUXT_PUBLIC_STUDIO_API_URL || 'https://api.nuxt.studio'
+    const apiURL = process.env.NUXT_PUBLIC_STUDIO_API_URL || process.env.STUDIO_API || 'https://api.nuxt.studio'
     nuxt.options.runtimeConfig.studio = nuxt.options.runtimeConfig.studio || {}
     nuxt.options.runtimeConfig.public.studio = defu(nuxt.options.runtimeConfig.public.studio, { apiURL })
 

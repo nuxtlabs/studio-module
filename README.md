@@ -46,6 +46,15 @@ If you want latest updates, please use `@nuxthq/studio-edge` in your `package.js
 }
 ```
 
+## Configuration
+
+By default the Studio API is `https://api.nuxt.studio`. If you want to customise it, you can set the `STUDIO_API` environement variable.
+
+```bash
+# .env
+STUDIO_API=https://dev-api.nuxt.studio
+```
+
 ## Usage
 
 The module will expose the Studio UI in development on `/_studio/`.
