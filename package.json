@@ -30,7 +30,7 @@
     "build:ui": "NITRO_PRESET=node nuxi build ui",
     "build:module": "nuxt-module-build",
     "lint": "eslint --ext .vue,.ts,.js,.mjs .",
-    "release": "yarn lint && standard-version && git push --follow-tags"
+    "release": "yarn lint && yarn build && standard-version && git push --follow-tags"
   },
   "dependencies": {
     "@nuxt/kit": "^3.0.0-rc.11",
