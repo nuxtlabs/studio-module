@@ -65,6 +65,9 @@ onUnmounted(() => {
 </template>
 
 <style>
+body.__preview_enabled {
+  padding-bottom: 50px;
+}
 #__nuxt_preview {
   height: 50px;
   display: flex;
@@ -83,6 +86,7 @@ onUnmounted(() => {
   border-top: 1px #eee solid;
   transition: bottom 0.3s ease-in-out;
   font-size: 16px;
+  z-index: 10000;
 }
 #__nuxt_preview.__preview_ready {
   bottom: 0;
