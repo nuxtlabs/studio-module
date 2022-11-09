@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.1.4...v0.1.5) (2022-11-09)
+
+
+### Bug Fixes
+
+* handle missing content in drafts ([#58](https://github.com/nuxtlabs/studio.nuxt.com/issues/58)) ([50f88d7](https://github.com/nuxtlabs/studio.nuxt.com/commit/50f88d7ebbfb1734cb5037e66e0d8419d3c10533))
+
 ### [0.1.4](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.1.3...v0.1.4) (2022-11-03)
 
 
