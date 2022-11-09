@@ -33,12 +33,12 @@
     "release": "yarn lint && yarn build && standard-version && git push --follow-tags"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.0.0-rc.11",
-    "@nuxt/schema": "^3.0.0-rc.11",
+    "@nuxt/kit": "^3.0.0-rc.13",
+    "@nuxt/schema": "^3.0.0-rc.13",
     "defu": "^6.1.0",
     "nuxt-component-meta": "^0.2.3",
-    "socket.io-client": "^4.5.2",
-    "ufo": "^0.8.5"
+    "socket.io-client": "^4.5.3",
+    "ufo": "^0.8.6"
   },
   "devDependencies": {
     "@milkdown/core": "^6.4.1",
@@ -60,22 +60,22 @@
     "@milkdown/vue": "^6.4.1",
     "@nuxt-themes/elements-edge": "^0.0.1-fd5890e",
     "@nuxt/content": "npm:@nuxt/content-edge@latest",
-    "@nuxt/module-builder": "^0.1.7",
+    "@nuxt/module-builder": "^0.2.0",
     "@nuxthq/ui": "npm:@nuxthq/ui-edge@latest",
     "@nuxtjs/eslint-config-typescript": "^11.0.0",
-    "@vueuse/core": "^9.2.0",
-    "@vueuse/nuxt": "^9.2.0",
-    "eslint": "^8.23.1",
+    "@vueuse/core": "^9.5.0",
+    "@vueuse/nuxt": "^9.5.0",
+    "eslint": "^8.27.0",
     "jiti": "^1.16.0",
-    "monaco-editor-core": "^0.34.0",
-    "nuxt": "^3.0.0-rc.11",
-    "remark-mdc": "^1.0.7",
+    "monaco-editor-core": "^0.34.1",
+    "nuxt": "^3.0.0-rc.13",
+    "remark-mdc": "^1.1.1",
     "shiki-es": "^0.1.2",
-    "splitpanes": "^3.1.1",
+    "splitpanes": "^3.1.5",
     "standard-version": "^9.5.0",
-    "typescript": "^4.8.3",
+    "typescript": "^4.8.4",
     "y-websocket": "^1.4.5",
-    "yjs": "^13.5.41"
+    "yjs": "^13.5.42"
   },
   "packageManager": "yarn@3.2.3"
 }

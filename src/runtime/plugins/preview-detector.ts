@@ -1,12 +1,14 @@
 import { createApp } from 'vue'
+import type { Storage } from 'unstorage'
 import { defineNuxtPlugin, useRuntimeConfig, useRoute, useCookie, refreshNuxtData, useNuxtApp } from '#imports'
 import { ContentPreviewMode } from '#components'
+import { DraftFile, PreviewResponse, PreviewFile } from '~~/../types'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const { studio } = useRuntimeConfig().public
+  let contentStorage: Storage
 
   function initializePreview () {
-    let contentStorage
     const nuxtApp = useNuxtApp()
     const query = useRoute().query || {}
     const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
@@ -29,7 +31,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     }).mount(el)
 
     // @ts-ignore
-    nuxtApp.hook('content:storage', async (storage) => {
+    nuxtApp.hook('content:storage', async (storage: Storage) => {
       contentStorage = storage
       await fetchData(contentStorage, { baseURL: studio.apiURL, token: previewToken.value })
       refreshNuxtData()
@@ -48,9 +50,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 })
 
-async function fetchData (contentStorage, { token, baseURL }: { token: string, baseURL: string }) {
+async function fetchData (contentStorage: Storage, { token, baseURL }: { token: string, baseURL: string }) {
   // Fetch preview data from station
-  const data = await $fetch('api/projects/preview', {
+  const data = await $fetch<PreviewResponse>('api/projects/preview', {
     baseURL,
     params: {
       token
@@ -70,13 +72,64 @@ async function fetchData (contentStorage, { token, baseURL }: { token: string, b
   )
 
   // Fill store with preview content
-  const items = [
-    ...(data.files || []),
-    ...data.additions,
-    ...data.deletions.map(d => ({ ...d, parsed: { _id: d.path.replace(/\//g, ':'), __deleted: true } }))
-  ]
+  const items = mergeDraft(data.files, data.additions, data.deletions)
 
   await Promise.all(
     items.map(item => contentStorage.setItem(`${token}:${item.parsed._id}`, JSON.stringify(item.parsed)))
   )
+}
+
+const mergeDraft = (dbFiles: PreviewFile[], draftAdditions: DraftFile[], draftDeletions: DraftFile[]) => {
+  const additions = [...(draftAdditions || [])]
+  const deletions = [...(draftDeletions || [])]
+
+  // Compute file name
+  const mergedFiles: PreviewFile[] = [...(dbFiles || [])]
+
+  // Merge darft additions
+  for (const addition of additions) {
+    // File has been renamed
+    if (addition.oldPath) {
+      // Remove old file from deletions (only display renamed one)
+      deletions.splice(deletions.findIndex(d => d.path === addition.oldPath), 1)
+
+      // Custom case of #447
+      const oldPathExistInCache = additions.find(a => a.path === addition.oldPath)
+      if (oldPathExistInCache) {
+        mergedFiles.push({ path: addition.path, parsed: addition.parsed })
+        // Update exsiting renamed file data
+      } else {
+        const file = mergedFiles.find(f => f.path === addition.oldPath)
+        if (file) {
+          file.path = addition.path
+
+          // If file is also modified, set draft content
+          if (addition.parsed) {
+            file.parsed = addition.parsed
+          } else if (addition.pathMeta) {
+            // Apply new path metadata
+            ['_file', '_path', '_id', '_locale'].forEach((key) => {
+              file.parsed[key] = addition.pathMeta[key]
+            })
+          }
+        }
+      }
+      // File has been added
+    } else if (addition.new) {
+      mergedFiles.push({ path: addition.path, parsed: addition.parsed })
+      // File has been modified
+    } else {
+      const file = mergedFiles.find(f => f.path === addition.path)
+      if (file) {
+        Object.assign(file, { path: addition.path, parsed: addition.parsed })
+      }
+    }
+  }
+
+  // Merge draft deletions (set deletion status)
+  for (const deletion of deletions) {
+    // File has been deleted
+    mergedFiles.splice(mergedFiles.findIndex(f => f.path === deletion.path), 1)
+  }
+  return mergedFiles
 }
