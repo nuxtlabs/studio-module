@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.1...v0.2.2) (2022-11-10)
+
+
+### Bug Fixes
+
+* missing useRuntimeConfig import ([dcf7d30](https://github.com/nuxtlabs/studio.nuxt.com/commit/dcf7d30b46f82063077890e375c536644758d6d4))
+
 ### [0.2.1](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.0...v0.2.1) (2022-11-10)
 
 
