@@ -1,4 +1,5 @@
 import { version } from '../../../../package.json'
+import { eventHandler } from '#imports'
 // @ts-ignore
 import components from '#nuxt-component-meta/nitro'
 
