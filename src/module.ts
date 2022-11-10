@@ -1,5 +1,5 @@
 import { defu } from 'defu'
-import { defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler } from '@nuxt/kit'
+import { installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler } from '@nuxt/kit'
 
 const log = logger.withScope('@nuxt/studio')
 
@@ -28,10 +28,13 @@ export default defineNuxtModule<ModuleOptions>({
       .then((m: any) => m.getMeta())
       .then(m => m.version)
       .catch(() => '0')
-    if (contentModuleVersion < '2.1.1') {
-      log.warn('Please update `@nuxt/content` to version 2.1.2 or higher to enable preview mode.')
+    if (contentModuleVersion < '2.2.2') {
+      log.warn('Please update `@nuxt/content` to version 2.2.2 or higher to enable preview mode.')
       return
     }
+
+    // Add nuxt-components-meta
+    installModule('nuxt-component-meta')
 
     const { resolve } = createResolver(import.meta.url)
 
@@ -59,11 +62,11 @@ export default defineNuxtModule<ModuleOptions>({
     // Add server route to know Studio is enabled
     addServerHandler({
       method: 'get',
-      route: '/_studio_enabled.json',
-      handler: resolve('./runtime/server/routes/enabled')
+      route: '/__studio.json',
+      handler: resolve('./runtime/server/routes/studio')
     })
     // With RC13
-    // addPrerenderRoute('/_studio_enabled.json')
+    // addPrerenderRoute('/__studio.json')
     nuxt.hook('nitro:config', (nitroConfig) => {
       // Init Nitro context
       nitroConfig.prerender = nitroConfig.prerender || {}
