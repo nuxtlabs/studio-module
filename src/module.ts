@@ -1,5 +1,5 @@
 import { defu } from 'defu'
-import { installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler } from '@nuxt/kit'
+import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler } from '@nuxt/kit'
 
 const log = logger.withScope('@nuxt/studio')
 
@@ -66,12 +66,6 @@ export default defineNuxtModule<ModuleOptions>({
       handler: resolve('./runtime/server/routes/studio')
     })
     // With RC13
-    // addPrerenderRoute('/__studio.json')
-    nuxt.hook('nitro:config', (nitroConfig) => {
-      // Init Nitro context
-      nitroConfig.prerender = nitroConfig.prerender || {}
-      nitroConfig.prerender.routes = nitroConfig.prerender.routes || []
-      nitroConfig.prerender.routes.unshift('/_studio_enabled.json')
-    })
+    addPrerenderRoutes('/__studio.json')
   }
 })
