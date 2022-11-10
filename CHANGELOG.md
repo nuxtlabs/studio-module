@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.1.5...v0.2.0) (2022-11-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* Rename to /__studio and expose modules meta (#60)
+
+### Features
+
+* Rename to /__studio and expose modules meta ([#60](https://github.com/nuxtlabs/studio.nuxt.com/issues/60)) ([fbb3147](https://github.com/nuxtlabs/studio.nuxt.com/commit/fbb3147f76b6b60a9ed8ec99744014a511ca079d))
+
 ### [0.1.5](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.1.4...v0.1.5) (2022-11-09)
 
 
