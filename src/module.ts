@@ -28,8 +28,8 @@ export default defineNuxtModule<ModuleOptions>({
       .then((m: any) => m.getMeta())
       .then(m => m.version)
       .catch(() => '0')
-    if (contentModuleVersion < '2.2.2') {
-      log.warn('Please update `@nuxt/content` to version 2.2.2 or higher to enable preview mode.')
+    if (contentModuleVersion < '2.1.1') {
+      log.warn('Please update `@nuxt/content` to version 2.1.1 or higher to enable preview mode.')
       return
     }
 

@@ -1,7 +1,5 @@
 import { version } from '../../../../package.json'
 // @ts-ignore
-import contentCtx from '#content/context'
-// @ts-ignore
 import components from '#nuxt-component-meta/nitro'
 
 export default eventHandler(() => {
@@ -19,7 +17,7 @@ export default eventHandler(() => {
       }
     })
 
-  const { sources, ignores, locales, highlight, navigation, documentDriven, experiment } = contentCtx
+  const { sources, ignores, locales, highlight, navigation, documentDriven, experiment } = useRuntimeConfig().content
   return {
     version,
     content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment },
