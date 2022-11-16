@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, ref } from 'vue'
 import type { Storage } from 'unstorage'
 import { defineNuxtPlugin, useRuntimeConfig, useRoute, useCookie, refreshNuxtData, useNuxtApp } from '#imports'
 import { ContentPreviewMode } from '#components'
@@ -20,21 +20,23 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
 
     // Show loading
+    const storageReady = ref(false)
     const el = document.createElement('div')
     el.id = '__nuxt_preview_wrapper'
     document.body.appendChild(el)
     createApp(ContentPreviewMode, {
       previewToken,
       apiURL: studio.apiURL,
-      onRefresh: () => fetchData(contentStorage, { baseURL: studio.apiURL, token: previewToken.value })
-        .then(() => refreshNuxtData())
+      storageReady,
+      refresh: () => fetchData(contentStorage, { baseURL: studio.apiURL, token: previewToken.value })
+        .then(() => refreshNuxtData()),
+      init: () => syncData(studio.apiURL, previewToken.value)
     }).mount(el)
 
     // @ts-ignore
-    nuxtApp.hook('content:storage', async (storage: Storage) => {
+    nuxtApp.hook('content:storage', (storage: Storage) => {
       contentStorage = storage
-      await fetchData(contentStorage, { baseURL: studio.apiURL, token: previewToken.value })
-      refreshNuxtData()
+      storageReady.value = true
     })
   }
 
@@ -77,6 +79,17 @@ async function fetchData (contentStorage: Storage, { token, baseURL }: { token: 
   await Promise.all(
     items.map(item => contentStorage.setItem(`${token}:${item.parsed._id}`, JSON.stringify(item.parsed)))
   )
+}
+
+async function syncData (baseURL: string, token: string) {
+  // Fetch preview data from station
+  await $fetch<PreviewResponse>('api/projects/preview/sync', {
+    baseURL,
+    method: 'POST',
+    body: {
+      token
+    }
+  }) as any
 }
 
 const mergeDraft = (dbFiles: PreviewFile[], draftAdditions: DraftFile[], draftDeletions: DraftFile[]) => {
