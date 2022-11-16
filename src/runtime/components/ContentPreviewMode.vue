@@ -161,17 +161,8 @@ body.__preview_enabled {
   z-index: 40;
   width: 100vw;
   height: 100vh;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(8px);
-}
-
-.preview-loading-enter-active,
-.preview-loading-leave-active {
-  transition: opacity 0.4s;
-}
-.preview-loading-enter,
-.preview-loading-leave-to {
-  opacity: 0;
 }
 
 #__preview_loader {
@@ -185,6 +176,24 @@ body.__preview_enabled {
   transform: translate(-50%, -50%);
   font-size: 1.4rem;
   z-index: 50;
+  color: black;
+}
+
+.dark #__preview_background,
+.dark-mode #__preview_background {
+  background: rgba(0, 0, 0, 0.3);
+}
+.dark #__preview_loader {
+  color: white;
+}
+
+.preview-loading-enter-active,
+.preview-loading-leave-active {
+  transition: opacity 0.4s;
+}
+.preview-loading-enter,
+.preview-loading-leave-to {
+  opacity: 0;
 }
 
 #__preview_loading_icon {
