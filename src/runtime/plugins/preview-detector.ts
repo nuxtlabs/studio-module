@@ -26,6 +26,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     createApp(ContentPreviewMode, {
       previewToken,
       apiURL: studio.apiURL,
+      onInit: () => syncData(studio.apiURL, previewToken.value),
       onRefresh: () => fetchData(contentStorage, { baseURL: studio.apiURL, token: previewToken.value })
         .then(() => refreshNuxtData())
     }).mount(el)
@@ -39,6 +40,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 
   if (studio?.apiURL) {
+    if (process.client) {
+      initializePreview()
+    }
     nuxtApp.hook('app:mounted', async () => {
       await initializePreview()
     })
@@ -77,6 +81,17 @@ async function fetchData (contentStorage: Storage, { token, baseURL }: { token: 
   await Promise.all(
     items.map(item => contentStorage.setItem(`${token}:${item.parsed._id}`, JSON.stringify(item.parsed)))
   )
+}
+
+async function syncData (baseURL: string, token: string) {
+  // Fetch preview data from station
+  await $fetch<PreviewResponse>('api/projects/preview/sync', {
+    baseURL,
+    method: 'POST',
+    body: {
+      token
+    }
+  }) as any
 }
 
 const mergeDraft = (dbFiles: PreviewFile[], draftAdditions: DraftFile[], draftDeletions: DraftFile[]) => {

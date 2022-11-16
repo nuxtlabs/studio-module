@@ -12,7 +12,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['refresh'])
+const emit = defineEmits(['refresh', 'init'])
 const previewClasses = ['__nuxt_preview', '__preview_enabled']
 const open = ref(true)
 const refreshing = ref(false)
@@ -35,14 +35,21 @@ onMounted(async () => {
   const socket = io.connect(`${props.apiURL}/preview:${props.previewToken.value}`, {
     transports: ['websocket', 'polling']
   })
-  ready.value = true
+
+  emit('init')
 
   // Adds body classes for live preview
   document.body.classList.add(...previewClasses)
-  socket.on('draft:update', () => {
-    refreshing.value = true
+
+  socket.on('draft:ready', () => {
+    ready.value = true
     emit('refresh')
-    refreshing.value = false
+
+    socket.on('draft:update', () => {
+      refreshing.value = true
+      emit('refresh')
+      refreshing.value = false
+    })
   })
 })
 
@@ -53,14 +60,24 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="open" id="__nuxt_preview" :class="{ __preview_ready: ready, __preview_refreshing: refreshing }">
-    <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50.0016 71.0999h29.2561c.9293.0001 1.8422-.241 2.6469-.6992.8047-.4582 1.4729-1.1173 1.9373-1.9109.4645-.7936.7088-1.6939.7083-2.6102-.0004-.9162-.2455-1.8163-.7106-2.6095L64.192 29.713c-.4644-.7934-1.1325-1.4523-1.937-1.9105-.8046-.4581-1.7173-.6993-2.6463-.6993-.9291 0-1.8418.2412-2.6463.6993-.8046.4582-1.4726 1.1171-1.937 1.9105l-5.0238 8.5861-9.8224-16.7898c-.4648-.7934-1.1332-1.4522-1.938-1.9102-.8047-.4581-1.7176-.6992-2.6468-.6992-.9292 0-1.842.2411-2.6468.6992-.8048.458-1.4731 1.1168-1.9379 1.9102L6.56062 63.2701c-.46512.7932-.71021 1.6933-.71061 2.6095-.00041.9163.24389 1.8166.70831 2.6102.46443.7936 1.1326 1.4527 1.93732 1.9109.80473.4582 1.71766.6993 2.64686.6992h18.3646c7.2763 0 12.6422-3.1516 16.3345-9.3002l8.9642-15.3081 4.8015-8.1925 14.4099 24.6083H54.8058l-4.8042 8.1925ZM29.2077 62.899l-12.8161-.0028L35.603 30.0869l9.5857 16.4047-6.418 10.9645c-2.4521 3.9894-5.2377 5.4429-9.563 5.4429Z" fill="currentColor" />
-    </svg>
-    <span>Preview mode enabled</span>
-    <button @click="closePreviewMode">
-      Close
-    </button>
+  <div>
+    <div v-if="open" id="__nuxt_preview" :class="{ __preview_ready: ready, __preview_refreshing: refreshing }">
+      <div v-if="ready">
+        <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50.0016 71.0999h29.2561c.9293.0001 1.8422-.241 2.6469-.6992.8047-.4582 1.4729-1.1173 1.9373-1.9109.4645-.7936.7088-1.6939.7083-2.6102-.0004-.9162-.2455-1.8163-.7106-2.6095L64.192 29.713c-.4644-.7934-1.1325-1.4523-1.937-1.9105-.8046-.4581-1.7173-.6993-2.6463-.6993-.9291 0-1.8418.2412-2.6463.6993-.8046.4582-1.4726 1.1171-1.937 1.9105l-5.0238 8.5861-9.8224-16.7898c-.4648-.7934-1.1332-1.4522-1.938-1.9102-.8047-.4581-1.7176-.6992-2.6468-.6992-.9292 0-1.842.2411-2.6468.6992-.8048.458-1.4731 1.1168-1.9379 1.9102L6.56062 63.2701c-.46512.7932-.71021 1.6933-.71061 2.6095-.00041.9163.24389 1.8166.70831 2.6102.46443.7936 1.1326 1.4527 1.93732 1.9109.80473.4582 1.71766.6993 2.64686.6992h18.3646c7.2763 0 12.6422-3.1516 16.3345-9.3002l8.9642-15.3081 4.8015-8.1925 14.4099 24.6083H54.8058l-4.8042 8.1925ZM29.2077 62.899l-12.8161-.0028L35.603 30.0869l9.5857 16.4047-6.418 10.9645c-2.4521 3.9894-5.2377 5.4429-9.563 5.4429Z" fill="currentColor" />
+        </svg>
+        <span>Preview mode enabled</span>
+        <button @click="closePreviewMode">
+          Close
+        </button>
+      </div>
+    </div>
+    <div v-if="!ready">
+      <div id="__preview_blur" />
+      <div id="__preview_loader">
+        Loading...
+      </div>
+    </div>
   </div>
 </template>
 
@@ -91,6 +108,27 @@ body.__preview_enabled {
 #__nuxt_preview.__preview_ready {
   bottom: 0;
 }
+
+#__preview_blur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  width: 100vw;
+  height: 100vh;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  filter: blur(6px);
+}
+
+#__preview_loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 50;
+}
+
 .dark #__nuxt_preview,
 .dark-mode #__nuxt_preview {
   background: rgba(0, 0, 0, 0.3);
