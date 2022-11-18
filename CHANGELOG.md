@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.4](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.3...v0.2.4) (2022-11-18)
+
+
+### Bug Fixes
+
+* **preview:** send token from params for sync ([#66](https://github.com/nuxtlabs/studio.nuxt.com/issues/66)) ([c985aa3](https://github.com/nuxtlabs/studio.nuxt.com/commit/c985aa3fbc446b8c7ec62b0820fff6fe0e03459c))
+
 ### [0.2.3](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.2...v0.2.3) (2022-11-16)
 
 
