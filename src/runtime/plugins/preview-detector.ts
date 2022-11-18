@@ -86,7 +86,7 @@ async function syncData (baseURL: string, token: string) {
   await $fetch<PreviewResponse>('api/projects/preview/sync', {
     baseURL,
     method: 'POST',
-    body: {
+    params: {
       token
     }
   }) as any
