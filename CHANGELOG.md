@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.5](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.4...v0.2.5) (2022-11-18)
+
+
+### Bug Fixes
+
+* **socket:** add auth token ([#67](https://github.com/nuxtlabs/studio.nuxt.com/issues/67)) ([9962ae5](https://github.com/nuxtlabs/studio.nuxt.com/commit/9962ae5dd4d57819472f9df5d74a6a316b64a7fb))
+
 ### [0.2.4](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.3...v0.2.4) (2022-11-18)
 
 
