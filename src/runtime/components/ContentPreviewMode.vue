@@ -48,7 +48,10 @@ const closePreviewMode = async () => {
 onMounted(async () => {
   const io = await import('socket.io-client')
   const socket = io.connect(`${props.apiURL}/preview:${props.previewToken.value}`, {
-    transports: ['websocket', 'polling']
+    transports: ['websocket', 'polling'],
+    auth: {
+      token: props.previewToken.value
+    }
   })
 
   socket.on('connect', () => {
