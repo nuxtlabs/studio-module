@@ -12,6 +12,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     const nuxtApp = useNuxtApp()
     const query = useRoute().query || {}
     const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
+
+    // Disable preview mode if token value is null, undefined or empty
+    if (Object.prototype.hasOwnProperty.call(query, 'preview') && !query.preview) {
+      return
+    }
+
     if (!query.preview && !previewToken.value) {
       return
     }
@@ -77,7 +83,7 @@ async function fetchData (contentStorage: Storage, { token, baseURL }: { token: 
   const items = mergeDraft(data.files, data.additions, data.deletions)
 
   await Promise.all(
-    items.map(item => contentStorage.setItem(`${token}:${item.parsed._id}`, JSON.stringify(item.parsed)))
+    items.map(item => contentStorage.setItem(`${token}:${item.parsed?._id}`, JSON.stringify(item.parsed)))
   )
 }
 
@@ -122,7 +128,7 @@ const mergeDraft = (dbFiles: PreviewFile[], draftAdditions: DraftFile[], draftDe
           } else if (addition.pathMeta) {
             // Apply new path metadata
             ['_file', '_path', '_id', '_locale'].forEach((key) => {
-              file.parsed[key] = addition.pathMeta[key]
+              file.parsed![key] = addition.pathMeta![key]
             })
           }
         }
