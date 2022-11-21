@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.6](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.5...v0.2.6) (2022-11-21)
+
+
+### Features
+
+* disable preview mode is query exists and its falsy ([#68](https://github.com/nuxtlabs/studio.nuxt.com/issues/68)) ([8611eea](https://github.com/nuxtlabs/studio.nuxt.com/commit/8611eeae70fc9873f74fa64b6ea5ce352b67467e))
+* **preview:** send events through message to studio ([#65](https://github.com/nuxtlabs/studio.nuxt.com/issues/65)) ([4c7d8d1](https://github.com/nuxtlabs/studio.nuxt.com/commit/4c7d8d17404f506b503feda57f2bd0342a9e5d7a))
+
+
+### Bug Fixes
+
+* **preview:** change loading background in dark mode ([#64](https://github.com/nuxtlabs/studio.nuxt.com/issues/64)) ([6397d6b](https://github.com/nuxtlabs/studio.nuxt.com/commit/6397d6b3fd3bc7ba424120f5b7bb56e2831b9b9a))
+
 ### [0.2.5](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.4...v0.2.5) (2022-11-18)
 
 
