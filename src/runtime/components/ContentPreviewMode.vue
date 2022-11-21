@@ -183,7 +183,8 @@ body.__preview_enabled {
 .dark-mode #__preview_background {
   background: rgba(0, 0, 0, 0.3);
 }
-.dark #__preview_loader {
+.dark #__preview_loader,
+.dark-mode #__preview_loader {
   color: white;
 }
 
