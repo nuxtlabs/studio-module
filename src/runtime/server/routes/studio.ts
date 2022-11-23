@@ -1,10 +1,19 @@
+import type { ComponentMeta } from 'vue-component-meta'
+import { eventHandler } from 'h3'
 import { version } from '../../../../package.json'
-import { eventHandler, useRuntimeConfig } from '#imports'
+import { useRuntimeConfig } from '#imports'
 // @ts-ignore
 import components from '#nuxt-component-meta/nitro'
 
+interface NuxtComponentMeta {
+  pascalName: string
+  filePath: string
+  meta: ComponentMeta
+  global: boolean
+}
+
 export default eventHandler(() => {
-  const filteredComponents = Object.values(components)
+  const filteredComponents = (Object.values(components) as NuxtComponentMeta[])
     .filter(c => c.global)
     .filter(c => !c.pascalName.startsWith('Content'))
     .filter(c => !c.pascalName.startsWith('DocumentDriven'))
@@ -14,7 +23,11 @@ export default eventHandler(() => {
       return {
         name: pascalName,
         path: filePath,
-        meta
+        meta: {
+          props: meta.props,
+          slots: meta.slots,
+          events: meta.events
+        }
       }
     })
 
