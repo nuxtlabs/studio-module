@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.7](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.6...v0.2.7) (2022-11-25)
+
+
+### Bug Fixes
+
+* **components:** drop exposed field in meta ([#71](https://github.com/nuxtlabs/studio.nuxt.com/issues/71)) ([e2570fb](https://github.com/nuxtlabs/studio.nuxt.com/commit/e2570fbd71eba45b5cb460d685822f17cd918222))
+* **preview:** prevent calling `refreshNuxtData` when preview mode is disabled ([#73](https://github.com/nuxtlabs/studio.nuxt.com/issues/73)) ([955e2a4](https://github.com/nuxtlabs/studio.nuxt.com/commit/955e2a409045a65b6392a559aaf9342390846ede))
+
 ### [0.2.6](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.5...v0.2.6) (2022-11-21)
 
 
