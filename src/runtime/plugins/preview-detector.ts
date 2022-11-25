@@ -21,6 +21,15 @@ export default defineNuxtPlugin((nuxtApp) => {
     if (!query.preview && !previewToken.value) {
       return
     }
+
+    // This is required to enable client-db initialization inside Content Module
+    // In the intialization process of client-db, it will call
+    // `content:storage` hook to get the storage instance
+    nuxtApp.hook('page:finish', () => {
+      // Refresh nuxt data
+      refreshNuxtData()
+    })
+
     if (query.preview && previewToken.value !== query.preview) {
       previewToken.value = String(query.preview)
     }
@@ -49,11 +58,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   if (studio?.apiURL) {
     nuxtApp.hook('app:mounted', async () => {
       await initializePreview()
-    })
-
-    nuxtApp.hook('page:finish', () => {
-    // Refresh nuxt data
-      refreshNuxtData()
     })
   }
 })
