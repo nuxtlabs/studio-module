@@ -33,16 +33,9 @@ export default defineNuxtModule<ModuleOptions>({
       return
     }
 
-    // Add nuxt-components-meta
-    installModule('nuxt-component-meta')
-    installModule('nuxt-config-schema')
-
     // @ts-ignore
     nuxt.hook('schema:resolved', (schema: any) => {
-      nuxt.options.runtimeConfig.appConfig = {
-        properties: schema.properties?.appConfig,
-        default: schema.default?.appConfig
-      }
+      nuxt.options.runtimeConfig.schema = schema
     })
 
     const { resolve } = createResolver(import.meta.url)
@@ -76,5 +69,9 @@ export default defineNuxtModule<ModuleOptions>({
     })
     // With RC13
     addPrerenderRoutes('/__studio.json')
+
+    // Install dependecies
+    await installModule('nuxt-component-meta')
+    await installModule('nuxt-config-schema')
   }
 })
