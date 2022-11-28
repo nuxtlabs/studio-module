@@ -2,7 +2,7 @@ import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
   appConfig: {
-    configFormNuxtConfig: true
+    configFromNuxtConfig: true
   },
   modules: [
     '@nuxt/content',
