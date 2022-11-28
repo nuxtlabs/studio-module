@@ -1,5 +1,5 @@
 export default {
   appConfig: {
-    configFormNuxtSchema: true
+    configFromNuxtSchema: true
   }
 }
