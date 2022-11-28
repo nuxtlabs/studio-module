@@ -1,3 +1,5 @@
 export default {
-  playground: true
+  appConfig: {
+    configFormNuxtSchema: true
+  }
 }

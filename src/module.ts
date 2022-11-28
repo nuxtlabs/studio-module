@@ -35,7 +35,10 @@ export default defineNuxtModule<ModuleOptions>({
 
     // @ts-ignore
     nuxt.hook('schema:resolved', (schema: any) => {
-      nuxt.options.runtimeConfig.schema = schema
+      nuxt.options.runtimeConfig.appConfig = {
+        properties: schema.properties?.appConfig,
+        default: schema.default?.appConfig
+      }
     })
 
     const { resolve } = createResolver(import.meta.url)
