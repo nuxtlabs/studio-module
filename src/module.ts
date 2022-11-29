@@ -3,7 +3,13 @@ import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendV
 
 const log = logger.withScope('@nuxt/studio')
 
-export interface ModuleOptions {}
+export interface ModuleOptions {
+  /**
+   * Enable Studio mode
+   * @default: 'production'
+   * */
+  enabled: 'production' | true
+}
 
 export interface ModuleHooks {}
 
@@ -11,8 +17,15 @@ export default defineNuxtModule<ModuleOptions>({
   meta: {
     configKey: 'studio'
   },
-  defaults: {},
-  async setup (_options, nuxt) {
+  defaults: {
+    enabled: 'production'
+  },
+  async setup (options, nuxt) {
+    // Only enable Studio in production build
+    if (options.enabled === 'production' && nuxt.options.dev === true) {
+      return
+    }
+
     const contentModule = '@nuxt/content'
     // Check Content module is installed
     if (
@@ -70,10 +83,9 @@ export default defineNuxtModule<ModuleOptions>({
       route: '/__studio.json',
       handler: resolve('./runtime/server/routes/studio')
     })
-    // With RC13
     addPrerenderRoutes('/__studio.json')
 
-    // Install dependecies
+    // Install dependencies
     await installModule('nuxt-component-meta')
     await installModule('nuxt-config-schema')
   }
