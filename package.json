@@ -33,10 +33,11 @@
     "release": "yarn lint && yarn build && standard-version && git push --follow-tags"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.0.0-rc.13",
-    "@nuxt/schema": "^3.0.0-rc.13",
+    "@nuxt/kit": "^3.0.0",
+    "@nuxt/schema": "^3.0.0",
     "defu": "^6.1.0",
     "nuxt-component-meta": "^0.3.3",
+    "nuxt-config-schema": "^0.3.2",
     "socket.io-client": "^4.5.3",
     "ufo": "^0.8.6"
   },
@@ -68,7 +69,7 @@
     "eslint": "^8.27.0",
     "jiti": "^1.16.0",
     "monaco-editor-core": "^0.34.1",
-    "nuxt": "^3.0.0-rc.13",
+    "nuxt": "^3.0.0",
     "remark-mdc": "^1.1.1",
     "shiki-es": "^0.1.2",
     "splitpanes": "^3.1.5",

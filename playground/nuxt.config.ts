@@ -1,10 +1,15 @@
-import nuxtStudio from '../src/module'
+import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
-  // extends: '@nuxt-themes/elements-edge',
+  $schema: {
+    appConfig: {
+      configFromNuxtConfig: true
+    }
+  },
   modules: [
     '@nuxt/content',
-    nuxtStudio
+    // TODO: module functions are not supported yet
+    '../src/module'
   ],
   content: {
     documentDriven: true,
