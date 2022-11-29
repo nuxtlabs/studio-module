@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.3.0...v0.3.1) (2022-11-29)
+
+
+### Bug Fixes
+
+* enable studio only in production ([#76](https://github.com/nuxtlabs/studio.nuxt.com/issues/76)) ([bc8234c](https://github.com/nuxtlabs/studio.nuxt.com/commit/bc8234c4bfef20e00488a7c23b1779c67a74bdcd))
+* force nuxt-config-schema for now until part of core ([5805047](https://github.com/nuxtlabs/studio.nuxt.com/commit/58050476b1f95dee13ebb0624d9322de537adcfa))
+
 ## [0.3.0](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.7...v0.3.0) (2022-11-29)
 
 
