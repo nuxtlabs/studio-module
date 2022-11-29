@@ -1,7 +1,5 @@
 /* Copyright 2021, Milkdown by Mirone. */
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-
 /**
  * Copy pasted from https://github.com/ProseMirror/prosemirror-view/blob/master/src/clipboard.ts
  */

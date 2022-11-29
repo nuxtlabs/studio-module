@@ -21,6 +21,15 @@ export default defineNuxtModule<ModuleOptions>({
     enabled: 'production'
   },
   async setup (options, nuxt) {
+    // @ts-ignore
+    nuxt.hook('schema:resolved', (schema: any) => {
+      nuxt.options.runtimeConfig.appConfig = {
+        properties: schema.properties?.appConfig,
+        default: schema.default?.appConfig
+      }
+    })
+    await installModule('nuxt-config-schema')
+
     // Only enable Studio in production build
     if (options.enabled === 'production' && nuxt.options.dev === true) {
       return
@@ -45,14 +54,6 @@ export default defineNuxtModule<ModuleOptions>({
       log.warn('Please update `@nuxt/content` to version 2.1.1 or higher to enable preview mode.')
       return
     }
-
-    // @ts-ignore
-    nuxt.hook('schema:resolved', (schema: any) => {
-      nuxt.options.runtimeConfig.appConfig = {
-        properties: schema.properties?.appConfig,
-        default: schema.default?.appConfig
-      }
-    })
 
     const { resolve } = createResolver(import.meta.url)
 
@@ -87,6 +88,5 @@ export default defineNuxtModule<ModuleOptions>({
 
     // Install dependencies
     await installModule('nuxt-component-meta')
-    await installModule('nuxt-config-schema')
   }
 })
