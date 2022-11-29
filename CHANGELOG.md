@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.7...v0.3.0) (2022-11-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* expose app config (#74)
+
+### Features
+
+* expose app config ([#74](https://github.com/nuxtlabs/studio.nuxt.com/issues/74)) ([4d0d200](https://github.com/nuxtlabs/studio.nuxt.com/commit/4d0d20088eb3b47d7e05e1adc8fda61e0b60a3e4))
+
 ### [0.2.7](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.2.6...v0.2.7) (2022-11-25)
 
 
