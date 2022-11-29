@@ -696,63 +696,63 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@milkdown/core@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/core@npm:6.5.3"
+"@milkdown/core@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/core@npm:6.5.4"
   dependencies:
-    "@milkdown/ctx": 6.5.3
-    "@milkdown/design-system": 6.5.3
-    "@milkdown/exception": 6.5.3
-    "@milkdown/transformer": 6.5.3
+    "@milkdown/ctx": 6.5.4
+    "@milkdown/design-system": 6.5.4
+    "@milkdown/exception": 6.5.4
+    "@milkdown/transformer": 6.5.4
     remark-parse: ^10.0.1
     remark-stringify: ^10.0.2
     tslib: ^2.4.0
     unified: ^10.1.0
   peerDependencies:
     "@milkdown/prose": ^6.0.1
-  checksum: 884f416b16e911178a527670f1f223bc4a5f0e666ccf01032042d6b9ff8e59e46d7b81125f89b1996240dce66df02c25c9488ee41a43e3e328e4768083d6b2dd
+  checksum: af5efcfd8a00b1b704825f4eff980e7d820a3b427b361396a3fe270b3c7d10dd41afd5b89931eb4d1ea39b90d5c5d68f3b54a607844ba409ce17d38635bd3395
   languageName: node
   linkType: hard
 
-"@milkdown/ctx@npm:6.5.3, @milkdown/ctx@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/ctx@npm:6.5.3"
+"@milkdown/ctx@npm:6.5.4, @milkdown/ctx@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/ctx@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
+    "@milkdown/exception": 6.5.4
     tslib: ^2.4.0
-  checksum: db13c31a27de2ea4f16efa43ca1ad7c181e23ea8776e7e43564c4b24606ab746d9e494817d09e3ace02493185bea8ce07e1bd29ebbd1f14d263a637b90933a7a
+  checksum: baf269581f764cbf50e312bcfd9159edcecc355768ad9eae9448b6fb72aa53e98f830fb1b0b78f04065869838c357ae9e2ec917a3bb46351523fce3bdfd6d231
   languageName: node
   linkType: hard
 
-"@milkdown/design-system@npm:6.5.3":
-  version: 6.5.3
-  resolution: "@milkdown/design-system@npm:6.5.3"
+"@milkdown/design-system@npm:6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/design-system@npm:6.5.4"
   dependencies:
     "@emotion/cache": ^11.7.1
     "@emotion/css": ^11.1.3
-    "@milkdown/ctx": 6.5.3
+    "@milkdown/ctx": 6.5.4
     tslib: ^2.4.0
   peerDependencies:
     "@milkdown/prose": ^6.0.1
-  checksum: d2697331fffbbd7408e1b298ef7884310eeab2bba201931702cb3dbf502b91bb584836f4817422d2cede93185c09af60002865cb2fc9eab15ef5e3870257dd54
+  checksum: 9728dcdcec8aea91dc620fa5c45c793903a4f538fac9d6681dc9adea6bd97547c1b6bdf27f5bda4ba47d07dd7c5aec6c39b537f5577a303423b01609ad458ff7
   languageName: node
   linkType: hard
 
-"@milkdown/exception@npm:6.5.3":
-  version: 6.5.3
-  resolution: "@milkdown/exception@npm:6.5.3"
+"@milkdown/exception@npm:6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/exception@npm:6.5.4"
   dependencies:
     tslib: ^2.4.0
-  checksum: 9bfe5f964983a76d6d09cb426e0364be6207759586bc598f2adfc64c40e503592469124a2b7d38bc4e984d9dbc2de45a81b2272bcf9cbb8069a16f46bab31e52
+  checksum: 3417ea6cfcfde19ec7d4192ba56c123dc026f9330a1fddb6ffc74a7a9ccf98d9e105fc0a9b2c5fd8d1838327d5bbebc0408a5d67f09baaa8ddd563baaba7e8c3
   languageName: node
   linkType: hard
 
-"@milkdown/plugin-collaborative@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/plugin-collaborative@npm:6.5.3"
+"@milkdown/plugin-collaborative@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/plugin-collaborative@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
-    "@milkdown/utils": 6.5.3
+    "@milkdown/exception": 6.5.4
+    "@milkdown/utils": 6.5.4
     tslib: ^2.4.0
     y-prosemirror: ^1.2.0
     y-protocols: ^1.0.5
@@ -760,29 +760,29 @@ __metadata:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
     yjs: "*"
-  checksum: 0e18528d9dc009a23c490d1ccbec715510dae8be3f7231d23d28b00d48d6905faa2ac96aafc83a13a88a57029fed16eb4bdb72ef6c30f818d7d365e92c9c9557
+  checksum: 0061d380b684056507302f7a80410cf91f4562eeaaa213902ff3d3976eb623d94947661e6fcf6ad5373b288c3dfe3b4d2a24f6c1beb84b5748744bd604961a10
   languageName: node
   linkType: hard
 
-"@milkdown/plugin-cursor@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/plugin-cursor@npm:6.5.3"
+"@milkdown/plugin-cursor@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/plugin-cursor@npm:6.5.4"
   dependencies:
-    "@milkdown/utils": 6.5.3
+    "@milkdown/utils": 6.5.4
     tslib: ^2.4.0
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
-  checksum: 63abb0c0c3867140e047298c915453e5496c95fb28962d81c14d39796aef71e32f7cde03635d7b65efcc081aae199047dec8360797e783c647c3c539ea8a6b90
+  checksum: 671844140938034fb3a49a8decd3535bbe862e46584019258894baf2e4b772dab0be0b7ba208a980db49a3a204914f90b64599d912d091242b59d90f0a3064cf
   languageName: node
   linkType: hard
 
-"@milkdown/plugin-emoji@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/plugin-emoji@npm:6.5.3"
+"@milkdown/plugin-emoji@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/plugin-emoji@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
-    "@milkdown/utils": 6.5.3
+    "@milkdown/exception": 6.5.4
+    "@milkdown/utils": 6.5.4
     "@types/node-emoji": ^1.8.1
     emoji-regex: ^10.0.0
     node-emoji: ^1.10.0
@@ -793,42 +793,42 @@ __metadata:
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
-  checksum: 08664408c95cc82b74aa385d54b8f4fcf5222fb1dea2d137f391b881a5e50616d56ff8f8ee7882b59b802f2f91800694dd42f42fe86807de8aa9c93624d0d183
+  checksum: b383d6060f57eff169d348e1405f77b00ed7570b5990869eb98cfc47ae4c54ef7f00b386df5e3adadf4c64055776ee86531fd975c175e6dc3145f2afc048e381
   languageName: node
   linkType: hard
 
-"@milkdown/plugin-history@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/plugin-history@npm:6.5.3"
+"@milkdown/plugin-history@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/plugin-history@npm:6.5.4"
   dependencies:
-    "@milkdown/utils": 6.5.3
+    "@milkdown/utils": 6.5.4
     tslib: ^2.4.0
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
-  checksum: d472e3486c375381700761bb4870671b611d22e0880dac33d0f9b99f12bbed2efe85f4e6c00cdf78d939c7cb78238d1f61cb7c7a7db78f50bcd4d488e12a5739
+  checksum: ff6a8e50be5c32c05a87d3ed24ae917769e7f2faaf6883ec02faa0c6c5a57fc3bb62962100a35918b429aac9ef40b37f3e2f88cb9a10de5edf8db7f60b3be87d
   languageName: node
   linkType: hard
 
-"@milkdown/plugin-listener@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/plugin-listener@npm:6.5.3"
+"@milkdown/plugin-listener@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/plugin-listener@npm:6.5.4"
   dependencies:
-    "@milkdown/utils": 6.5.3
+    "@milkdown/utils": 6.5.4
     tslib: ^2.4.0
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
-  checksum: 88739c3f27ca1536ef6f15e1a1e8132e089a07c93299d964cea62aecc4082ba2f40397a5969dd1df5e80680e197f43376fd9582f94cbb81681fc365b707dfbf7
+  checksum: 7eada5b4943e7eebc26ac1047c5a345920c774cc2918eee542c0cb030cbfe8bd78f64ebe7b9da0665876ae2bbf7bd60580d8b690621a7c13a365aca39f6ec16d
   languageName: node
   linkType: hard
 
-"@milkdown/plugin-math@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/plugin-math@npm:6.5.3"
+"@milkdown/plugin-math@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/plugin-math@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
-    "@milkdown/utils": 6.5.3
+    "@milkdown/exception": 6.5.4
+    "@milkdown/utils": 6.5.4
     "@types/katex": ^0.14.0
     katex: ^0.16.0
     remark-math: ^5.1.0
@@ -836,89 +836,89 @@ __metadata:
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
-  checksum: 29407941830c3a5b4f317a9f10c9b3b5b95156b0f572b883046f52bbfa296f755f2df6a376bad830a06de230953ce95f8417a6ae58809d9ac6820ee4bcc617e6
+  checksum: 9e4b871038c322c8d211ae485c235308680d488c874bfaafc6dd2f302d3f38c6da51ee7621f5871c368e82abb4f3c0a6ecb7f73cc775b3beabcebb94b33d55fc
   languageName: node
   linkType: hard
 
-"@milkdown/plugin-slash@npm:^6.4.3":
-  version: 6.5.3
-  resolution: "@milkdown/plugin-slash@npm:6.5.3"
+"@milkdown/plugin-slash@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/plugin-slash@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
-    "@milkdown/utils": 6.5.3
+    "@milkdown/exception": 6.5.4
+    "@milkdown/utils": 6.5.4
     smooth-scroll-into-view-if-needed: ^1.1.32
     tslib: ^2.4.0
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
-  checksum: 51ebd565caf88663326673c2bdebb76c504221d44cbd9ff891cd08854074ea02525b5af59af00b2a4ce85275b076035591b937d0f37a5ba587486fca51f0907d
+  checksum: 4df296a6025221eb448e2b917d118947d8db46dc3fd5fdfa3ddefed86bc9d52f37340643bcbb2115e0995750233d403e9eb0e1f403c47761af62d509070b6892
   languageName: node
   linkType: hard
 
-"@milkdown/plugin-tooltip@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/plugin-tooltip@npm:6.5.3"
+"@milkdown/plugin-tooltip@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/plugin-tooltip@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
-    "@milkdown/utils": 6.5.3
+    "@milkdown/exception": 6.5.4
+    "@milkdown/utils": 6.5.4
     tslib: ^2.4.0
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
-  checksum: 12ebeef2ccc27a9311fb9bcf10709a46eea525142a3285b46e5e8894fee223f62f1cf897c06f69ad37a9f665ad4c873eb1061d3d74fd373854aa0ce8fc388f02
+  checksum: f98068ba3e5a6436c146523eb5d1dd1cb374229a8f03d2019a82a4567486b9fce1ab8abcc881d827c3c89a2d9c0c6b7aa000a9e751a886e2df1d7ee1d173d35b
   languageName: node
   linkType: hard
 
-"@milkdown/plugin-trailing@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/plugin-trailing@npm:6.5.3"
+"@milkdown/plugin-trailing@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/plugin-trailing@npm:6.5.4"
   dependencies:
-    "@milkdown/utils": 6.5.3
+    "@milkdown/utils": 6.5.4
     tslib: ^2.4.0
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
-  checksum: 2e4c0f391e43b46fc1a43dac6499c3ee8ee873d9cdbb3f928356f563a9430a0ae9f69a0d3b85f0ae656729af4eddedb2b1743cbbe3598b244630a9f3d2e47a85
+  checksum: 4ff7e260c2c74bfcb58a0ab33caa76cf6eef4c860ee4ee3b5b25e9ad6a1a1b406f1eca4f316aaaef820fe7cd62d60dcff1c10bc9a9f49772975eeea92bc83118
   languageName: node
   linkType: hard
 
-"@milkdown/preset-commonmark@npm:^6.4.2":
-  version: 6.5.3
-  resolution: "@milkdown/preset-commonmark@npm:6.5.3"
+"@milkdown/preset-commonmark@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/preset-commonmark@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
-    "@milkdown/utils": 6.5.3
+    "@milkdown/exception": 6.5.4
+    "@milkdown/utils": 6.5.4
     remark-inline-links: ^6.0.0
     tslib: ^2.4.0
     unist-util-visit: ^4.0.0
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
-  checksum: f73d7938e812f658cebf697d346e0daca734b5dde076d1e163788edcb1303ba08e4cf08c1c632aa71fe857a0c5f2bb075b4edd3c008e755d3d0450fb3c5f2c28
+  checksum: b22901868c4d7513a6e6d1697023bb102b3d48fbfa9c3c668657e5b262607e7f71bb7853c71a981074c3e521a5b680d73b45587c8d583935461dcb5397e6e29e
   languageName: node
   linkType: hard
 
-"@milkdown/preset-gfm@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/preset-gfm@npm:6.5.3"
+"@milkdown/preset-gfm@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/preset-gfm@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
-    "@milkdown/utils": 6.5.3
+    "@milkdown/exception": 6.5.4
+    "@milkdown/utils": 6.5.4
     remark-gfm: ^3.0.0
     tslib: ^2.4.0
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/preset-commonmark": ^6.0.1
     "@milkdown/prose": ^6.0.1
-  checksum: dd038d294bc629ed75dc5176d2a0a67d3bd294b86ce9f98036ad16fee34a74578261013e00332f01bcdef089fa494958ec82eeada395c9d59be0496eec885263
+  checksum: e3d9f96e5f51585efe37cf920456cfba146fb29429b78fa044c1803812f8e0fc1745613ba31a54fdf84f2f4cc08390e2b3bb24de46108eae8d979d86af94bbef
   languageName: node
   linkType: hard
 
-"@milkdown/prose@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/prose@npm:6.5.3"
+"@milkdown/prose@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/prose@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
+    "@milkdown/exception": 6.5.4
     prosemirror-commands: ^1.3.1
     prosemirror-dropcursor: ^1.5.0
     prosemirror-gapcursor: ^1.3.1
@@ -931,28 +931,28 @@ __metadata:
     prosemirror-transform: ^1.7.0
     prosemirror-view: ^1.28.0
     tslib: ^2.4.0
-  checksum: 18c2ee0bc20acb94a69a8c304d1605a8029e90befbe1fd31f80f7fb99485321934b002cde5d3f554649abacbb08afd7ee6d46fc964cfcef23e9af71c1a061c80
+  checksum: 36692d83db29af630d82ddc5d2b74cd5c87103a32d0f9a14f526ab15aa4b0180cdc516c5e8b59ff88adb40032fd9f80f79c71a2e1f986f7838bba19bdb52e03a
   languageName: node
   linkType: hard
 
-"@milkdown/theme-pack-helper@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/theme-pack-helper@npm:6.5.3"
+"@milkdown/theme-pack-helper@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/theme-pack-helper@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
+    "@milkdown/exception": 6.5.4
     tslib: ^2.4.0
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
-  checksum: dd2a8fbf3f5e3f2ce6fb7fd732c077107960adbb1804704f64c357910bfd374370c37f77c16bc09564f278d835777f7e0a184cede4ce189b489baf2e09f0b003
+  checksum: a5554cb08eb8e8ec5be3040c8d9834003448e86502717003bd42a12f05e18fdc8741f41b4de0a0a87dc4d51c7175faa812086037608a21c0b311ded1a47eeb21
   languageName: node
   linkType: hard
 
-"@milkdown/transformer@npm:6.5.3":
-  version: 6.5.3
-  resolution: "@milkdown/transformer@npm:6.5.3"
+"@milkdown/transformer@npm:6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/transformer@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
+    "@milkdown/exception": 6.5.4
     "@types/mdast": ^3.0.10
     "@types/unist": ^2.0.6
     remark: ^14.0.1
@@ -962,37 +962,37 @@ __metadata:
     unified: ^10.1.0
   peerDependencies:
     "@milkdown/prose": ^6.0.1
-  checksum: 36d3e6a299a478c25a609a42c3e9519087cf0490a0342ea4a163e0af0b80a8ad79ec486c12c72cb4e1fdf5a227b4f7e060fadafee2847ac81ca5552e8c21ee69
+  checksum: 5575646ce6a5db7bff0cefe703953352b142d628bb917792e49cc61550c28dc825a30182738a9635a7b710f43d4ee0b97015d9068b7440aa8bc3e66884c90410
   languageName: node
   linkType: hard
 
-"@milkdown/utils@npm:6.5.3, @milkdown/utils@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/utils@npm:6.5.3"
+"@milkdown/utils@npm:6.5.4, @milkdown/utils@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/utils@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
+    "@milkdown/exception": 6.5.4
     nanoid: ^4.0.0
     tslib: ^2.4.0
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
-  checksum: b3cb50d9bbfe8a721328dd3820dfe06b322b801fa934eba6b31a69d292d62fe338a22971e2ee3366330f754f1af833170f90ce726b380b2b4559166bb833083d
+  checksum: 1dc0d3a4f87a623a7f76f38f104aae789bef802567c8ead24923e48bda23aacf2ec48fb7f5b582894dbc9368a623450e8de559d792ec0b73544ee5ee5606e0f9
   languageName: node
   linkType: hard
 
-"@milkdown/vue@npm:^6.4.1":
-  version: 6.5.3
-  resolution: "@milkdown/vue@npm:6.5.3"
+"@milkdown/vue@npm:^6.5.4":
+  version: 6.5.4
+  resolution: "@milkdown/vue@npm:6.5.4"
   dependencies:
-    "@milkdown/exception": 6.5.3
-    "@milkdown/utils": 6.5.3
+    "@milkdown/exception": 6.5.4
+    "@milkdown/utils": 6.5.4
     nanoid: ^4.0.0
     tslib: ^2.4.0
   peerDependencies:
     "@milkdown/core": ^6.0.1
     "@milkdown/prose": ^6.0.1
     vue: ^3.0.0
-  checksum: 7588449f12f5e0370eee8267bd69c37e43259c7a419ba8ed0360e58f15dc17ea3f148ba498e640e9719d80d16d91dc31e760bdc4aeab04cf56e5b4a7dcc69200
+  checksum: dc94aae31b446d930e646d179bf5a84a68fc0f9ab8e0e7f4fda3b1b5674fcac163d740c85eda2c4315849bff6583650e696d8fe61e0fe6f9e8092b559cd45a49
   languageName: node
   linkType: hard
 
@@ -1153,7 +1153,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/module-builder@npm:^0.2.0":
+"@nuxt/module-builder@npm:^0.2.1":
   version: 0.2.1
   resolution: "@nuxt/module-builder@npm:0.2.1"
   dependencies:
@@ -1289,46 +1289,46 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@nuxthq/studio@workspace:."
   dependencies:
-    "@milkdown/core": ^6.4.1
-    "@milkdown/ctx": ^6.4.1
-    "@milkdown/plugin-collaborative": ^6.4.1
-    "@milkdown/plugin-cursor": ^6.4.1
-    "@milkdown/plugin-emoji": ^6.4.1
-    "@milkdown/plugin-history": ^6.4.1
-    "@milkdown/plugin-listener": ^6.4.1
-    "@milkdown/plugin-math": ^6.4.1
-    "@milkdown/plugin-slash": ^6.4.3
-    "@milkdown/plugin-tooltip": ^6.4.1
-    "@milkdown/plugin-trailing": ^6.4.1
-    "@milkdown/preset-commonmark": ^6.4.2
-    "@milkdown/preset-gfm": ^6.4.1
-    "@milkdown/prose": ^6.4.1
-    "@milkdown/theme-pack-helper": ^6.4.1
-    "@milkdown/utils": ^6.4.1
-    "@milkdown/vue": ^6.4.1
+    "@milkdown/core": ^6.5.4
+    "@milkdown/ctx": ^6.5.4
+    "@milkdown/plugin-collaborative": ^6.5.4
+    "@milkdown/plugin-cursor": ^6.5.4
+    "@milkdown/plugin-emoji": ^6.5.4
+    "@milkdown/plugin-history": ^6.5.4
+    "@milkdown/plugin-listener": ^6.5.4
+    "@milkdown/plugin-math": ^6.5.4
+    "@milkdown/plugin-slash": ^6.5.4
+    "@milkdown/plugin-tooltip": ^6.5.4
+    "@milkdown/plugin-trailing": ^6.5.4
+    "@milkdown/preset-commonmark": ^6.5.4
+    "@milkdown/preset-gfm": ^6.5.4
+    "@milkdown/prose": ^6.5.4
+    "@milkdown/theme-pack-helper": ^6.5.4
+    "@milkdown/utils": ^6.5.4
+    "@milkdown/vue": ^6.5.4
     "@nuxt-themes/elements-edge": ^0.0.1-fd5890e
     "@nuxt/content": "npm:@nuxt/content-edge@latest"
     "@nuxt/kit": ^3.0.0
-    "@nuxt/module-builder": ^0.2.0
+    "@nuxt/module-builder": ^0.2.1
     "@nuxt/schema": ^3.0.0
     "@nuxthq/ui": "npm:@nuxthq/ui-edge@latest"
-    "@nuxtjs/eslint-config-typescript": ^11.0.0
-    "@vueuse/core": ^9.5.0
-    "@vueuse/nuxt": ^9.5.0
-    defu: ^6.1.0
-    eslint: ^8.27.0
+    "@nuxtjs/eslint-config-typescript": ^12.0.0
+    "@vueuse/core": ^9.6.0
+    "@vueuse/nuxt": ^9.6.0
+    defu: ^6.1.1
+    eslint: ^8.28.0
     jiti: ^1.16.0
     monaco-editor-core: ^0.34.1
     nuxt: ^3.0.0
-    nuxt-component-meta: ^0.3.3
-    nuxt-config-schema: ^0.3.2
+    nuxt-component-meta: ^0.3.5
+    nuxt-config-schema: ^0.3.3
     remark-mdc: ^1.1.1
     shiki-es: ^0.1.2
-    socket.io-client: ^4.5.3
+    socket.io-client: ^4.5.4
     splitpanes: ^3.1.5
     standard-version: ^9.5.0
-    typescript: ^4.8.4
-    ufo: ^0.8.6
+    typescript: ^4.9.3
+    ufo: ^1.0.1
     y-websocket: ^1.4.5
     yjs: ^13.5.42
   languageName: unknown
@@ -1390,35 +1390,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxtjs/eslint-config-typescript@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "@nuxtjs/eslint-config-typescript@npm:11.0.0"
+"@nuxtjs/eslint-config-typescript@npm:^12.0.0":
+  version: 12.0.0
+  resolution: "@nuxtjs/eslint-config-typescript@npm:12.0.0"
   dependencies:
-    "@nuxtjs/eslint-config": ^11.0.0
-    "@typescript-eslint/eslint-plugin": ^5.36.1
-    "@typescript-eslint/parser": ^5.36.1
-    eslint-import-resolver-typescript: ^3.5.0
+    "@nuxtjs/eslint-config": ^12.0.0
+    "@typescript-eslint/eslint-plugin": ^5.42.1
+    "@typescript-eslint/parser": ^5.42.1
+    eslint-import-resolver-typescript: ^3.5.2
     eslint-plugin-import: ^2.26.0
+    eslint-plugin-vue: ^9.7.0
   peerDependencies:
     eslint: ^8.23.0
-  checksum: 7e24a15c41901b70670773e97ffc2d9dbfcc232993b0cfe7179707c41e449fc7d0ac166612a8d56a2a1ec99b018de34872089e75fd39d9c373528e17e5c17f01
+  checksum: 9276e17dd5ec5d6b8a6753e7c726ca2232da50fee4259e9af8e7f5e34144ec95baa63567ed35c1eef061da8f8ac69ceb81cb0c3ed95cd96cf9cd6e59509cae3b
   languageName: node
   linkType: hard
 
-"@nuxtjs/eslint-config@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "@nuxtjs/eslint-config@npm:11.0.0"
+"@nuxtjs/eslint-config@npm:^12.0.0":
+  version: 12.0.0
+  resolution: "@nuxtjs/eslint-config@npm:12.0.0"
   dependencies:
     eslint-config-standard: ^17.0.0
     eslint-plugin-import: ^2.26.0
-    eslint-plugin-n: ^15.2.5
+    eslint-plugin-n: ^15.5.1
     eslint-plugin-node: ^11.1.0
-    eslint-plugin-promise: ^6.0.1
-    eslint-plugin-unicorn: ^43.0.2
-    eslint-plugin-vue: ^9.4.0
+    eslint-plugin-promise: ^6.1.1
+    eslint-plugin-unicorn: ^44.0.2
+    eslint-plugin-vue: ^9.7.0
+    local-pkg: ^0.4.2
   peerDependencies:
     eslint: ^8.23.0
-  checksum: 302632d6cb05d60630a7bd75fac35d23a2b19294a6f23c29ce8cbff20fc78fd6faa4edec37f3626fa4cbf0190130ff62a8efc51407ec192dd6f9323d5018dffe
+  checksum: 25f65cd98ae87cb767d17dd85a57765c3181abb844b6b76084c99c39eafd302aa4b93c4b2e1ec4b1c7e67bd846a3cafcb725b4e7767df715e93fdd943ec997c0
   languageName: node
   linkType: hard
 
@@ -1810,13 +1812,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^5.36.1":
-  version: 5.44.0
-  resolution: "@typescript-eslint/eslint-plugin@npm:5.44.0"
+"@typescript-eslint/eslint-plugin@npm:^5.42.1":
+  version: 5.45.0
+  resolution: "@typescript-eslint/eslint-plugin@npm:5.45.0"
   dependencies:
-    "@typescript-eslint/scope-manager": 5.44.0
-    "@typescript-eslint/type-utils": 5.44.0
-    "@typescript-eslint/utils": 5.44.0
+    "@typescript-eslint/scope-manager": 5.45.0
+    "@typescript-eslint/type-utils": 5.45.0
+    "@typescript-eslint/utils": 5.45.0
     debug: ^4.3.4
     ignore: ^5.2.0
     natural-compare-lite: ^1.4.0
@@ -1829,43 +1831,43 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 88784e77e8e35ea50ca9c49d46df94cabc3447f4b332f3ca53974d3b5370cb5dcd85cc9ee0e317b91083812012369209574725dcfc3b2b4056b60371b68ca854
+  checksum: 7cff671a9ba33afa86f0ece6d0ebaeb5fc16596fc659ef230f6f65bfddfef2ffb6434310e3a4444fb852e79e40c85c5e62c559df6ddc9312aac235a18afdd269
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^5.36.1":
-  version: 5.44.0
-  resolution: "@typescript-eslint/parser@npm:5.44.0"
+"@typescript-eslint/parser@npm:^5.42.1":
+  version: 5.45.0
+  resolution: "@typescript-eslint/parser@npm:5.45.0"
   dependencies:
-    "@typescript-eslint/scope-manager": 5.44.0
-    "@typescript-eslint/types": 5.44.0
-    "@typescript-eslint/typescript-estree": 5.44.0
+    "@typescript-eslint/scope-manager": 5.45.0
+    "@typescript-eslint/types": 5.45.0
+    "@typescript-eslint/typescript-estree": 5.45.0
     debug: ^4.3.4
   peerDependencies:
     eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 2d09a1a1547a7ae3f76c9a33a54e11d79a194fbb9dbae69988e7aed3370bdf12bafde669211152769d89db822e0cdee4173affc126664fa6f17abba56daa7261
+  checksum: b8ce3af72de3ff22bb206c3299e728d37a836dbe1f75bcb66ad3bb7962204174b7fff834992b84f0e661de507729c01c7ad71ad2707c217cccc3c0f798a9dc23
   languageName: node
   linkType: hard
 
-"@typescript-eslint/scope-manager@npm:5.44.0":
-  version: 5.44.0
-  resolution: "@typescript-eslint/scope-manager@npm:5.44.0"
+"@typescript-eslint/scope-manager@npm:5.45.0":
+  version: 5.45.0
+  resolution: "@typescript-eslint/scope-manager@npm:5.45.0"
   dependencies:
-    "@typescript-eslint/types": 5.44.0
-    "@typescript-eslint/visitor-keys": 5.44.0
-  checksum: 4cfe4b55eb428eda740e6b967e3a87f3e1f9c4bbd8e1d6b8d64a11666abe33ffe7a21e4e614444ccde2da6930fa85f3e0ffca43d6e339943ff7a4fbccb09c8fc
+    "@typescript-eslint/types": 5.45.0
+    "@typescript-eslint/visitor-keys": 5.45.0
+  checksum: 8f686be8ee0c7ac49ee2a313570cddf86a1364b1ec129f50f8a531038a3bb241429734dc5e2c4e5dd76cc3ed149628aa3e8425cc092f37ca6885b1995c99c2d1
   languageName: node
   linkType: hard
 
-"@typescript-eslint/type-utils@npm:5.44.0":
-  version: 5.44.0
-  resolution: "@typescript-eslint/type-utils@npm:5.44.0"
+"@typescript-eslint/type-utils@npm:5.45.0":
+  version: 5.45.0
+  resolution: "@typescript-eslint/type-utils@npm:5.45.0"
   dependencies:
-    "@typescript-eslint/typescript-estree": 5.44.0
-    "@typescript-eslint/utils": 5.44.0
+    "@typescript-eslint/typescript-estree": 5.45.0
+    "@typescript-eslint/utils": 5.45.0
     debug: ^4.3.4
     tsutils: ^3.21.0
   peerDependencies:
@@ -1873,23 +1875,23 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 4c7b594f8afa52d57d0512951a874fa390eb791dcefcd0e1efff8817872293b2e4e04eff3c54d1595c1720a34d5fd315729af4e459882033d13cb6069ae9d28f
+  checksum: be96c89b91116b8fbed160631f3cdd345d47e34248a38e8a730fa9e09a4aa21184259414547d3c7a741b83fa68d4a14f77e9fc93b84aba4752f67bd5a772bf27
   languageName: node
   linkType: hard
 
-"@typescript-eslint/types@npm:5.44.0":
-  version: 5.44.0
-  resolution: "@typescript-eslint/types@npm:5.44.0"
-  checksum: ced7d32abecfc62ccb67cf27e30c0785b9c153ec7b1a05153ced58fa5a2031ab3845bc2e477b83e4cebdcc5881c5845d23053c6739c62549d41ae6208e547e85
+"@typescript-eslint/types@npm:5.45.0":
+  version: 5.45.0
+  resolution: "@typescript-eslint/types@npm:5.45.0"
+  checksum: 43d533622995f002221e439ea517aa07dbce2067cc880a6eb9d26307c505b746975f334d76b35501a2f4dd06d7aaf79964d86ce5a95e76a4f309d6e54faf5213
   languageName: node
   linkType: hard
 
-"@typescript-eslint/typescript-estree@npm:5.44.0":
-  version: 5.44.0
-  resolution: "@typescript-eslint/typescript-estree@npm:5.44.0"
+"@typescript-eslint/typescript-estree@npm:5.45.0":
+  version: 5.45.0
+  resolution: "@typescript-eslint/typescript-estree@npm:5.45.0"
   dependencies:
-    "@typescript-eslint/types": 5.44.0
-    "@typescript-eslint/visitor-keys": 5.44.0
+    "@typescript-eslint/types": 5.45.0
+    "@typescript-eslint/visitor-keys": 5.45.0
     debug: ^4.3.4
     globby: ^11.1.0
     is-glob: ^4.0.3
@@ -1898,35 +1900,35 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 758731108497cca7ff81cf0a78d086b5a85757a983979d6bb25ad8252b7acbc738c642ecb5f5df82f925a45926b9846e431d5cf9fee5ed2613300b4d0c5d6c3f
+  checksum: 8f48b3c75c155491ee49436c470e491f9fe48e6e7c95190c4d0c0ab64ce24e8bc6715de86996baf57fc9f0c6dae986ce9ae075e656664489bfa1dc706eaafcd7
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:5.44.0":
-  version: 5.44.0
-  resolution: "@typescript-eslint/utils@npm:5.44.0"
+"@typescript-eslint/utils@npm:5.45.0":
+  version: 5.45.0
+  resolution: "@typescript-eslint/utils@npm:5.45.0"
   dependencies:
     "@types/json-schema": ^7.0.9
     "@types/semver": ^7.3.12
-    "@typescript-eslint/scope-manager": 5.44.0
-    "@typescript-eslint/types": 5.44.0
-    "@typescript-eslint/typescript-estree": 5.44.0
+    "@typescript-eslint/scope-manager": 5.45.0
+    "@typescript-eslint/types": 5.45.0
+    "@typescript-eslint/typescript-estree": 5.45.0
     eslint-scope: ^5.1.1
     eslint-utils: ^3.0.0
     semver: ^7.3.7
   peerDependencies:
     eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
-  checksum: bc5bb28e41898464d35b8eb47cc452103852541e3b6be56252c15a5a81c45e10aad3db4c749eb92d752b0c358df8074e23ec6f9e65f8089baadeda7f395c7e31
+  checksum: 33a383881efb6c6e0ecd32f74810ca18bb5e85d4839f607409047d6e3d64a98b3cd1e811d027638d051b3741981de50a652c3abe0fcbb70fac80d7d93cd3e36f
   languageName: node
   linkType: hard
 
-"@typescript-eslint/visitor-keys@npm:5.44.0":
-  version: 5.44.0
-  resolution: "@typescript-eslint/visitor-keys@npm:5.44.0"
+"@typescript-eslint/visitor-keys@npm:5.45.0":
+  version: 5.45.0
+  resolution: "@typescript-eslint/visitor-keys@npm:5.45.0"
   dependencies:
-    "@typescript-eslint/types": 5.44.0
+    "@typescript-eslint/types": 5.45.0
     eslint-visitor-keys: ^3.3.0
-  checksum: a012c888209e1d6ae684b2a44fd460ae5a80f5faf07bca4bda6c9c0d8c063ad3297d4c53f7151ae86cf1a43dee09625dc3ee72183323c91089c7288fd573c6f4
+  checksum: 050cc4275d8a3638a106c2915410710e775382996130a6b2af732269e55cbbc4ed438c8662ddf409635d2d8bd0d8a4389b3980bc2cb38c6105c77c6835222af0
   languageName: node
   linkType: hard
 
@@ -2194,7 +2196,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vueuse/core@npm:9.6.0, @vueuse/core@npm:^9.1.0, @vueuse/core@npm:^9.5.0, @vueuse/core@npm:^9.6.0":
+"@vueuse/core@npm:9.6.0, @vueuse/core@npm:^9.1.0, @vueuse/core@npm:^9.6.0":
   version: 9.6.0
   resolution: "@vueuse/core@npm:9.6.0"
   dependencies:
@@ -2273,7 +2275,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vueuse/nuxt@npm:^9.5.0":
+"@vueuse/nuxt@npm:^9.6.0":
   version: 9.6.0
   resolution: "@vueuse/nuxt@npm:9.6.0"
   dependencies:
@@ -3209,7 +3211,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ci-info@npm:^3.3.2, ci-info@npm:^3.6.1":
+"ci-info@npm:^3.4.0, ci-info@npm:^3.6.1":
   version: 3.7.0
   resolution: "ci-info@npm:3.7.0"
   checksum: 6e5df0250382ff3732703b36b958d2d892dd3c481f9671666f96c2ab7888be744bc4dca81395be958dcb828502d94f18fa9aa8901c5a3c9923cda212df02724c
@@ -4846,7 +4848,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-import-resolver-typescript@npm:^3.5.0":
+"eslint-import-resolver-typescript@npm:^3.5.2":
   version: 3.5.2
   resolution: "eslint-import-resolver-typescript@npm:3.5.2"
   dependencies:
@@ -4923,7 +4925,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-n@npm:^15.2.5":
+"eslint-plugin-n@npm:^15.5.1":
   version: 15.5.1
   resolution: "eslint-plugin-n@npm:15.5.1"
   dependencies:
@@ -4957,7 +4959,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-promise@npm:^6.0.1":
+"eslint-plugin-promise@npm:^6.1.1":
   version: 6.1.1
   resolution: "eslint-plugin-promise@npm:6.1.1"
   peerDependencies:
@@ -4966,17 +4968,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-unicorn@npm:^43.0.2":
-  version: 43.0.2
-  resolution: "eslint-plugin-unicorn@npm:43.0.2"
+"eslint-plugin-unicorn@npm:^44.0.2":
+  version: 44.0.2
+  resolution: "eslint-plugin-unicorn@npm:44.0.2"
   dependencies:
-    "@babel/helper-validator-identifier": ^7.18.6
-    ci-info: ^3.3.2
+    "@babel/helper-validator-identifier": ^7.19.1
+    ci-info: ^3.4.0
     clean-regexp: ^1.0.0
     eslint-utils: ^3.0.0
     esquery: ^1.4.0
     indent-string: ^4.0.0
-    is-builtin-module: ^3.1.0
+    is-builtin-module: ^3.2.0
     lodash: ^4.17.21
     pluralize: ^8.0.0
     read-pkg-up: ^7.0.1
@@ -4985,12 +4987,12 @@ __metadata:
     semver: ^7.3.7
     strip-indent: ^3.0.0
   peerDependencies:
-    eslint: ">=8.18.0"
-  checksum: 1b63eb013cbc0b3c9ef131a1e049b4b53d8e208393675d5f97d3fa83c050ebcb695a7fd210f4de1460f42f89c2ecca261280488834591d5c21e146d297a9ee2e
+    eslint: ">=8.23.1"
+  checksum: b0ed6b3a60e36efab5b19a0e2a1ea4e4faba79ef315aa1eff9bdebaf28b70ada059837a0a4cdf20e0b678d8eee6155afc2c6300d0ff7d51b68eced4f0bcb56e0
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:^9.4.0":
+"eslint-plugin-vue@npm:^9.7.0":
   version: 9.8.0
   resolution: "eslint-plugin-vue@npm:9.8.0"
   dependencies:
@@ -5068,7 +5070,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.27.0":
+"eslint@npm:^8.28.0":
   version: 8.28.0
   resolution: "eslint@npm:8.28.0"
   dependencies:
@@ -6567,7 +6569,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-builtin-module@npm:^3.1.0, is-builtin-module@npm:^3.2.0":
+"is-builtin-module@npm:^3.2.0":
   version: 3.2.0
   resolution: "is-builtin-module@npm:3.2.0"
   dependencies:
@@ -8923,7 +8925,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nuxt-component-meta@npm:^0.3.3":
+"nuxt-component-meta@npm:^0.3.5":
   version: 0.3.5
   resolution: "nuxt-component-meta@npm:0.3.5"
   dependencies:
@@ -8935,16 +8937,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nuxt-config-schema@npm:^0.3.2":
-  version: 0.3.2
-  resolution: "nuxt-config-schema@npm:0.3.2"
+"nuxt-config-schema@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "nuxt-config-schema@npm:0.3.3"
   dependencies:
     "@nuxt/kit": ^3.0.0
     defu: ^6.1.1
     jiti: ^1.16.0
     pathe: ^1.0.0
     untyped: ^1.0.0
-  checksum: 09e04e27a7c07a4aaa6b3c02e60d5e2cf1b34ab6936456aad60f8f19a74141b84fad4bd5c1a7afce6ddff5ea24ca80aa1d83eda70bed39879f8bc521b4bf6c5d
+  checksum: 259f4239f367a95a8cc307c858b6cb38f749e517d3be47c14a868184a0118f678a40a08aebf9a88c8265f870f8f76b821c0bfb8603add76612c2f87b0b78d30b
   languageName: node
   linkType: hard
 
@@ -11240,7 +11242,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"socket.io-client@npm:^4.5.3":
+"socket.io-client@npm:^4.5.3, socket.io-client@npm:^4.5.4":
   version: 4.5.4
   resolution: "socket.io-client@npm:4.5.4"
   dependencies:
@@ -12129,6 +12131,13 @@ __metadata:
   version: 1.0.0
   resolution: "ufo@npm:1.0.0"
   checksum: 0ef41654d5b04028cc4778884e324f7fe1309c6dd7b3cbebc77e7eebd8df0776824c404ae958706667a7dce882510a3af31ec8dcef0ea1ec9f98cca84303407c
+  languageName: node
+  linkType: hard
+
+"ufo@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "ufo@npm:1.0.1"
+  checksum: 63024876f21b7cc44267255a8043062046d3215e09212bd682787a13ccf1e0c5d23f7686a7f1bc7ac9f34c7e8a88100af234f42b509db50f17ce638af6ac87cc
   languageName: node
   linkType: hard
 
