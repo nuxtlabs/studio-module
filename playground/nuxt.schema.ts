@@ -1,5 +1,5 @@
-export default {
+export default defineNuxtConfigSchema({
   appConfig: {
     configFromNuxtSchema: true
   }
-}
+})

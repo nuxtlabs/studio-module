@@ -1321,7 +1321,7 @@ __metadata:
     monaco-editor-core: ^0.34.1
     nuxt: ^3.0.0
     nuxt-component-meta: ^0.3.3
-    nuxt-config-schema: ^0.1.0
+    nuxt-config-schema: ^0.3.2
     remark-mdc: ^1.1.1
     shiki-es: ^0.1.2
     socket.io-client: ^4.5.3
@@ -8935,16 +8935,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nuxt-config-schema@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "nuxt-config-schema@npm:0.1.0"
+"nuxt-config-schema@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "nuxt-config-schema@npm:0.3.2"
   dependencies:
     "@nuxt/kit": ^3.0.0
     defu: ^6.1.1
     jiti: ^1.16.0
     pathe: ^1.0.0
     untyped: ^1.0.0
-  checksum: 60e454bb17f1f73059c9d413cba0ae634d1bd6d316919168de83dd9d27138a179ae3f6c51a04818e0f1ee040cb525f7acfad1cc852b17ed6420ec87862882140
+  checksum: 09e04e27a7c07a4aaa6b3c02e60d5e2cf1b34ab6936456aad60f8f19a74141b84fad4bd5c1a7afce6ddff5ea24ca80aa1d83eda70bed39879f8bc521b4bf6c5d
   languageName: node
   linkType: hard
 

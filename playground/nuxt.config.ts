@@ -1,8 +1,10 @@
 import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
-  appConfig: {
-    configFromNuxtConfig: true
+  $schema: {
+    appConfig: {
+      configFromNuxtConfig: true
+    }
   },
   modules: [
     '@nuxt/content',
