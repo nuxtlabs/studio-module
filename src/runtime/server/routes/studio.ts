@@ -31,10 +31,10 @@ export default eventHandler(() => {
       }
     })
 
-  const { appConfig, content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment } } = useRuntimeConfig()
+  const { appConfigSchema, content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment } } = useRuntimeConfig()
   return {
     version,
-    appConfig: appConfig || {},
+    appConfigSchema: appConfigSchema || {},
     content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment },
     components: filteredComponents
   }

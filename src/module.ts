@@ -23,7 +23,7 @@ export default defineNuxtModule<ModuleOptions>({
   async setup (options, nuxt) {
     // @ts-ignore
     nuxt.hook('schema:resolved', (schema: any) => {
-      nuxt.options.runtimeConfig.appConfig = {
+      nuxt.options.runtimeConfig.appConfigSchema = {
         properties: schema.properties?.appConfig,
         default: schema.default?.appConfig
       }
