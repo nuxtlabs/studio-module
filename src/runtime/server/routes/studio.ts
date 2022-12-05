@@ -12,7 +12,7 @@ interface NuxtComponentMeta {
   global: boolean
 }
 
-export default eventHandler(() => {
+export default eventHandler(async () => {
   const filteredComponents = (Object.values(components) as NuxtComponentMeta[])
     .filter(c => c.global)
     .filter(c => !c.pascalName.startsWith('Content'))
@@ -31,10 +31,15 @@ export default eventHandler(() => {
       }
     })
 
-  const { appConfig, content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment } } = useRuntimeConfig()
+  // TODO: Remove workaround ASAP when Nitro supports app.config
+  // @ts-ignore
+  const appConfig = await $fetch.native('/__app_config.json').then(r => r.json())
+
+  const { appConfigSchema, content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment } } = useRuntimeConfig()
   return {
     version,
-    appConfig: appConfig || {},
+    appConfigSchema: appConfigSchema || {},
+    appConfig,
     content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment },
     components: filteredComponents
   }

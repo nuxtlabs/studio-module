@@ -1,5 +1,6 @@
+import { existsSync } from 'node:fs'
 import { defu } from 'defu'
-import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler } from '@nuxt/kit'
+import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler, resolveAlias } from '@nuxt/kit'
 
 const log = logger.withScope('@nuxt/studio')
 
@@ -23,7 +24,7 @@ export default defineNuxtModule<ModuleOptions>({
   async setup (options, nuxt) {
     // @ts-ignore
     nuxt.hook('schema:resolved', (schema: any) => {
-      nuxt.options.runtimeConfig.appConfig = {
+      nuxt.options.runtimeConfig.appConfigSchema = {
         properties: schema.properties?.appConfig,
         default: schema.default?.appConfig
       }
@@ -73,9 +74,20 @@ export default defineNuxtModule<ModuleOptions>({
     addPlugin(resolve('./runtime/plugins/preview-detector'))
     addPlugin(resolve('./runtime/plugins/iframe.client'))
 
+    // TODO: Remove workaround ASAP when Nitro supports app.config
+    addPlugin(resolve('./runtime/plugins/app-config.server'))
+
     // Register components
     addComponentsDir({
       path: resolve('./runtime/components')
+    })
+
+    // Support custom ~/.studio/app.config.json
+    nuxt.hook('app:resolve', (appCtx) => {
+      const studioAppConfigPath = resolveAlias('~/.studio/app.config.json')
+      if (existsSync(studioAppConfigPath)) {
+        appCtx.configs.unshift(studioAppConfigPath)
+      }
     })
 
     // Add server route to know Studio is enabled

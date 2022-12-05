@@ -1,3 +1,4 @@
 export default {
-  configFromAppConfig: true
+  configFromAppConfig: true,
+  someConfig: 'user config'
 }
