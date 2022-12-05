@@ -73,6 +73,9 @@ export default defineNuxtModule<ModuleOptions>({
     addPlugin(resolve('./runtime/plugins/preview-detector'))
     addPlugin(resolve('./runtime/plugins/iframe.client'))
 
+    // TODO: Remove workaround ASAP when Nitro supports app.config
+    addPlugin(resolve('./runtime/plugins/app-config.server'))
+
     // Register components
     addComponentsDir({
       path: resolve('./runtime/components')
