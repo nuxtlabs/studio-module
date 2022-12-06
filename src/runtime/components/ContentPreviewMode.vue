@@ -110,7 +110,7 @@ onUnmounted(() => {
       </template>
     </div>
     <Transition name="preview-loading">
-      <div v-if="!previewReady">
+      <div v-if="open && !previewReady">
         <div id="__preview_background" />
         <div id="__preview_loader">
           <svg id="__preview_loading_icon" width="32" height="32" viewBox="0 0 24 24">
@@ -123,7 +123,10 @@ onUnmounted(() => {
               d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"
             />
           </svg>
-          Initializing the preview...
+          <p>Initializing the preview...</p>
+          <button @click="closePreviewMode">
+            Cancel
+          </button>
         </div>
       </div>
     </Transition>
@@ -184,6 +187,10 @@ body.__preview_enabled {
   font-size: 1.4rem;
   z-index: 50;
   color: black;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+#__preview_loader p {
+  margin: 10px 0;
 }
 
 .dark #__preview_background,
@@ -224,7 +231,7 @@ body.__preview_enabled {
 .dark-mode #__nuxt_preview svg {
   color: white;
 }
-#__nuxt_preview button {
+button {
   cursor: pointer;
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 4px 10px;
