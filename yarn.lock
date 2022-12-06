@@ -647,7 +647,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/sourcemap-codec@npm:1.4.14, @jridgewell/sourcemap-codec@npm:^1.4.10":
+"@jridgewell/sourcemap-codec@npm:1.4.14, @jridgewell/sourcemap-codec@npm:^1.4.10, @jridgewell/sourcemap-codec@npm:^1.4.13":
   version: 1.4.14
   resolution: "@jridgewell/sourcemap-codec@npm:1.4.14"
   checksum: 61100637b6d173d3ba786a5dff019e1a74b1f394f323c1fee337ff390239f053b87266c7a948777f4b1ee68c01a8ad0ab61e5ff4abb5a012a0b091bec391ab97
@@ -1316,13 +1316,13 @@ __metadata:
     "@vueuse/core": ^9.6.0
     "@vueuse/nuxt": ^9.6.0
     defu: ^6.1.1
-    eslint: ^8.28.0
+    eslint: ^8.29.0
     jiti: ^1.16.0
     monaco-editor-core: ^0.34.1
     nuxt: ^3.0.0
-    nuxt-component-meta: ^0.3.5
-    nuxt-config-schema: ^0.3.3
-    remark-mdc: ^1.1.1
+    nuxt-component-meta: ^0.3.8
+    nuxt-config-schema: ^0.3.4
+    remark-mdc: ^1.1.3
     shiki-es: ^0.1.2
     socket.io-client: ^4.5.4
     splitpanes: ^3.1.5
@@ -1330,7 +1330,7 @@ __metadata:
     typescript: ^4.9.3
     ufo: ^1.0.1
     y-websocket: ^1.4.5
-    yjs: ^13.5.42
+    yjs: ^13.5.43
   languageName: unknown
   linkType: soft
 
@@ -1481,7 +1481,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:^23.0.2":
+"@rollup/plugin-commonjs@npm:^23.0.2, @rollup/plugin-commonjs@npm:^23.0.3":
   version: 23.0.3
   resolution: "@rollup/plugin-commonjs@npm:23.0.3"
   dependencies:
@@ -1516,7 +1516,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-json@npm:^5.0.1":
+"@rollup/plugin-json@npm:^5.0.1, @rollup/plugin-json@npm:^5.0.2":
   version: 5.0.2
   resolution: "@rollup/plugin-json@npm:5.0.2"
   dependencies:
@@ -4714,7 +4714,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.15.13, esbuild@npm:^0.15.14, esbuild@npm:^0.15.9":
+"esbuild@npm:^0.15.13, esbuild@npm:^0.15.14, esbuild@npm:^0.15.18, esbuild@npm:^0.15.9":
   version: 0.15.18
   resolution: "esbuild@npm:0.15.18"
   dependencies:
@@ -5070,7 +5070,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.28.0":
+"eslint@npm:^8.29.0":
   version: 8.29.0
   resolution: "eslint@npm:8.29.0"
   dependencies:
@@ -7122,8 +7122,8 @@ __metadata:
   linkType: hard
 
 "koa@npm:^2.12.0":
-  version: 2.13.4
-  resolution: "koa@npm:2.13.4"
+  version: 2.14.0
+  resolution: "koa@npm:2.14.0"
   dependencies:
     accepts: ^1.3.5
     cache-content-type: ^1.0.0
@@ -7148,7 +7148,7 @@ __metadata:
     statuses: ^1.5.0
     type-is: ^1.6.16
     vary: ^1.1.2
-  checksum: c9a6f9c803433b2d143a0788308048c1432a71c5febcfea2af7f2e8bd732b9bfd75c2c220d553752ee9ab9a3f52490f006cfd521db97cd01d8461d67cc1ccc1f
+  checksum: da17421e44559e4c2cc94c6cca79a027f73cbfba4035ed04c5ae676206b16974c09a632c49b57f75ac0c5f34227a42f3cc9b02c37bc98d47f364ed6c6ddf46ce
   languageName: node
   linkType: hard
 
@@ -7576,6 +7576,15 @@ __metadata:
   dependencies:
     sourcemap-codec: ^1.4.8
   checksum: 89b0d60cbb32bbf3d1e23c46ea93db082d18a8230b972027aecb10a40bba51be519ecce0674f995571e3affe917b76b09f59d8dbc9a1b2c9c4102a2b6e8a2b01
+  languageName: node
+  linkType: hard
+
+"magic-string@npm:^0.27.0":
+  version: 0.27.0
+  resolution: "magic-string@npm:0.27.0"
+  dependencies:
+    "@jridgewell/sourcemap-codec": ^1.4.13
+  checksum: 273faaa50baadb7a2df6e442eac34ad611304fc08fe16e24fe2e472fd944bfcb73ffb50d2dc972dc04e92784222002af46868cb9698b1be181c81830fd95a13e
   languageName: node
   linkType: hard
 
@@ -8918,19 +8927,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nuxt-component-meta@npm:^0.3.5":
-  version: 0.3.6
-  resolution: "nuxt-component-meta@npm:0.3.6"
+"nuxt-component-meta@npm:^0.3.8":
+  version: 0.3.8
+  resolution: "nuxt-component-meta@npm:0.3.8"
   dependencies:
     "@nuxt/kit": ^3.0.0
     scule: ^1.0.0
     typescript: ^4.9.3
     vue-component-meta: ^1.0.9
-  checksum: dd598cb6183d7daf6b0ace549e555a1b23c68a2c6cab44095c4c25a5e449f6a0424232bd8c91afcb9f3d2b6ffbf70bf1ebf87d50e6d5b72b1134e371bd293dd2
+  checksum: a525b1371f0135b362c1d7ddf26ee89652d5aadc1d1d5e4a46793629d6eda819fabfed58720bfe4a80baca8e918b026024308d69e21c9b779466d7d02bf439c9
   languageName: node
   linkType: hard
 
-"nuxt-config-schema@npm:^0.3.3":
+"nuxt-config-schema@npm:^0.3.4":
   version: 0.3.4
   resolution: "nuxt-config-schema@npm:0.3.4"
   dependencies:
@@ -10643,7 +10652,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-mdc@npm:^1.1.1, remark-mdc@npm:^1.1.3":
+"remark-mdc@npm:^1.1.3":
   version: 1.1.3
   resolution: "remark-mdc@npm:1.1.3"
   dependencies:
@@ -10896,7 +10905,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.3.0":
+"rollup@npm:^3.6.0":
   version: 3.6.0
   resolution: "rollup@npm:3.6.0"
   dependencies:
@@ -12147,23 +12156,23 @@ __metadata:
   linkType: hard
 
 "unbuild@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "unbuild@npm:1.0.1"
+  version: 1.0.2
+  resolution: "unbuild@npm:1.0.2"
   dependencies:
     "@rollup/plugin-alias": ^4.0.2
-    "@rollup/plugin-commonjs": ^23.0.2
-    "@rollup/plugin-json": ^5.0.1
+    "@rollup/plugin-commonjs": ^23.0.3
+    "@rollup/plugin-json": ^5.0.2
     "@rollup/plugin-node-resolve": ^15.0.1
     "@rollup/plugin-replace": ^5.0.1
     "@rollup/pluginutils": ^5.0.2
     chalk: ^5.1.2
     consola: ^2.15.3
     defu: ^6.1.1
-    esbuild: ^0.15.14
+    esbuild: ^0.15.18
     globby: ^13.1.2
     hookable: ^5.4.2
     jiti: ^1.16.0
-    magic-string: ^0.26.7
+    magic-string: ^0.27.0
     mkdirp: ^1.0.4
     mkdist: ^1.0.0
     mlly: ^1.0.0
@@ -12172,14 +12181,14 @@ __metadata:
     pkg-types: ^1.0.1
     pretty-bytes: ^6.0.0
     rimraf: ^3.0.2
-    rollup: ^3.3.0
+    rollup: ^3.6.0
     rollup-plugin-dts: ^5.0.0
     scule: ^1.0.0
     typescript: ^4.9.3
     untyped: ^1.0.0
   bin:
     unbuild: dist/cli.mjs
-  checksum: 507d1618e83d4d23fe98ae3c228d36bef135475bc8e10a9503e9b01a27a64d4d9e1b9de744722a2b82642b4a9d002e2314e6bd0fdc3a7f8fd4c4aef28fb0d7fe
+  checksum: 91a2e773fb54536bf5f519754d7ab60e86d2c13e834e531de8716c685668dfaf67c809b05f823cd7b3cf2300e2e764c4e82c4ec3748819106f858359f631c824
   languageName: node
   linkType: hard
 
@@ -13131,7 +13140,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yjs@npm:^13.5.42":
+"yjs@npm:^13.5.43":
   version: 13.5.43
   resolution: "yjs@npm:13.5.43"
   dependencies:
