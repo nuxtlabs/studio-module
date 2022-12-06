@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.3](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.3.2...v0.3.3) (2022-12-06)
+
+
+### Features
+
+* **app-config:** add support for `.studio` files ([#80](https://github.com/nuxtlabs/studio.nuxt.com/issues/80)) ([8804f40](https://github.com/nuxtlabs/studio.nuxt.com/commit/8804f40da086a704f91ba2bcaa018d62ce75bcf3))
+
 ### [0.3.2](https://github.com/nuxtlabs/studio.nuxt.com/compare/v0.3.1...v0.3.2) (2022-12-05)
 
 
