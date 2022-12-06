@@ -1,10 +1,10 @@
 import type { Ref } from 'vue'
 import { createApp, computed } from 'vue'
 import type { Storage } from 'unstorage'
+import { callWithNuxt } from '#app'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, mergeDraft } from '../utils'
 import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRoute, useRuntimeConfig } from '#imports'
-import { callWithNuxt } from '#app'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
 
 export const useStudio = createSingleton(() => {
