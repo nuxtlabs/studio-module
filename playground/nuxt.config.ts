@@ -20,4 +20,7 @@ export default defineNuxtConfig({
   studio: {
     enabled: true
   }
+  // app: {
+  //   baseURL: '/test/'
+  // }
 })
