@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref, onUnmounted, nextTick, watch, Ref, PropType } from 'vue'
-
+import type { Ref, PropType } from 'vue'
+import { onMounted, ref, onUnmounted, nextTick, watch } from 'vue'
 import { refreshNuxtData, useCookie, useRoute, navigateTo } from '#imports'
+
 const props = defineProps({
   previewToken: {
     type: Object,
@@ -133,6 +134,9 @@ onUnmounted(() => {
 body.__preview_enabled {
   padding-bottom: 50px;
 }
+</style>
+
+<style scoped>
 #__nuxt_preview {
   height: 50px;
   display: flex;
@@ -264,11 +268,11 @@ body.__preview_enabled {
 #__nuxt_preview.__preview_refreshing svg,
 #__nuxt_preview.__preview_refreshing span,
 #__nuxt_preview.__preview_refreshing button {
-  -webkit-animation: nuxt_pulsate 1s ease-out;
-  -webkit-animation-iteration-count: infinite;
+  animation: nuxt_pulsate 1s ease-out;
+  animation-iteration-count: infinite;
   opacity: 0.5;
 }
-@-webkit-keyframes nuxt_pulsate {
+@keyframes nuxt_pulsate {
   0% {
       opacity: 1;
   }
