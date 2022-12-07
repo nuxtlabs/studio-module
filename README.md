@@ -36,16 +36,6 @@ export default defineNuxtConfig({
 })
 ```
 
-If you want latest updates, please use `@nuxthq/studio-edge` in your `package.json`:
-
-```json
-{
-  "devDependencies": {
-    "@nuxthq/studio": "npm:@nuxthq/studio-edge@latest"
-  }
-}
-```
-
 ## Configuration
 
 By default the Studio API is `https://api.nuxt.studio`. If you want to customise it, you can set the `STUDIO_API` environement variable.

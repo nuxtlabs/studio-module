@@ -33,10 +33,10 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Release Edge
-        if: github.event_name == 'push'
-        run: |
-          yarn jiti .github/scripts/bump-edge
-          npm publish -q --access public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      # - name: Release Edge
+      #   if: github.event_name == 'push'
+      #   run: |
+      #     yarn jiti .github/scripts/bump-edge
+      #     npm publish -q --access public
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
