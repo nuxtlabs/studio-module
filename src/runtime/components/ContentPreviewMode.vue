@@ -235,7 +235,7 @@ button {
   cursor: pointer;
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 4px 10px;
-  border-radius: 5px;
+  border-radius: 3px;
   background: transparent;
   margin-left: 5px;
   margin-right: 8px;
@@ -249,6 +249,20 @@ button {
   display: inline-block;
   width: auto;
   margin: 0;
+}
+button:hover {
+  color: rgba(0, 0, 0, 0.9);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+.dark-mode button,
+.dark button {
+  color: lightgray;
+  border-color: rgba(255, 255, 255, 0.2)
+}
+.dark-mode button:hover,
+.dark button:hover {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.4)
 }
 #__nuxt_preview button:hover,
 #__nuxt_preview button:focus {

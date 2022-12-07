@@ -5,12 +5,12 @@ const appConfig = useAppConfig()
 </script>
 
 <template>
-  <div>
+  <NuxtLayout>
     <h1>useRuntimeConfig().public.studio</h1>
     <pre>{{ config }}</pre>
     <h1>useAppConfig()</h1>
     <pre>{{ appConfig }}</pre>
     <h1>/api/_studio/components</h1>
     <pre>{{ components }}</pre>
-  </div>
+  </NuxtLayout>
 </template>
