@@ -1,15 +1,15 @@
 import type { Ref } from 'vue'
 import { createApp, computed } from 'vue'
 import type { Storage } from 'unstorage'
-import { callWithNuxt } from '#app'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, mergeDraft } from '../utils'
+import { callWithNuxt } from '#app'
 import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRoute, useRuntimeConfig } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
 
 export const useStudio = createSingleton(() => {
   const nuxtApp = useNuxtApp()
-  const initialAppConfig = { ...useAppConfig() }
+  const initialAppConfig = JSON.parse(JSON.stringify((useAppConfig())))
   const runtimeConfig = useRuntimeConfig().public.studio || {}
 
   const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
