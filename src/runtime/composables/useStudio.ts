@@ -1,16 +1,17 @@
 import type { Ref } from 'vue'
 import { createApp, computed } from 'vue'
 import type { Storage } from 'unstorage'
-import { callWithNuxt } from '#app'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, mergeDraft } from '../utils'
-import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRoute, useRuntimeConfig } from '#imports'
+import { callWithNuxt } from '#app'
+import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRoute, useRuntimeConfig, useState } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
 
 export const useStudio = createSingleton(() => {
   const nuxtApp = useNuxtApp()
   const initialAppConfig = { ...useAppConfig() }
   const runtimeConfig = useRuntimeConfig().public.studio || {}
+  const storage = useState<Storage | null>('client-db', () => null)
 
   const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
 
@@ -85,15 +86,30 @@ export const useStudio = createSingleton(() => {
     }).mount(el)
   }
 
+  const findContentWithId = async (path: string) => {
+    if (!path) {
+      return null
+    }
+    path = path.replace(/\/$/, '')
+    let content = await storage.value.getItem(`${previewToken.value}:${path}`)
+    if (!content) {
+      content = await storage.value.getItem(path)
+    }
+    return content
+  }
+
   return {
     apiURL: runtimeConfig.apiURL,
     previewToken,
+    contentStorage: storage,
 
     syncPreview,
     syncPreviewFiles,
     syncPreviewAppConfig,
     requestPreviewSynchronization,
 
-    mountPreviewUI
+    mountPreviewUI,
+
+    findContentWithId
   }
 })
