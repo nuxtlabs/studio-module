@@ -1,8 +1,10 @@
 import type { Ref } from 'vue'
 import { createApp, computed } from 'vue'
 import type { Storage } from 'unstorage'
+// @ts-ignore
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, mergeDraft } from '../utils'
+// eslint-disable-next-line import/order
 import { callWithNuxt } from '#app'
 import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRoute, useRuntimeConfig, useState } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
@@ -91,9 +93,9 @@ export const useStudio = createSingleton(() => {
       return null
     }
     path = path.replace(/\/$/, '')
-    let content = await storage.value.getItem(`${previewToken.value}:${path}`)
+    let content = await storage.value?.getItem(`${previewToken.value}:${path}`)
     if (!content) {
-      content = await storage.value.getItem(path)
+      content = await storage.value?.getItem(path)
     }
     return content
   }
