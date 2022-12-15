@@ -54,7 +54,7 @@ export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
     }
 
     // Ignore if navigating from editor
-    if (editorSelectedPath.value === page._path) {
+    if (page && editorSelectedPath.value === page._path) {
       editorSelectedPath.value = ''
       return
     }
