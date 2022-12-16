@@ -1,10 +1,11 @@
 import type { Ref } from 'vue'
 import { createApp, computed } from 'vue'
 import type { Storage } from 'unstorage'
+import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 // @ts-ignore
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, mergeDraft } from '../utils'
-// eslint-disable-next-line import/order
+
 import { callWithNuxt } from '#app'
 import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRoute, useRuntimeConfig, useState } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
@@ -88,7 +89,7 @@ export const useStudio = createSingleton(() => {
     }).mount(el)
   }
 
-  const findContentWithId = async (path: string) => {
+  const findContentWithId = async (path: string): Promise<ParsedContent | null> => {
     if (!path) {
       return null
     }
@@ -97,7 +98,7 @@ export const useStudio = createSingleton(() => {
     if (!content) {
       content = await storage.value?.getItem(path)
     }
-    return content
+    return content as ParsedContent
   }
 
   return {
