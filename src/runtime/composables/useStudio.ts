@@ -5,7 +5,7 @@ import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 // @ts-ignore
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, mergeDraft } from '../utils'
-
+// eslint-disable-next-line import/order
 import { callWithNuxt } from '#app'
 import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRoute, useRuntimeConfig, useState } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
