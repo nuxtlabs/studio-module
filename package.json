@@ -30,6 +30,7 @@
     "build:ui": "NITRO_PRESET=node nuxi build ui",
     "build:module": "nuxt-module-build",
     "lint": "eslint --ext .vue,.ts,.js,.mjs .",
+    "prepublish": "yarn build",
     "release": "yarn lint && release-it"
   },
   "dependencies": {
