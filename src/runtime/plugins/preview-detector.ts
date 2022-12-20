@@ -1,10 +1,9 @@
-import { ref } from 'vue'
 import type { Storage } from 'unstorage'
-import type { NuxtApp } from 'nuxt/app'
-import { defineNuxtPlugin, refreshNuxtData, useCookie, useRoute, useRuntimeConfig } from '#imports'
+import { NuxtApp } from 'nuxt/app'
+import { defineNuxtPlugin, useState, refreshNuxtData, useCookie, useRoute, useRuntimeConfig } from '#imports'
 
-const contentStorage = ref<Storage | null>(null)
 export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
+  const contentStorage = useState<Storage | null>('client-db', () => null)
   const runtimeConfig = useRuntimeConfig().public.studio || {}
   const route = useRoute()
   const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })

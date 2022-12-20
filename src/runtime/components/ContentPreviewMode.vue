@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Ref, PropType } from 'vue'
 import { onMounted, ref, onUnmounted, nextTick, watch } from 'vue'
-import { refreshNuxtData, useCookie, useRoute, navigateTo } from '#imports'
+import { refreshNuxtData, useCookie, useRoute, navigateTo, useNuxtApp } from '#imports'
 
 const props = defineProps({
   previewToken: {
@@ -28,6 +28,7 @@ const props = defineProps({
 
 const previewClasses = ['__nuxt_preview', '__preview_enabled']
 
+const nuxtApp = useNuxtApp()
 const open = ref(true)
 const refreshing = ref(false)
 const apiReady = ref(false)
@@ -78,6 +79,8 @@ watch(() => apiReady.value, () => {
     props.refresh()
       .then(() => {
         previewReady.value = true
+        // @ts-ignore
+        nuxtApp.callHook('nuxt-studio:preview:ready')
       })
   }
 })
@@ -86,6 +89,8 @@ watch(() => props.storageReady.value, () => {
     props.refresh()
       .then(() => {
         previewReady.value = true
+        // @ts-ignore
+        nuxtApp.callHook('nuxt-studio:preview:ready')
       })
   }
 })
