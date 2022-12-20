@@ -1,6 +1,7 @@
 import type { Ref } from 'vue'
 import { createApp, computed } from 'vue'
 import type { Storage } from 'unstorage'
+import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 // @ts-ignore
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, mergeDraft } from '../utils'
@@ -88,16 +89,16 @@ export const useStudio = createSingleton(() => {
     }).mount(el)
   }
 
-  const findContentWithId = async (path: string) => {
+  const findContentWithId = async (path: string): Promise<ParsedContent | undefined> => {
     if (!path) {
-      return null
+      return undefined
     }
     path = path.replace(/\/$/, '')
     let content = await storage.value?.getItem(`${previewToken.value}:${path}`)
     if (!content) {
       content = await storage.value?.getItem(path)
     }
-    return content
+    return content as ParsedContent
   }
 
   return {
