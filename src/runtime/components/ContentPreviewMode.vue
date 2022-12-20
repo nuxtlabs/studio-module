@@ -79,6 +79,7 @@ watch(() => apiReady.value, () => {
     props.refresh()
       .then(() => {
         previewReady.value = true
+        // @ts-ignore
         nuxtApp.callHook('nuxt-studio:preview:ready')
       })
   }
@@ -88,6 +89,7 @@ watch(() => props.storageReady.value, () => {
     props.refresh()
       .then(() => {
         previewReady.value = true
+        // @ts-ignore
         nuxtApp.callHook('nuxt-studio:preview:ready')
       })
   }

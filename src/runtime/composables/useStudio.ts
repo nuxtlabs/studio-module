@@ -12,7 +12,7 @@ import type { PreviewFile, PreviewResponse } from '~~/../types'
 
 export const useStudio = createSingleton(() => {
   const nuxtApp = useNuxtApp()
-  const initialAppConfig = { ...useAppConfig() }
+  const initialAppConfig = JSON.parse(JSON.stringify((useAppConfig())))
   const runtimeConfig = useRuntimeConfig().public.studio || {}
   const storage = useState<Storage | null>('client-db', () => null)
 
@@ -88,6 +88,7 @@ export const useStudio = createSingleton(() => {
       init: requestPreviewSynchronization
     }).mount(el)
   }
+
 
   const findContentWithId = async (path: string): Promise<ParsedContent | null> => {
     if (!path) {

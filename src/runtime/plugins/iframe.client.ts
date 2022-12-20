@@ -1,13 +1,17 @@
 import type { NuxtApp } from 'nuxt/app'
-import { useStudio } from '../composables/useStudio'
 import { defineNuxtPlugin, ref, toRaw, useRouter } from '#imports'
 
-export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
+export default defineNuxtPlugin(async (nuxtApp: NuxtApp) => {
   // Not in an iframe
   if (!window.parent || window.self === window.parent) {
     return
   }
   const router = useRouter()
+
+  const editorSelectedPath = ref('')
+  const isDocumentDrivenInitialHook = ref(true)
+
+  const useStudio = await import('../composables/useStudio').then(m => m.useStudio)
   const { findContentWithId } = useStudio()
 
   window.addEventListener('keydown', (e) => {
@@ -24,9 +28,6 @@ export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
       }, '*')
     }
   })
-
-  const editorSelectedPath = ref('')
-  const isDocumentDrivenInitialHook = ref(true)
 
   window.addEventListener('message', async (e) => {
     const { type, payload = {} } = e.data || {}
