@@ -89,9 +89,10 @@ export const useStudio = createSingleton(() => {
     }).mount(el)
   }
 
-  const findContentWithId = async (path: string): Promise<ParsedContent | undefined> => {
+
+  const findContentWithId = async (path: string): Promise<ParsedContent | null> => {
     if (!path) {
-      return undefined
+      return null
     }
     path = path.replace(/\/$/, '')
     let content = await storage.value?.getItem(`${previewToken.value}:${path}`)
