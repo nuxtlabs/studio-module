@@ -89,7 +89,6 @@ export const useStudio = createSingleton(() => {
     }).mount(el)
   }
 
-
   const findContentWithId = async (path: string): Promise<ParsedContent | null> => {
     if (!path) {
       return null
