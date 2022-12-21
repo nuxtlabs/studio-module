@@ -78,7 +78,7 @@ export const useStudio = createSingleton(() => {
     const appConfig = dotStudioFiles.find(item => item.path === '.studio/app.config.json')
     syncPreviewAppConfig(appConfig?.parsed)
 
-    // Hande `.studio/tokens.config.json`
+    // Handle `.studio/tokens.config.json`
     const tokensConfig = dotStudioFiles.find(item => item.path === '.studio/tokens.config.json')
     syncPreviewAppConfig(tokensConfig?.parsed)
   }
