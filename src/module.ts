@@ -29,6 +29,13 @@ export default defineNuxtModule<ModuleOptions>({
         default: schema.default?.appConfig
       }
     })
+    // Support custom ~/.studio/app.config.json
+    nuxt.hook('app:resolve', (appCtx) => {
+      const studioAppConfigPath = resolveAlias('~/.studio/app.config.json')
+      if (existsSync(studioAppConfigPath)) {
+        appCtx.configs.unshift(studioAppConfigPath)
+      }
+    })
     await installModule('nuxt-config-schema')
 
     // Only enable Studio in production build
@@ -80,14 +87,6 @@ export default defineNuxtModule<ModuleOptions>({
     // Register components
     addComponentsDir({
       path: resolve('./runtime/components')
-    })
-
-    // Support custom ~/.studio/app.config.json
-    nuxt.hook('app:resolve', (appCtx) => {
-      const studioAppConfigPath = resolveAlias('~/.studio/app.config.json')
-      if (existsSync(studioAppConfigPath)) {
-        appCtx.configs.unshift(studioAppConfigPath)
-      }
     })
 
     // Add server route to know Studio is enabled
