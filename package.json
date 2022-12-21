@@ -31,6 +31,7 @@
     "build:module": "nuxt-module-build",
     "lint": "eslint --ext .vue,.ts,.js,.mjs .",
     "prepublish": "yarn build",
+    "prepack": "yarn build",
     "release": "yarn lint && release-it"
   },
   "dependencies": {
