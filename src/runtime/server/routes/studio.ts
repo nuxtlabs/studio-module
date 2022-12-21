@@ -33,14 +33,38 @@ export default eventHandler(async (event) => {
     })
 
   // TODO: Remove workaround ASAP when Nitro supports app.config
-  // @ts-ignore
-  const { app, appConfigSchema, content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment } } = useRuntimeConfig()
-  const appConfig = await $fetch.native(joinURL(app.baseURL, '/__app_config.json')).then(r => r.json())
+  const runtimeConfig = useRuntimeConfig()
+
+  const { app, content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment } } = runtimeConfig
+
+  // Support for __app_config.json
+  const appConfigSchema = runtimeConfig?.appConfigSchema
+  let appConfig = {}
+  if (appConfigSchema) {
+    // @ts-ignore
+    appConfig = await $fetch.native(joinURL(app.baseURL, '/__app_config.json')).then(r => r.json())
+  }
+
+  // Support for __tokens_config.json
+  const tokensConfigSchema = runtimeConfig?.tokensConfigSchema
+  let tokensConfig = {}
+  if (tokensConfigSchema) {
+    // @ts-ignore
+    tokensConfig = await $fetch.native(joinURL(app.baseURL, '/__tokens_config.json')).then(r => r.json())
+  }
+
   return {
+    // Studio version
     version,
+    // app.config
     appConfigSchema: appConfigSchema || {},
     appConfig,
+    // tokens.config
+    tokensConfigSchema: tokensConfigSchema || {},
+    tokensConfig,
+    // @nuxt/content
     content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment },
+    // nuxt-component-meta
     components: filteredComponents
   }
 })

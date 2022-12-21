@@ -1,5 +1,5 @@
 import type { Ref } from 'vue'
-import { createApp, computed } from 'vue'
+import { createApp, computed, inject } from 'vue'
 import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 // @ts-ignore
@@ -7,13 +7,21 @@ import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, mergeDraft } from '../utils'
 // eslint-disable-next-line import/order
 import { callWithNuxt } from '#app'
-import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRoute, useRuntimeConfig, useState } from '#imports'
+import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
 
 export const useStudio = createSingleton(() => {
   const nuxtApp = useNuxtApp()
-  const initialAppConfig = JSON.parse(JSON.stringify((useAppConfig())))
   const runtimeConfig = useRuntimeConfig().public.studio || {}
+
+  // App config (required)
+  const initialAppConfig = JSON.parse(JSON.stringify((useAppConfig())))
+
+  // Tokens config (optional; depends on the presence of pinceauTheme provide)
+  // TODO: Improve typings
+  const themeSheet = inject('pinceauTheme') as any
+  const initialTokensConfig = themeSheet && themeSheet?.theme ? themeSheet.theme.value : {}
+
   const storage = useState<Storage | null>('client-db', () => null)
 
   const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
@@ -41,6 +49,14 @@ export const useStudio = createSingleton(() => {
     callWithNuxt(nuxtApp, updateAppConfig, [appConfig || initialAppConfig])
   }
 
+  const syncPreviewTokensConfig = (tokensConfig?: any) => {
+    // Pinceau might be not present, or not booted yet
+    if (!themeSheet || !themeSheet?.updateTheme) { return }
+
+    // Call updateTheme with new config
+    callWithNuxt(nuxtApp, themeSheet.updateTheme, tokensConfig || initialTokensConfig)
+  }
+
   const syncPreview = async (contentStorage: Storage) => {
     // Fetch preview data from station
     const data = await $fetch<PreviewResponse>('api/projects/preview', {
@@ -61,6 +77,10 @@ export const useStudio = createSingleton(() => {
     // Handle `.studio/app.config.json`
     const appConfig = dotStudioFiles.find(item => item.path === '.studio/app.config.json')
     syncPreviewAppConfig(appConfig?.parsed)
+
+    // Hande `.studio/tokens.config.json`
+    const tokensConfig = dotStudioFiles.find(item => item.path === '.studio/tokens.config.json')
+    syncPreviewAppConfig(tokensConfig?.parsed)
   }
 
   const requestPreviewSynchronization = async () => {
@@ -109,6 +129,7 @@ export const useStudio = createSingleton(() => {
     syncPreview,
     syncPreviewFiles,
     syncPreviewAppConfig,
+    syncPreviewTokensConfig,
     requestPreviewSynchronization,
 
     mountPreviewUI,
