@@ -39,7 +39,7 @@ export default eventHandler(async (event) => {
 
   // Support for __app_config.json
   const appConfigSchema = runtimeConfig?.appConfigSchema
-  let appConfig = {}
+  let appConfig: any = {}
   if (appConfigSchema) {
     // @ts-ignore
     appConfig = await $fetch.native(joinURL(app.baseURL, '/__app_config.json')).then(r => r.json())
@@ -47,7 +47,7 @@ export default eventHandler(async (event) => {
 
   // Support for __tokens_config.json
   const tokensConfigSchema = runtimeConfig?.tokensConfigSchema
-  let tokensConfig = {}
+  let tokensConfig: any
   if (tokensConfigSchema) {
     // @ts-ignore
     tokensConfig = await $fetch.native(joinURL(app.baseURL, '/__tokens_config.json')).then(r => r.json())
@@ -60,7 +60,7 @@ export default eventHandler(async (event) => {
     appConfigSchema: appConfigSchema || {},
     appConfig,
     // tokens.config
-    tokensConfigSchema: tokensConfigSchema || {},
+    tokensConfigSchema,
     tokensConfig,
     // @nuxt/content
     content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment },
