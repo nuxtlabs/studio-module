@@ -1,7 +1,9 @@
 import type { ComponentMeta } from 'vue-component-meta'
 import { eventHandler } from 'h3'
 import { joinURL } from 'ufo'
+// @ts-ignore
 import { version } from '../../../../package.json'
+// @ts-ignore
 import { useRuntimeConfig } from '#imports'
 // @ts-ignore
 import components from '#nuxt-component-meta/nitro'

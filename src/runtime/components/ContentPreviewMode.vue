@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Ref, PropType } from 'vue'
 import { onMounted, ref, onUnmounted, nextTick, watch } from 'vue'
+// @ts-ignore
 import { refreshNuxtData, useCookie, useRoute, navigateTo, useNuxtApp } from '#imports'
 
 const props = defineProps({
