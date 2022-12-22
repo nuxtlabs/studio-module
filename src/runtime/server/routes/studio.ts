@@ -45,12 +45,15 @@ export default eventHandler(async (event) => {
     appConfig = await $fetch.native(joinURL(app.baseURL, '/__app_config.json')).then(r => r.json())
   }
 
-  // Support for __tokens_config.json
-  const tokensConfigSchema = runtimeConfig?.tokensConfigSchema
+  // Support for __pinceau_tokens_{schema|config}.json
+  const hasPinceau = runtimeConfig?.pinceau?.studio
   let tokensConfig: any
-  if (tokensConfigSchema) {
+  let tokensConfigSchema: any
+  if (hasPinceau) {
     // @ts-ignore
-    tokensConfig = await $fetch.native(joinURL(app.baseURL, '/__tokens_config.json')).then(r => r.json())
+    tokensConfig = await $fetch.native(joinURL(app.baseURL, '/__pinceau_tokens_config.json')).then(r => r.json())
+    // @ts-ignore
+    tokensConfigSchema = await $fetch.native(joinURL(app.baseURL, '/__pinceau_tokens_schema.json')).then(r => r.json())
   }
 
   return {
