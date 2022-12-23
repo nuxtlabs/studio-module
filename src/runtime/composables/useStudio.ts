@@ -4,18 +4,20 @@ import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 // @ts-ignore
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
-import { mergeDraft } from '../utils'
+import { createSingleton, mergeDraft } from '../utils'
 // eslint-disable-next-line import/order
 import { callWithNuxt } from '#app'
 import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
+
+const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
 
 export const useStudio = () => {
   const nuxtApp = useNuxtApp()
   const runtimeConfig = useRuntimeConfig().public.studio || {}
 
   // App config (required)
-  const initialAppConfig = JSON.parse(JSON.stringify((useAppConfig())))
+  const initialAppConfig = useDefaultAppConfig()
 
   // Tokens config (optional; depends on the presence of pinceauTheme provide)
   // TODO: Improve typings
@@ -80,7 +82,7 @@ export const useStudio = () => {
 
     // Handle `.studio/tokens.config.json`
     const tokensConfig = dotStudioFiles.find(item => item.path === '.studio/tokens.config.json')
-    syncPreviewAppConfig(tokensConfig?.parsed)
+    syncPreviewTokensConfig(tokensConfig?.parsed)
   }
 
   const requestPreviewSynchronization = async () => {
