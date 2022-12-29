@@ -21,8 +21,9 @@ export const useStudio = () => {
 
   // Tokens config (optional; depends on the presence of pinceauTheme provide)
   // TODO: Improve typings
-  const themeSheet = inject('pinceauTheme') as any
-  const initialTokensConfig = themeSheet && themeSheet?.theme ? themeSheet.theme.value : {}
+  // TODO: Use `inject()` but wrong context seem to be resolved; while $pinceauTheme global property is present in `app` context
+  const themeSheet = nuxtApp?.vueApp?._context?.config?.globalProperties?.$pinceauTheme
+  const initialTokensConfig = {}
 
   const storage = useState<Storage | null>('client-db', () => null)
 
@@ -56,7 +57,7 @@ export const useStudio = () => {
     if (!themeSheet || !themeSheet?.updateTheme) { return }
 
     // Call updateTheme with new config
-    callWithNuxt(nuxtApp, themeSheet.updateTheme, tokensConfig || initialTokensConfig)
+    callWithNuxt(nuxtApp, themeSheet.updateTheme, [tokensConfig || initialTokensConfig])
   }
 
   const syncPreview = async (contentStorage: Storage) => {
