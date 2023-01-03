@@ -38,7 +38,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.18.13, @babel/core@npm:^7.19.6, @babel/core@npm:^7.20.5":
+"@babel/core@npm:^7.18.13, @babel/core@npm:^7.19.6, @babel/core@npm:^7.20.5, @babel/core@npm:^7.20.7":
   version: 7.20.7
   resolution: "@babel/core@npm:7.20.7"
   dependencies:
@@ -317,7 +317,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/standalone@npm:^7.18.13, @babel/standalone@npm:^7.20.6":
+"@babel/standalone@npm:^7.18.13, @babel/standalone@npm:^7.20.11, @babel/standalone@npm:^7.20.6":
   version: 7.20.11
   resolution: "@babel/standalone@npm:7.20.11"
   checksum: 38ca1dd46eef3522ee01ca829c6dc9fc4ce47e8e68e2201df34af8c18951495ff62fab09ec78b45813e4e1f608df87988d7a2e07791f94eabdaaf0829c63eb5a
@@ -1522,7 +1522,7 @@ __metadata:
     monaco-editor-core: ^0.34.1
     nuxt: ^3.0.0
     nuxt-component-meta: ^0.4.2
-    nuxt-config-schema: ^0.3.7
+    nuxt-config-schema: ^0.3.8
     pinceau: ^0.10.2
     release-it: ^15.6.0
     remark-mdc: ^1.1.3
@@ -9469,16 +9469,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nuxt-config-schema@npm:^0.3.7":
-  version: 0.3.7
-  resolution: "nuxt-config-schema@npm:0.3.7"
+"nuxt-config-schema@npm:^0.3.8":
+  version: 0.3.8
+  resolution: "nuxt-config-schema@npm:0.3.8"
   dependencies:
     "@nuxt/kit": ^3.0.0
     defu: ^6.1.1
     jiti: ^1.16.0
     pathe: ^1.0.0
-    untyped: ^1.2.0
-  checksum: 0ace3d7adce3b37459273d1607ef7b102a3709bf2e6a4437018de0202fd8c236c030c1fd51d9aa4cca282cd14915316d3f7fc48bddbc6b8847d8e7bea4400a24
+    untyped: ^1.2.1
+  checksum: 93473e8d2239d37dc96ccf8c5590280f390468206068e7446773335f88e5fda83978005490d7ace9bd2f1ba8d441d8ad5090529ce6c419c41a3b8ec6f9a267e6
   languageName: node
   linkType: hard
 
@@ -13174,7 +13174,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"untyped@npm:^1.0.0, untyped@npm:^1.2.0":
+"untyped@npm:^1.0.0":
   version: 1.2.0
   resolution: "untyped@npm:1.2.0"
   dependencies:
@@ -13183,6 +13183,18 @@ __metadata:
     "@babel/types": ^7.20.5
     scule: ^1.0.0
   checksum: 7acb1c874c378b6859b8bcbb1d464ca011f463d95f1fb6bb28ee23a6aa50b5d88ced77aa44d2a1299c9d9927114ff1a33bf1dadcadbd62f3bb4d3db48dbbe1de
+  languageName: node
+  linkType: hard
+
+"untyped@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "untyped@npm:1.2.1"
+  dependencies:
+    "@babel/core": ^7.20.7
+    "@babel/standalone": ^7.20.11
+    "@babel/types": ^7.20.7
+    scule: ^1.0.0
+  checksum: e0ec1f8d2e542f5c891603282fdd0fda37991aa5fbc4ad8bf945833ce8b75ec210a8149fcab09b5c6461f2d569bdf8d08cd23ce698c3e28a4e345df70786e1c6
   languageName: node
   linkType: hard
 

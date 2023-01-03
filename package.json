@@ -39,7 +39,7 @@
     "@nuxt/schema": "^3.0.0",
     "defu": "^6.1.1",
     "nuxt-component-meta": "^0.4.2",
-    "nuxt-config-schema": "^0.3.7",
+    "nuxt-config-schema": "^0.3.8",
     "socket.io-client": "^4.5.4",
     "ufo": "^1.0.1"
   },
