@@ -4,14 +4,15 @@ import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendV
 
 const log = logger.withScope('@nuxt/studio')
 
+export interface ModuleOptions {
+  /**
+   * Enable Studio mode
+   * @default: 'production'
+   **/
+  enabled: 'production' | true
+}
+
 declare module '@nuxt/schema' {
-  interface ModuleOptions {
-    /**
-     * Enable Studio mode
-     * @default: 'production'
-     * */
-    enabled: 'production' | true
-  }
   interface NuxtConfig {
     ['studio']?: ModuleOptions
   }
