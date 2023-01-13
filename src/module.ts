@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs'
 import { defu } from 'defu'
-import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler, resolveAlias } from '@nuxt/kit'
+import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler, resolveAlias, extendPages } from '@nuxt/kit'
 
 const log = logger.withScope('@nuxt/studio')
 
@@ -96,6 +96,16 @@ export default defineNuxtModule({
     // Register components
     addComponentsDir({
       path: resolve('./runtime/components')
+    })
+
+    // Ensure `/__app_config.json` is a valid route in the app
+    extendPages((pages) => {
+      pages.push({
+        name: '__app_config.json',
+        path: '/__app_config.json',
+        file: resolve('./runtime/pages/empty'),
+        children: []
+      })
     })
 
     // Add server route to know Studio is enabled
