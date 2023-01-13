@@ -1,6 +1,7 @@
 import type { Storage } from 'unstorage'
 import { NuxtApp } from 'nuxt/app'
-import { defineNuxtPlugin, useState, refreshNuxtData, useCookie, useRoute, useRuntimeConfig } from '#imports'
+// @ts-ignore
+import { defineNuxtPlugin, useState, refreshNuxtData, useCookie, useRoute, useRuntimeConfig, queryContent } from '#imports'
 
 export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
   const contentStorage = useState<Storage | null>('client-db', () => null)
@@ -20,6 +21,9 @@ export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
       nuxtApp.hook('content:storage', (storage: Storage) => {
         contentStorage.value = storage
       })
+
+      // Call `queryContent` to trigger `content:storage` hook
+      queryContent('/non-existing-path').findOne()
     })
 
     const useStudio = await import('../composables/useStudio').then(m => m.useStudio)
