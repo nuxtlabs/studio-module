@@ -1,7 +1,7 @@
 import type { Storage } from 'unstorage'
 import { NuxtApp } from 'nuxt/app'
 // @ts-ignore
-import { defineNuxtPlugin, useState, refreshNuxtData, useCookie, useRoute, useRuntimeConfig, queryContent } from '#imports'
+import { defineNuxtPlugin, useState, useCookie, useRoute, useRuntimeConfig, queryContent } from '#imports'
 
 export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
   const contentStorage = useState<Storage | null>('client-db', () => null)
@@ -10,26 +10,18 @@ export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
   const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
 
   async function initializePreview () {
-    // This is required to enable client-db initialization inside Content Module
-    // In the intialization process of client-db, it will call
-    // `content:storage` hook to get the storage instance
-    nuxtApp.hook('page:finish', () => {
-      // Refresh nuxt data
-      refreshNuxtData()
-
-      // @ts-ignore
-      nuxtApp.hook('content:storage', (storage: Storage) => {
-        contentStorage.value = storage
-      })
-
-      // Call `queryContent` to trigger `content:storage` hook
-      queryContent('/non-existing-path').findOne()
+    // @ts-ignore
+    nuxtApp.hook('content:storage', (storage: Storage) => {
+      contentStorage.value = storage
     })
 
     const useStudio = await import('../composables/useStudio').then(m => m.useStudio)
     const { mountPreviewUI } = useStudio()
 
     mountPreviewUI(contentStorage)
+
+    // Call `queryContent` to trigger `content:storage` hook
+    queryContent('/non-existing-path').findOne()
   }
 
   if (runtimeConfig.apiURL) {

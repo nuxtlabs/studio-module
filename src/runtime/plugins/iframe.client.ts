@@ -1,5 +1,5 @@
 import type { NuxtApp } from 'nuxt/app'
-import { defineNuxtPlugin, ref, toRaw, useRouter } from '#imports'
+import { defineNuxtPlugin, ref, toRaw, useRoute, useRouter } from '#imports'
 
 export default defineNuxtPlugin(async (nuxtApp: NuxtApp) => {
   // Not in an iframe
@@ -41,7 +41,7 @@ export default defineNuxtPlugin(async (nuxtApp: NuxtApp) => {
         } else if (content._partial) {
           // Partials should use as helpers for other content files, like `_dir.yml`
           // We should not navigate if content is a partial
-        } else if (content._path !== router.currentRoute.value.path) {
+        } else if (content._path !== useRoute().path) {
           editorSelectedPath.value = content._path!
           router.push(content._path!)
         }
@@ -67,8 +67,8 @@ export default defineNuxtPlugin(async (nuxtApp: NuxtApp) => {
       type: 'nuxt-studio:preview:document-driven:finish',
       payload: {
         path: route.path,
-        query: route.query,
-        params: route.params,
+        query: toRaw(route.query),
+        params: toRaw(route.params),
         fullPath: route.fullPath,
         meta: toRaw(route.meta),
         contentId: page?._id
@@ -81,8 +81,8 @@ export default defineNuxtPlugin(async (nuxtApp: NuxtApp) => {
       type: 'nuxt-studio:preview:route-changed',
       payload: {
         path: to.path,
-        query: to.query,
-        params: to.params,
+        query: toRaw(to.query),
+        params: toRaw(to.params),
         fullPath: to.fullPath,
         meta: toRaw(to.meta)
       }
@@ -91,14 +91,16 @@ export default defineNuxtPlugin(async (nuxtApp: NuxtApp) => {
 
   // @ts-ignore
   nuxtApp.hook('nuxt-studio:preview:ready', () => {
+    const route = useRoute()
+
     window.parent.postMessage({
       type: 'nuxt-studio:preview:ready',
       payload: {
-        path: router.currentRoute.value.path,
-        query: router.currentRoute.value.query,
-        params: router.currentRoute.value.params,
-        fullPath: router.currentRoute.value.fullPath,
-        meta: toRaw(router.currentRoute.value.meta)
+        path: route.path,
+        query: toRaw(route.query),
+        params: toRaw(route.params),
+        fullPath: route.fullPath,
+        meta: toRaw(route.meta)
       }
     }, '*')
   })
