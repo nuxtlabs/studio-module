@@ -3,6 +3,7 @@ import { createApp, computed, inject } from 'vue'
 import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 // @ts-ignore
+import defu from 'defu'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, mergeDraft } from '../utils'
 // eslint-disable-next-line import/order
@@ -62,7 +63,7 @@ export const useStudio = () => {
     }
 
     // Call updateTheme with new config
-    callWithNuxt(nuxtApp, themeSheet.updateTheme, [tokensConfig || initialTokensConfig])
+    callWithNuxt(nuxtApp, themeSheet.updateTheme, defu(tokensConfig || {}, initialTokensConfig))
   }
 
   const syncPreview = async (contentStorage: Storage) => {
