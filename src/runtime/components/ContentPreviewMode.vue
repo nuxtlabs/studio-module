@@ -65,6 +65,10 @@ onMounted(async () => {
   document.body.classList.add(...previewClasses)
 
   socket.on('draft:ready', () => {
+    if (apiReady.value) {
+      return
+    }
+
     apiReady.value = true
 
     socket.on('draft:update', () => {
