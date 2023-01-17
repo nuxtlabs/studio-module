@@ -71,6 +71,11 @@ onMounted(async () => {
 
     apiReady.value = true
 
+    if (window.parent && window.self !== window.parent) {
+      // Do not listen to update hook if in an iframe
+      socket.disconnect()
+      return
+    }
     socket.on('draft:update', () => {
       refreshing.value = true
       props.refresh()

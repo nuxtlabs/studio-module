@@ -29,6 +29,16 @@ export const useStudio = () => {
 
   const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
 
+  const updateContent = (content: PreviewFile) => {
+    if (!storage.value) { return }
+
+    storage.value.setItem(`${previewToken.value}:${content.parsed?._id}`, JSON.stringify(content.parsed))
+  }
+
+  const removeContentWithId = async (path: string) => {
+    await storage.value?.removeItem(`${previewToken.value}:${path}`)
+  }
+
   const syncPreviewFiles = async (contentStorage: Storage, files: PreviewFile[], ignoreBuiltContents = true) => {
     // Remove previous preview data
     const keys: string[] = await contentStorage.getKeys(`${previewToken.value}:`)
@@ -142,6 +152,10 @@ export const useStudio = () => {
 
     mountPreviewUI,
 
-    findContentWithId
+    findContentWithId,
+    updateContent,
+    removeContentWithId,
+
+    requestRerender: refreshNuxtData
   }
 }
