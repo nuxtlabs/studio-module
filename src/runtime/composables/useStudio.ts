@@ -1,10 +1,10 @@
 import type { Ref } from 'vue'
-import { createApp, computed, inject } from 'vue'
+import { createApp, computed } from 'vue'
 import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 // @ts-ignore
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
-import { createSingleton, mergeDraft } from '../utils'
+import { createSingleton, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
 // eslint-disable-next-line import/order
 import { callWithNuxt } from '#app'
 import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState } from '#imports'
@@ -23,16 +23,6 @@ export const useStudio = () => {
   const storage = useState<Storage | null>('client-db', () => null)
 
   const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
-
-  const updateContent = (content: PreviewFile) => {
-    if (!storage.value) { return }
-
-    storage.value.setItem(`${previewToken.value}:${content.parsed?._id}`, JSON.stringify(content.parsed))
-  }
-
-  const removeContentWithId = async (path: string) => {
-    await storage.value?.removeItem(`${previewToken.value}:${path}`)
-  }
 
   const syncPreviewFiles = async (contentStorage: Storage, files: PreviewFile[], ignoreBuiltContents = true) => {
     // Remove previous preview data
@@ -87,17 +77,15 @@ export const useStudio = () => {
     const mergedFiles = mergeDraft(data.files, data.additions, data.deletions)
 
     // Handle content files
-    const contentFiles = mergedFiles.filter(item => item.path.startsWith('content'))
+    const contentFiles = mergedFiles.filter(item => !item.path.startsWith(StudioConfigRoot))
     await syncPreviewFiles(contentStorage, contentFiles, (data.files || []).length !== 0)
 
-    const dotStudioFiles = mergedFiles.filter(item => item.path.startsWith('.studio'))
-
     // Handle `.studio/app.config.json`
-    const appConfig = dotStudioFiles.find(item => item.path === '.studio/app.config.json')
+    const appConfig = mergedFiles.find(item => item.path === StudioConfigFiles.appConfig)
     syncPreviewAppConfig(appConfig?.parsed)
 
     // Handle `.studio/tokens.config.json`
-    const tokensConfig = dotStudioFiles.find(item => item.path === '.studio/tokens.config.json')
+    const tokensConfig = mergedFiles.find(item => item.path === StudioConfigFiles.tokensConfig)
     syncPreviewTokensConfig(tokensConfig?.parsed)
   }
 
@@ -127,6 +115,8 @@ export const useStudio = () => {
     }).mount(el)
   }
 
+  // Content Helpers
+
   const findContentWithId = async (path: string): Promise<ParsedContent | null> => {
     if (!path) {
       return null
@@ -137,6 +127,16 @@ export const useStudio = () => {
       content = await storage.value?.getItem(path)
     }
     return content as ParsedContent
+  }
+
+  const updateContent = (content: PreviewFile) => {
+    if (!storage.value) { return }
+
+    storage.value.setItem(`${previewToken.value}:${content.parsed?._id}`, JSON.stringify(content.parsed))
+  }
+
+  const removeContentWithId = async (path: string) => {
+    await storage.value?.removeItem(`${previewToken.value}:${path}`)
   }
 
   return {

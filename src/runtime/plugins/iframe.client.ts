@@ -1,4 +1,5 @@
 import type { RouteLocationNormalized } from 'vue-router'
+import { StudioConfigFiles } from '../utils'
 import { defineNuxtPlugin, ref, toRaw, useRoute, useRouter } from '#imports'
 import { FileChangeMessagePayload } from '~~/../types'
 
@@ -71,21 +72,21 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       case 'nuxt-studio:config:file-changed': {
         const { additions = [], deletions = [] } = payload as FileChangeMessagePayload
         // Handle `.studio/app.config.json`
-        const appConfig = additions.find(item => item.path === '.studio/app.config.json')
+        const appConfig = additions.find(item => item.path === StudioConfigFiles.appConfig)
         if (appConfig) {
           syncPreviewAppConfig(appConfig?.parsed)
         }
-        const shouldRemoveAppConfig = deletions.find(item => item.path === '.studio/app.config.json')
+        const shouldRemoveAppConfig = deletions.find(item => item.path === StudioConfigFiles.appConfig)
         if (shouldRemoveAppConfig) {
           syncPreviewAppConfig(undefined)
         }
 
         // Handle `.studio/tokens.config.json`
-        const tokensConfig = additions.find(item => item.path === '.studio/tokens.config.json')
+        const tokensConfig = additions.find(item => item.path === StudioConfigFiles.tokensConfig)
         if (tokensConfig) {
           syncPreviewTokensConfig(tokensConfig?.parsed)
         }
-        const shouldRemoveTokensConfig = deletions.find(item => item.path === '.studio/tokens.config.json')
+        const shouldRemoveTokensConfig = deletions.find(item => item.path === StudioConfigFiles.tokensConfig)
         if (shouldRemoveTokensConfig) {
           syncPreviewTokensConfig(undefined)
         }
