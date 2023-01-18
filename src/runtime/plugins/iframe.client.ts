@@ -90,8 +90,6 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         if (shouldRemoveTokensConfig) {
           syncPreviewTokensConfig(undefined)
         }
-
-        requestRerender()
         break
       }
     }
