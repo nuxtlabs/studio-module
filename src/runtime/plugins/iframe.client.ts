@@ -1,5 +1,6 @@
 import type { RouteLocationNormalized } from 'vue-router'
 import { defineNuxtPlugin, ref, toRaw, useRoute, useRouter } from '#imports'
+import { FileChangeMessagePayload } from '~~/../types'
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   // Not in an iframe
@@ -21,7 +22,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   })
 
   const useStudio = await import('../composables/useStudio').then(m => m.useStudio)
-  const { contentStorage, findContentWithId, updateContent, removeContentWithId, requestRerender } = useStudio()
+  const { findContentWithId, updateContent, removeContentWithId, requestRerender, syncPreviewAppConfig, syncPreviewTokensConfig } = useStudio()
 
   window.addEventListener('keydown', (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) {
@@ -57,7 +58,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         break
       }
       case 'nuxt-studio:editor:file-changed': {
-        const { additions = [], deletions = [] } = payload
+        const { additions = [], deletions = [] } = payload as FileChangeMessagePayload
         for (const addition of additions) {
           await updateContent(addition)
         }
@@ -65,6 +66,32 @@ export default defineNuxtPlugin(async (nuxtApp) => {
           await removeContentWithId(deletion.path)
         }
         requestRerender()
+        break
+      }
+      case 'nuxt-studio:config:file-changed': {
+        const { additions = [], deletions = [] } = payload as FileChangeMessagePayload
+        // Handle `.studio/app.config.json`
+        const appConfig = additions.find(item => item.path === '.studio/app.config.json')
+        if (appConfig) {
+          syncPreviewAppConfig(appConfig?.parsed)
+        }
+        const shouldRemoveAppConfig = deletions.find(item => item.path === '.studio/app.config.json')
+        if (shouldRemoveAppConfig) {
+          syncPreviewAppConfig(undefined)
+        }
+
+        // Handle `.studio/tokens.config.json`
+        const tokensConfig = additions.find(item => item.path === '.studio/tokens.config.json')
+        if (tokensConfig) {
+          syncPreviewTokensConfig(tokensConfig?.parsed)
+        }
+        const shouldRemoveTokensConfig = deletions.find(item => item.path === '.studio/tokens.config.json')
+        if (shouldRemoveTokensConfig) {
+          syncPreviewTokensConfig(undefined)
+        }
+
+        requestRerender()
+        break
       }
     }
   })

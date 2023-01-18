@@ -20,11 +20,6 @@ export const useStudio = () => {
   const initialAppConfig = useDefaultAppConfig()
   let initialTokensConfig: object
 
-  // Tokens config (optional; depends on the presence of pinceauTheme provide)
-  // TODO: Improve typings
-  // TODO: Use `inject()` but wrong context seem to be resolved; while $pinceauTheme global property is present in `app` context
-  const themeSheet = nuxtApp?.vueApp?._context?.config?.globalProperties?.$pinceauTheme
-
   const storage = useState<Storage | null>('client-db', () => null)
 
   const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
@@ -63,6 +58,11 @@ export const useStudio = () => {
   }
 
   const syncPreviewTokensConfig = (tokensConfig?: any) => {
+    // Tokens config (optional; depends on the presence of pinceauTheme provide)
+    // TODO: Improve typings
+    // TODO: Use `inject()` but wrong context seem to be resolved; while $pinceauTheme global property is present in `app` context
+    const themeSheet = nuxtApp?.vueApp?._context?.config?.globalProperties?.$pinceauTheme
+
     // Pinceau might be not present, or not booted yet
     if (!themeSheet || !themeSheet?.updateTheme) { return }
 
