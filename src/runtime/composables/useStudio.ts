@@ -1,10 +1,10 @@
 import type { Ref } from 'vue'
-import { createApp, computed, inject } from 'vue'
+import { createApp, computed } from 'vue'
 import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 // @ts-ignore
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
-import { createSingleton, mergeDraft } from '../utils'
+import { createSingleton, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
 // eslint-disable-next-line import/order
 import { callWithNuxt } from '#app'
 import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState } from '#imports'
@@ -19,11 +19,6 @@ export const useStudio = () => {
   // App config (required)
   const initialAppConfig = useDefaultAppConfig()
   let initialTokensConfig: object
-
-  // Tokens config (optional; depends on the presence of pinceauTheme provide)
-  // TODO: Improve typings
-  // TODO: Use `inject()` but wrong context seem to be resolved; while $pinceauTheme global property is present in `app` context
-  const themeSheet = nuxtApp?.vueApp?._context?.config?.globalProperties?.$pinceauTheme
 
   const storage = useState<Storage | null>('client-db', () => null)
 
@@ -53,6 +48,11 @@ export const useStudio = () => {
   }
 
   const syncPreviewTokensConfig = (tokensConfig?: any) => {
+    // Tokens config (optional; depends on the presence of pinceauTheme provide)
+    // TODO: Improve typings
+    // TODO: Use `inject()` but wrong context seem to be resolved; while $pinceauTheme global property is present in `app` context
+    const themeSheet = nuxtApp?.vueApp?._context?.config?.globalProperties?.$pinceauTheme
+
     // Pinceau might be not present, or not booted yet
     if (!themeSheet || !themeSheet?.updateTheme) { return }
 
@@ -77,17 +77,15 @@ export const useStudio = () => {
     const mergedFiles = mergeDraft(data.files, data.additions, data.deletions)
 
     // Handle content files
-    const contentFiles = mergedFiles.filter(item => item.path.startsWith('content'))
+    const contentFiles = mergedFiles.filter(item => !item.path.startsWith(StudioConfigRoot))
     await syncPreviewFiles(contentStorage, contentFiles, (data.files || []).length !== 0)
 
-    const dotStudioFiles = mergedFiles.filter(item => item.path.startsWith('.studio'))
-
     // Handle `.studio/app.config.json`
-    const appConfig = dotStudioFiles.find(item => item.path === '.studio/app.config.json')
+    const appConfig = mergedFiles.find(item => item.path === StudioConfigFiles.appConfig)
     syncPreviewAppConfig(appConfig?.parsed)
 
     // Handle `.studio/tokens.config.json`
-    const tokensConfig = dotStudioFiles.find(item => item.path === '.studio/tokens.config.json')
+    const tokensConfig = mergedFiles.find(item => item.path === StudioConfigFiles.tokensConfig)
     syncPreviewTokensConfig(tokensConfig?.parsed)
   }
 
@@ -117,6 +115,8 @@ export const useStudio = () => {
     }).mount(el)
   }
 
+  // Content Helpers
+
   const findContentWithId = async (path: string): Promise<ParsedContent | null> => {
     if (!path) {
       return null
@@ -127,6 +127,16 @@ export const useStudio = () => {
       content = await storage.value?.getItem(path)
     }
     return content as ParsedContent
+  }
+
+  const updateContent = (content: PreviewFile) => {
+    if (!storage.value) { return }
+
+    storage.value.setItem(`${previewToken.value}:${content.parsed?._id}`, JSON.stringify(content.parsed))
+  }
+
+  const removeContentWithId = async (path: string) => {
+    await storage.value?.removeItem(`${previewToken.value}:${path}`)
   }
 
   return {
@@ -142,6 +152,10 @@ export const useStudio = () => {
 
     mountPreviewUI,
 
-    findContentWithId
+    findContentWithId,
+    updateContent,
+    removeContentWithId,
+
+    requestRerender: refreshNuxtData
   }
 }

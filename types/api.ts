@@ -18,3 +18,8 @@ export interface PreviewResponse {
   additions: DraftFile[]
   deletions: DraftFile[]
 }
+
+export interface FileChangeMessagePayload {
+  additions: Array<PreviewFile>
+  deletions: Array<PreviewFile>
+}

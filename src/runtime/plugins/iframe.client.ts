@@ -1,7 +1,9 @@
-import type { NuxtApp } from 'nuxt/app'
+import type { RouteLocationNormalized } from 'vue-router'
+import { StudioConfigFiles } from '../utils'
 import { defineNuxtPlugin, ref, toRaw, useRoute, useRouter } from '#imports'
+import { FileChangeMessagePayload } from '~~/../types'
 
-export default defineNuxtPlugin(async (nuxtApp: NuxtApp) => {
+export default defineNuxtPlugin(async (nuxtApp) => {
   // Not in an iframe
   if (!window.parent || window.self === window.parent) {
     return
@@ -11,8 +13,17 @@ export default defineNuxtPlugin(async (nuxtApp: NuxtApp) => {
   const editorSelectedPath = ref('')
   const isDocumentDrivenInitialHook = ref(true)
 
+  // Evaluate route payload
+  const routePayload = (route: RouteLocationNormalized) => ({
+    path: route.path,
+    query: toRaw(route.query),
+    params: toRaw(route.params),
+    fullPath: route.fullPath,
+    meta: toRaw(route.meta)
+  })
+
   const useStudio = await import('../composables/useStudio').then(m => m.useStudio)
-  const { findContentWithId } = useStudio()
+  const { findContentWithId, updateContent, removeContentWithId, requestRerender, syncPreviewAppConfig, syncPreviewTokensConfig } = useStudio()
 
   window.addEventListener('keydown', (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) {
@@ -47,6 +58,40 @@ export default defineNuxtPlugin(async (nuxtApp: NuxtApp) => {
         }
         break
       }
+      case 'nuxt-studio:editor:file-changed': {
+        const { additions = [], deletions = [] } = payload as FileChangeMessagePayload
+        for (const addition of additions) {
+          await updateContent(addition)
+        }
+        for (const deletion of deletions) {
+          await removeContentWithId(deletion.path)
+        }
+        requestRerender()
+        break
+      }
+      case 'nuxt-studio:config:file-changed': {
+        const { additions = [], deletions = [] } = payload as FileChangeMessagePayload
+        // Handle `.studio/app.config.json`
+        const appConfig = additions.find(item => item.path === StudioConfigFiles.appConfig)
+        if (appConfig) {
+          syncPreviewAppConfig(appConfig?.parsed)
+        }
+        const shouldRemoveAppConfig = deletions.find(item => item.path === StudioConfigFiles.appConfig)
+        if (shouldRemoveAppConfig) {
+          syncPreviewAppConfig(undefined)
+        }
+
+        // Handle `.studio/tokens.config.json`
+        const tokensConfig = additions.find(item => item.path === StudioConfigFiles.tokensConfig)
+        if (tokensConfig) {
+          syncPreviewTokensConfig(tokensConfig?.parsed)
+        }
+        const shouldRemoveTokensConfig = deletions.find(item => item.path === StudioConfigFiles.tokensConfig)
+        if (shouldRemoveTokensConfig) {
+          syncPreviewTokensConfig(undefined)
+        }
+        break
+      }
     }
   })
 
@@ -66,11 +111,7 @@ export default defineNuxtPlugin(async (nuxtApp: NuxtApp) => {
     window.parent.postMessage({
       type: 'nuxt-studio:preview:document-driven:finish',
       payload: {
-        path: route.path,
-        query: toRaw(route.query),
-        params: toRaw(route.params),
-        fullPath: route.fullPath,
-        meta: toRaw(route.meta),
+        ...routePayload(route),
         contentId: page?._id
       }
     }, '*')
@@ -79,29 +120,15 @@ export default defineNuxtPlugin(async (nuxtApp: NuxtApp) => {
   router?.afterEach((to: any) => {
     window.parent.postMessage({
       type: 'nuxt-studio:preview:route-changed',
-      payload: {
-        path: to.path,
-        query: toRaw(to.query),
-        params: toRaw(to.params),
-        fullPath: to.fullPath,
-        meta: toRaw(to.meta)
-      }
+      payload: routePayload(to)
     }, '*')
   })
 
   // @ts-ignore
   nuxtApp.hook('nuxt-studio:preview:ready', () => {
-    const route = useRoute()
-
     window.parent.postMessage({
       type: 'nuxt-studio:preview:ready',
-      payload: {
-        path: route.path,
-        query: toRaw(route.query),
-        params: toRaw(route.params),
-        fullPath: route.fullPath,
-        meta: toRaw(route.meta)
-      }
+      payload: routePayload(useRoute())
     }, '*')
   })
 })
