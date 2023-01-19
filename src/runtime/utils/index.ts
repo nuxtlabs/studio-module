@@ -2,7 +2,7 @@ export * from './files'
 
 export const StudioConfigRoot = '.studio'
 export const StudioConfigFiles = {
-  appConfig: `${StudioConfigRoot}/studio.config.json`,
+  appConfig: `${StudioConfigRoot}/app.config.json`,
   tokensConfig: `${StudioConfigRoot}/tokens.config.json`
 }
 
