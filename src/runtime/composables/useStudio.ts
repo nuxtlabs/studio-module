@@ -158,6 +158,8 @@ export const useStudio = () => {
     updateContent,
     removeContentWithId,
 
-    requestRerender: refreshNuxtData
+    requestRerender: () => {
+      callWithNuxt(nuxtApp, refreshNuxtData)
+    }
   }
 }
