@@ -4,10 +4,10 @@ import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 // @ts-ignore
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
-import { createSingleton, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
+import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
 // eslint-disable-next-line import/order
 import { callWithNuxt } from '#app'
-import { refreshNuxtData, updateAppConfig, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState } from '#imports'
+import { refreshNuxtData, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
 
 const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
@@ -44,7 +44,9 @@ export const useStudio = () => {
   }
 
   const syncPreviewAppConfig = (appConfig?: any) => {
-    callWithNuxt(nuxtApp, updateAppConfig, [appConfig || initialAppConfig])
+    const _appConfig = callWithNuxt(nuxtApp, useAppConfig)
+    deepAssign(_appConfig, appConfig || initialAppConfig)
+    deepDelete(_appConfig, appConfig || initialAppConfig)
   }
 
   const syncPreviewTokensConfig = (tokensConfig?: any) => {
