@@ -22,9 +22,8 @@ export const useStudio = () => {
 
   const storage = useState<Storage | null>('client-db', () => null)
 
-  const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
-
   const syncPreviewFiles = async (contentStorage: Storage, files: PreviewFile[], ignoreBuiltContents = true) => {
+    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
     // Remove previous preview data
     const keys: string[] = await contentStorage.getKeys(`${previewToken.value}:`)
     await Promise.all(keys.map(key => contentStorage.removeItem(key)))
@@ -68,6 +67,7 @@ export const useStudio = () => {
   }
 
   const syncPreview = async (contentStorage: Storage) => {
+    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
     // Fetch preview data from station
     const data = await $fetch<PreviewResponse>('api/projects/preview', {
       baseURL: runtimeConfig.apiURL,
@@ -92,6 +92,7 @@ export const useStudio = () => {
   }
 
   const requestPreviewSynchronization = async () => {
+    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
     // Fetch preview data from station
     await $fetch<PreviewResponse>('api/projects/preview/sync', {
       baseURL: runtimeConfig.apiURL,
@@ -103,6 +104,7 @@ export const useStudio = () => {
   }
 
   const mountPreviewUI = (storage: Ref<Storage | null>) => {
+    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
     const storageReady = computed(() => !!storage.value)
     // Show loading
     const el = document.createElement('div')
@@ -120,6 +122,7 @@ export const useStudio = () => {
   // Content Helpers
 
   const findContentWithId = async (path: string): Promise<ParsedContent | null> => {
+    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
     if (!path) {
       return null
     }
@@ -132,18 +135,19 @@ export const useStudio = () => {
   }
 
   const updateContent = (content: PreviewFile) => {
+    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
     if (!storage.value) { return }
 
     storage.value.setItem(`${previewToken.value}:${content.parsed?._id}`, JSON.stringify(content.parsed))
   }
 
   const removeContentWithId = async (path: string) => {
+    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
     await storage.value?.removeItem(`${previewToken.value}:${path}`)
   }
 
   return {
     apiURL: runtimeConfig.apiURL,
-    previewToken,
     contentStorage: storage,
 
     syncPreview,
