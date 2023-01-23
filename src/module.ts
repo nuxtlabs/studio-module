@@ -72,6 +72,12 @@ export default defineNuxtModule({
       return
     }
 
+    // Check Pinceau module activated
+    // @ts-ignore
+    nuxt.hook('pinceau:options', (options) => {
+      options.studio = true
+    })
+
     const { resolve } = createResolver(import.meta.url)
 
     const apiURL = process.env.NUXT_PUBLIC_STUDIO_API_URL || process.env.STUDIO_API || 'https://api.nuxt.studio'
