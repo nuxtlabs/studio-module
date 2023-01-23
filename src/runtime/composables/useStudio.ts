@@ -45,7 +45,12 @@ export const useStudio = () => {
   const syncPreviewAppConfig = (appConfig?: any) => {
     const _appConfig = callWithNuxt(nuxtApp, useAppConfig)
     deepAssign(_appConfig, appConfig || initialAppConfig)
-    deepDelete(_appConfig, appConfig || initialAppConfig)
+
+    // Reset app config to initial state if no appConfig is provided
+    // Makes sure that app config does not contain any preview data
+    if (!appConfig) {
+      deepDelete(_appConfig, initialAppConfig)
+    }
   }
 
   const syncPreviewTokensConfig = (tokensConfig?: any) => {
