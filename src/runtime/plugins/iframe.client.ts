@@ -48,7 +48,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         const content = await findContentWithId(payload.path)
         if (!content) {
           editorSelectedPath.value = '/'
-          router.push('/')
+          if (useRoute().path !== '/') {
+            router.push('/')
+          }
         } else if (content._partial) {
           // Partials should use as helpers for other content files, like `_dir.yml`
           // We should not navigate if content is a partial
