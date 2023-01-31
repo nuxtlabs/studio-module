@@ -64,11 +64,7 @@ onMounted(async () => {
   // Adds body classes for live preview
   document.body.classList.add(...previewClasses)
 
-  socket.on('draft:ready', () => {
-    if (apiReady.value) {
-      return
-    }
-
+  socket.once('draft:ready', () => {
     apiReady.value = true
 
     if (window.parent && window.self !== window.parent) {
