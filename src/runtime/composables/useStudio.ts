@@ -1,5 +1,4 @@
-import type { Ref } from 'vue'
-import { createApp, computed } from 'vue'
+import { createApp } from 'vue'
 import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 // @ts-ignore
@@ -20,7 +19,13 @@ export const useStudio = () => {
   const initialAppConfig = useDefaultAppConfig()
   let initialTokensConfig: object
 
-  const storage = useState<Storage | null>('client-db', () => null)
+  const storage = useState<Storage | null>('studio-client-db', () => null)
+  const dbFiles = useState<PreviewFile[]>('studio-preview-db-files', () => [])
+
+  // @ts-ignore
+  nuxtApp.hook('content:storage', (_storage: Storage) => {
+    storage.value = _storage
+  })
 
   const syncPreviewFiles = async (contentStorage: Storage, files: PreviewFile[], ignoreBuiltContents = true) => {
     const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
@@ -29,12 +34,7 @@ export const useStudio = () => {
     await Promise.all(keys.map(key => contentStorage.removeItem(key)))
 
     // Set preview meta
-    await contentStorage.setItem(
-      `${previewToken.value}$`,
-      JSON.stringify({
-        ignoreBuiltContents
-      })
-    )
+    await contentStorage.setItem(`${previewToken.value}$`, JSON.stringify({ ignoreBuiltContents }))
 
     // Handle content files
     await Promise.all(
@@ -71,21 +71,20 @@ export const useStudio = () => {
     callWithNuxt(nuxtApp, themeSheet.updateTheme, [tokensConfig || initialTokensConfig])
   }
 
-  const syncPreview = async (contentStorage: Storage) => {
-    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
-    // Fetch preview data from station
-    const data = await $fetch<PreviewResponse>('api/projects/preview', {
-      baseURL: runtimeConfig.apiURL,
-      params: {
-        token: previewToken.value
-      }
-    }) as any
+  const syncPreview = async (data: PreviewResponse) => {
+    // Preserve db files for later use in `draft:update` events
+    dbFiles.value = data.files = data.files || dbFiles.value || []
+
+    if (!storage.value) {
+      // Postpone sync if storage is not ready
+      return false
+    }
 
     const mergedFiles = mergeDraft(data.files, data.additions, data.deletions)
 
     // Handle content files
     const contentFiles = mergedFiles.filter(item => !item.path.startsWith(StudioConfigRoot))
-    await syncPreviewFiles(contentStorage, contentFiles, (data.files || []).length !== 0)
+    await syncPreviewFiles(storage.value, contentFiles, (data.files || []).length !== 0)
 
     // Handle `.studio/app.config.json`
     const appConfig = mergedFiles.find(item => item.path === StudioConfigFiles.appConfig)
@@ -94,6 +93,10 @@ export const useStudio = () => {
     // Handle `.studio/tokens.config.json`
     const tokensConfig = mergedFiles.find(item => item.path === StudioConfigFiles.tokensConfig)
     syncPreviewTokensConfig(tokensConfig?.parsed)
+
+    requestRerender()
+
+    return true
   }
 
   const requestPreviewSynchronization = async () => {
@@ -108,9 +111,8 @@ export const useStudio = () => {
     }) as any
   }
 
-  const mountPreviewUI = (storage: Ref<Storage | null>) => {
+  const mountPreviewUI = () => {
     const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
-    const storageReady = computed(() => !!storage.value)
     // Show loading
     const el = document.createElement('div')
     el.id = '__nuxt_preview_wrapper'
@@ -118,14 +120,12 @@ export const useStudio = () => {
     createApp(ContentPreviewMode, {
       previewToken,
       apiURL: runtimeConfig.apiURL,
-      storageReady,
-      refresh: () => syncPreview(storage.value!).then(() => refreshNuxtData()),
-      init: requestPreviewSynchronization
+      syncPreview,
+      requestPreviewSyncAPI: requestPreviewSynchronization
     }).mount(el)
   }
 
   // Content Helpers
-
   const findContentWithId = async (path: string): Promise<ParsedContent | null> => {
     const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
     if (!path) {
@@ -151,11 +151,14 @@ export const useStudio = () => {
     await storage.value?.removeItem(`${previewToken.value}:${path}`)
   }
 
+  const requestRerender = () => {
+    callWithNuxt(nuxtApp, refreshNuxtData)
+  }
+
   return {
     apiURL: runtimeConfig.apiURL,
     contentStorage: storage,
 
-    syncPreview,
     syncPreviewFiles,
     syncPreviewAppConfig,
     syncPreviewTokensConfig,
@@ -167,8 +170,6 @@ export const useStudio = () => {
     updateContent,
     removeContentWithId,
 
-    requestRerender: () => {
-      callWithNuxt(nuxtApp, refreshNuxtData)
-    }
+    requestRerender
   }
 }

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { Ref, PropType } from 'vue'
-import { onMounted, ref, onUnmounted, nextTick, watch } from 'vue'
+import { onMounted, ref, onUnmounted, nextTick } from 'vue'
 // @ts-ignore
 import { refreshNuxtData, useCookie, useRoute, navigateTo, useNuxtApp } from '#imports'
 
@@ -13,15 +12,11 @@ const props = defineProps({
     type: String,
     required: true
   },
-  storageReady: {
-    type: Object as PropType<Ref<boolean>>,
-    required: true
-  },
-  refresh: {
+  syncPreview: {
     type: Function,
     required: true
   },
-  init: {
+  requestPreviewSyncAPI: {
     type: Function,
     required: true
   }
@@ -32,8 +27,8 @@ const previewClasses = ['__nuxt_preview', '__preview_enabled']
 const nuxtApp = useNuxtApp()
 const open = ref(true)
 const refreshing = ref(false)
-const apiReady = ref(false)
 const previewReady = ref(false)
+let socket
 
 const closePreviewMode = async () => {
   useCookie('previewToken').value = ''
@@ -48,57 +43,63 @@ const closePreviewMode = async () => {
   document.body.classList.remove(...previewClasses)
 }
 
+const sync = async (data) => {
+  const isUpdated = await props.syncPreview(data)
+
+  if (previewReady.value === true) {
+    // Preview already ready, no need to sync again
+    return
+  }
+
+  // If data is not updated, it means the storage is not ready yet and we should try again
+  if (!isUpdated) {
+    setTimeout(() => sync(data), 1000)
+    return
+  }
+
+  previewReady.value = true
+  // @ts-ignore
+  nuxtApp.callHook('nuxt-studio:preview:ready')
+
+  if (window.parent && window.self !== window.parent) {
+    socket.disconnect()
+  }
+}
+
 onMounted(async () => {
   const io = await import('socket.io-client')
-  const socket = io.connect(`${props.apiURL}/preview:${props.previewToken.value}`, {
+  socket = io.connect(`${props.apiURL}/preview:${props.previewToken.value}`, {
     transports: ['websocket', 'polling'],
     auth: {
       token: props.previewToken.value
     }
   })
 
-  socket.on('connect', () => {
-    props.init()
+  // Client should receive draft:sync event on connect
+  socket.on('draft:sync', (data) => {
+    // If no data is received, it means the draft is not ready yet
+    if (!data) {
+      // Call init to request draft sync via api
+      props.requestPreviewSyncAPI()
+
+      // Wait for draft:ready and then request sync
+      socket.once('draft:ready', () => {
+        socket.emit('draft:requestSync')
+      })
+      return
+    }
+
+    sync(data)
   })
 
   // Adds body classes for live preview
   document.body.classList.add(...previewClasses)
 
-  socket.once('draft:ready', () => {
-    apiReady.value = true
-
-    if (window.parent && window.self !== window.parent) {
-      // Do not listen to update hook if in an iframe
-      socket.disconnect()
-      return
-    }
-    socket.on('draft:update', () => {
-      refreshing.value = true
-      props.refresh()
-      refreshing.value = false
-    })
+  socket.on('draft:update', (data) => {
+    refreshing.value = true
+    props.syncPreview(data)
+    refreshing.value = false
   })
-})
-
-watch(() => apiReady.value, () => {
-  if (props.storageReady.value) {
-    props.refresh()
-      .then(() => {
-        previewReady.value = true
-        // @ts-ignore
-        nuxtApp.callHook('nuxt-studio:preview:ready')
-      })
-  }
-})
-watch(() => props.storageReady.value, () => {
-  if (apiReady.value) {
-    props.refresh()
-      .then(() => {
-        previewReady.value = true
-        // @ts-ignore
-        nuxtApp.callHook('nuxt-studio:preview:ready')
-      })
-  }
 })
 
 // Also cleans up body classes on unMounted
