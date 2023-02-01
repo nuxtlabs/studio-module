@@ -1,24 +1,16 @@
-import type { Storage } from 'unstorage'
-import { NuxtApp } from 'nuxt/app'
 // @ts-ignore
-import { defineNuxtPlugin, useState, useCookie, useRoute, useRuntimeConfig, queryContent } from '#imports'
+import { defineNuxtPlugin, useCookie, useRoute, useRuntimeConfig, queryContent } from '#imports'
 
-export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
-  const contentStorage = useState<Storage | null>('client-db', () => null)
+export default defineNuxtPlugin((nuxtApp) => {
   const runtimeConfig = useRuntimeConfig().public.studio || {}
   const route = useRoute()
   const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
 
   async function initializePreview () {
-    // @ts-ignore
-    nuxtApp.hook('content:storage', (storage: Storage) => {
-      contentStorage.value = storage
-    })
-
     const useStudio = await import('../composables/useStudio').then(m => m.useStudio)
     const { mountPreviewUI } = useStudio()
 
-    mountPreviewUI(contentStorage)
+    mountPreviewUI()
 
     // Call `queryContent` to trigger `content:storage` hook
     queryContent('/non-existing-path').findOne()
@@ -27,11 +19,11 @@ export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
   if (runtimeConfig.apiURL) {
     // Disable preview mode if token value is null, undefined or empty
     if (Object.prototype.hasOwnProperty.call(route.query, 'preview') && !route.query.preview) {
-      return false
+      return
     }
 
     if (!route.query.preview && !previewToken.value) {
-      return false
+      return
     }
 
     if (route.query.preview && previewToken.value !== route.query.preview) {

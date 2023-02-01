@@ -1,11 +1,11 @@
 import { DraftFile, PreviewFile } from '../../../types'
 
-export const mergeDraft = (dbFiles: PreviewFile[], draftAdditions: DraftFile[], draftDeletions: DraftFile[]) => {
+export const mergeDraft = (dbFiles: PreviewFile[] = [], draftAdditions: DraftFile[], draftDeletions: DraftFile[]) => {
   const additions = [...(draftAdditions || [])]
   const deletions = [...(draftDeletions || [])]
 
   // Compute file name
-  const mergedFiles: PreviewFile[] = [...(dbFiles || [])]
+  const mergedFiles: PreviewFile[] = JSON.parse(JSON.stringify(dbFiles))
 
   // Merge darft additions
   for (const addition of additions) {
