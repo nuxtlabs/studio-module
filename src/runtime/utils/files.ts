@@ -52,5 +52,9 @@ export const mergeDraft = (dbFiles: PreviewFile[], draftAdditions: DraftFile[], 
     // File has been deleted
     mergedFiles.splice(mergedFiles.findIndex(f => f.path === deletion.path), 1)
   }
+
+  const comperable = new Intl.Collator(undefined, { numeric: true })
+  mergedFiles.sort((a, b) => comperable.compare(a.path, b.path))
+
   return mergedFiles
 }
