@@ -70,7 +70,7 @@ const sync = async (data) => {
 
 onMounted(async () => {
   const io = await import('socket.io-client')
-  socket = io.connect(`${props.apiURL}/preview:${props.previewToken.value}`, {
+  socket = io.connect(`${props.apiURL}/preview`, {
     transports: ['websocket', 'polling'],
     auth: {
       token: props.previewToken.value
