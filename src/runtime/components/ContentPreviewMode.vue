@@ -28,6 +28,7 @@ const nuxtApp = useNuxtApp()
 const open = ref(true)
 const refreshing = ref(false)
 const previewReady = ref(false)
+const error = ref('')
 let socket
 
 const closePreviewMode = async () => {
@@ -39,6 +40,7 @@ const closePreviewMode = async () => {
   })
 
   open.value = false
+  error.value = ''
   // Cleans up body classes for live preview
   document.body.classList.remove(...previewClasses)
 }
@@ -75,8 +77,31 @@ onMounted(async () => {
     }
   })
 
+  let syncTimeout
+  socket.on('connect', () => {
+    syncTimeout = setTimeout(() => {
+      if (!previewReady.value) {
+        syncTimeout = setTimeout(() => {
+          error.value = 'Preview sync timed out'
+          previewReady.value = false
+        }, 30000)
+
+        socket.emit('draft:requestSync')
+      }
+    }, 30000)
+  })
+
+  const clearSyncTimeout = () => {
+    if (syncTimeout) {
+      clearInterval(syncTimeout)
+      syncTimeout = null
+    }
+  }
+
   // Client should receive draft:sync event on connect
   socket.on('draft:sync', (data) => {
+    clearSyncTimeout()
+
     // If no data is received, it means the draft is not ready yet
     if (!data) {
       // Call init to request draft sync via api
@@ -90,6 +115,15 @@ onMounted(async () => {
     }
 
     sync(data)
+  })
+
+  socket.on('draft:unauthorized', () => {
+    clearSyncTimeout()
+    error.value = 'Unauthorized preview token'
+    previewReady.value = false
+  })
+  socket.on('disconnect', () => {
+    clearSyncTimeout()
   })
 
   // Adds body classes for live preview
@@ -122,7 +156,7 @@ onUnmounted(() => {
       </template>
     </div>
     <Transition name="preview-loading">
-      <div v-if="open && !previewReady">
+      <div v-if="open && !previewReady && !error">
         <div id="__preview_background" />
         <div id="__preview_loader">
           <svg id="__preview_loading_icon" width="32" height="32" viewBox="0 0 24 24">
@@ -138,6 +172,17 @@ onUnmounted(() => {
           <p>Initializing the preview...</p>
           <button @click="closePreviewMode">
             Cancel
+          </button>
+        </div>
+      </div>
+    </Transition>
+    <Transition name="preview-loading">
+      <div v-if="error">
+        <div id="__preview_background" />
+        <div id="__preview_loader">
+          <p>{{ error }}</p>
+          <button @click="closePreviewMode">
+            Exit preview
           </button>
         </div>
       </div>
