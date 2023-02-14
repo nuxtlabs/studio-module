@@ -93,24 +93,39 @@ onMounted(async () => {
 
   const clearSyncTimeout = () => {
     if (syncTimeout) {
-      clearInterval(syncTimeout)
+      clearTimeout(syncTimeout)
       syncTimeout = null
     }
   }
 
   // Client should receive draft:sync event on connect
-  socket.on('draft:sync', (data) => {
+  socket.on('draft:sync',async (data) => {
     clearSyncTimeout()
 
     // If no data is received, it means the draft is not ready yet
     if (!data) {
       // Call init to request draft sync via api
-      props.requestPreviewSyncAPI()
+      try {
+        await props.requestPreviewSyncAPI()
 
-      // Wait for draft:ready and then request sync
-      socket.once('draft:ready', () => {
-        socket.emit('draft:requestSync')
-      })
+
+        // Wait for draft:ready and then request sync
+        socket.once('draft:ready', () => {
+          socket.emit('draft:requestSync')
+        })
+      } catch (e) {
+        clearSyncTimeout()
+        
+        switch(e.response.status) {
+          case 404:
+            error.value = 'Preview draft not found'
+            previewReady.value = false
+            break
+          default:
+            error.value = 'An error occurred while syncing preview'
+            previewReady.value = false
+        }
+      }
       return
     }
 
