@@ -2,6 +2,7 @@
  "extends": "./ui/.nuxt/tsconfig.json",
   "include": [
     "src/**/*.ts",
+    "src/**/*.vue",
     "types/**/*.ts",
     "ui/**/*.ts",
     "ui/**/*.vue",

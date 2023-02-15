@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, onUnmounted, nextTick } from 'vue'
+import type { Socket } from 'socket.io-client'
+import { onMounted, ref, onUnmounted, nextTick, Transition } from 'vue'
+import type { PreviewResponse } from '~~/../types'
 // @ts-ignore
 import { refreshNuxtData, useCookie, useRoute, navigateTo, useNuxtApp } from '#imports'
 
@@ -29,7 +31,7 @@ const open = ref(true)
 const refreshing = ref(false)
 const previewReady = ref(false)
 const error = ref('')
-let socket
+let socket: Socket
 
 const closePreviewMode = async () => {
   useCookie('previewToken').value = ''
@@ -45,7 +47,7 @@ const closePreviewMode = async () => {
   document.body.classList.remove(...previewClasses)
 }
 
-const sync = async (data) => {
+const sync = async (data: PreviewResponse) => {
   const isUpdated = await props.syncPreview(data)
 
   if (previewReady.value === true) {
@@ -77,7 +79,7 @@ onMounted(async () => {
     }
   })
 
-  let syncTimeout
+  let syncTimeout: ReturnType<typeof setTimeout> | null
   socket.on('connect', () => {
     syncTimeout = setTimeout(() => {
       if (!previewReady.value) {
@@ -99,7 +101,7 @@ onMounted(async () => {
   }
 
   // Client should receive draft:sync event on connect
-  socket.on('draft:sync',async (data) => {
+  socket.on('draft:sync', async (data) => {
     clearSyncTimeout()
 
     // If no data is received, it means the draft is not ready yet
@@ -108,15 +110,14 @@ onMounted(async () => {
       try {
         await props.requestPreviewSyncAPI()
 
-
         // Wait for draft:ready and then request sync
         socket.once('draft:ready', () => {
           socket.emit('draft:requestSync')
         })
-      } catch (e) {
+      } catch (e: any) {
         clearSyncTimeout()
-        
-        switch(e.response.status) {
+
+        switch (e.response.status) {
           case 404:
             error.value = 'Preview draft not found'
             previewReady.value = false
