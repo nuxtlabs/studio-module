@@ -1,4 +1,4 @@
-import { NuxtStudioClient, File } from '~/../types'
+import { NuxtStudioClient, File } from '~~/../types'
 
 export type StudioState = ReturnType<typeof createStudio>
 
