@@ -34,11 +34,12 @@ export const useStudio = () => {
     await Promise.all(keys.map(key => contentStorage.removeItem(key)))
 
     // Set preview meta
-    await contentStorage.setItem(`${previewToken.value}$`, JSON.stringify({ ignoreBuiltContents }))
+    const sources = new Set<string>(files.map(file => file.parsed!._id.split(':').shift()!))
+    await contentStorage.setItem(`${previewToken.value}$`, JSON.stringify({ ignoreSources: Array.from(sources) }))
 
     // Handle content files
     await Promise.all(
-      files.map(item => contentStorage.setItem(`${previewToken.value}:${item.parsed?._id}`, JSON.stringify(item.parsed)))
+      files.map(item => contentStorage.setItem(`${previewToken.value}:${item.parsed!._id}`, JSON.stringify(item.parsed)))
     )
   }
 
