@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
+import defu from 'defu'
 // @ts-ignore
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
@@ -44,7 +45,9 @@ export const useStudio = () => {
 
   const syncPreviewAppConfig = (appConfig?: any) => {
     const _appConfig = callWithNuxt(nuxtApp, useAppConfig)
-    deepAssign(_appConfig, appConfig || initialAppConfig)
+    // Using `defu` to merge with initial config
+    // This is important to revert to default values for missing properties
+    deepAssign(_appConfig, defu(appConfig, initialAppConfig))
 
     // Reset app config to initial state if no appConfig is provided
     // Makes sure that app config does not contain any preview data
@@ -68,7 +71,14 @@ export const useStudio = () => {
     }
 
     // Call updateTheme with new config
-    callWithNuxt(nuxtApp, themeSheet.updateTheme, [tokensConfig || initialTokensConfig])
+    callWithNuxt(
+      nuxtApp, 
+      themeSheet.updateTheme, [
+        // Using `defu` to merge with initial tokens
+        // This is important to revert to default values for missing properties
+        defu(tokensConfig, initialTokensConfig)
+      ]
+    )
   }
 
   const syncPreview = async (data: PreviewResponse) => {
