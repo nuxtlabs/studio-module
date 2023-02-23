@@ -72,7 +72,7 @@ export const useStudio = () => {
 
     // Call updateTheme with new config
     callWithNuxt(
-      nuxtApp, 
+      nuxtApp,
       themeSheet.updateTheme, [
         // Using `defu` to merge with initial tokens
         // This is important to revert to default values for missing properties
