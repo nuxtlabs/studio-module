@@ -108,12 +108,12 @@ onMounted(async () => {
     if (!data) {
       // Call init to request draft sync via api
       try {
-        await props.requestPreviewSyncAPI()
-
         // Wait for draft:ready and then request sync
         socket.once('draft:ready', () => {
           socket.emit('draft:requestSync')
         })
+
+        await props.requestPreviewSyncAPI()
       } catch (e: any) {
         clearSyncTimeout()
 
