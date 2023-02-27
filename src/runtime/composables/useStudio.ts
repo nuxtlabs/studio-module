@@ -135,7 +135,10 @@ export const useStudio = () => {
     path = path.replace(/\/$/, '')
     let content = await storage.value?.getItem(`${previewToken.value}:${path}`)
     if (!content) {
-      content = await storage.value?.getItem(path)
+      content = await storage.value?.getItem(`cached:${path}`)
+    }
+    if (!content) {
+      content = content = await storage.value?.getItem(path)
     }
     return content as ParsedContent
   }
