@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import type { Socket } from 'socket.io-client'
 import { onMounted, ref, onUnmounted, nextTick, Transition } from 'vue'
+import { refreshNuxtData, useCookie, useRoute, navigateTo, useNuxtApp } from '#app'
 import type { PreviewResponse } from '../../../types'
-// @ts-ignore
-import { refreshNuxtData, useCookie, useRoute, navigateTo, useNuxtApp } from '#imports'
 
 const props = defineProps({
   previewToken: {
