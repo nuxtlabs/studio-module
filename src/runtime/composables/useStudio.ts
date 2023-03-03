@@ -1,11 +1,10 @@
 import { createApp } from 'vue'
 import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
-import defu from 'defu'
+import { defu } from 'defu'
 // @ts-ignore
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
-// eslint-disable-next-line import/order
 import { callWithNuxt } from '#app'
 import { refreshNuxtData, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
