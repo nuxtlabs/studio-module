@@ -26,6 +26,7 @@ const props = defineProps({
 const previewClasses = ['__nuxt_preview', '__preview_enabled']
 
 const nuxtApp = useNuxtApp()
+const router = useRouter()
 const open = ref(true)
 const refreshing = ref(false)
 const previewReady = ref(false)
@@ -63,6 +64,8 @@ const sync = async (data: PreviewResponse) => {
   previewReady.value = true
   // @ts-ignore
   nuxtApp.callHook('nuxt-studio:preview:ready')
+  // Remove query params in url to refresh page (in case of 404 with no SPA fallback)
+  router.replace({ query: {} })
 
   if (window.parent && window.self !== window.parent) {
     socket.disconnect()
