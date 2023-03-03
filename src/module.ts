@@ -12,19 +12,11 @@ export interface ModuleOptions {
   enabled: 'production' | true
 }
 
-declare module '@nuxt/schema' {
-  interface NuxtConfig {
-    ['studio']?: ModuleOptions
-  }
-  interface NuxtOptions {
-    ['studio']: ModuleOptions
-  }
-}
-
 export interface ModuleHooks {}
 
-export default defineNuxtModule({
+export default defineNuxtModule<ModuleOptions>({
   meta: {
+    name: 'studio',
     configKey: 'studio'
   },
   defaults: {
