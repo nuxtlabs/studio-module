@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, onUnmounted, nextTick, Transition } from 'vue'
-import { refreshNuxtData, useCookie, useRoute, navigateTo, useNuxtApp } from '#app'
+import { refreshNuxtData, useCookie, useRoute, navigateTo, useNuxtApp, useRouter } from '#app'
 import type { Socket } from 'socket.io-client'
 import type { PreviewResponse } from '../../../types'
 
