@@ -1,13 +1,9 @@
 import { defineTheme } from 'pinceau'
+import { field } from '../src/utils'
 
 export default defineTheme({
   color: {
-    $schema: {
-      title: 'My Theme Colors',
-      tags: [
-        '@studio-icon ph:color'
-      ]
-    },
+    $schema: field('color'),
     black: '#000000'
   }
 })

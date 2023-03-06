@@ -18,6 +18,10 @@
     ".": {
       "import": "./dist/module.mjs",
       "require": "./dist/module.cjs"
+    },
+    "./utils": {
+      "import": "./dist/utils.mjs",
+      "require": "./dist/utils.cjs"
     }
   },
   "main": "./dist/module.cjs",
@@ -73,6 +77,18 @@
         "axios",
         "postcss"
       ]
+    }
+  },
+  "unbuild": {
+    "entries": [
+      "./src/module",
+      "./src/utils"
+    ],
+    "externals": [
+      "untyped"
+    ],
+    "rollup": {
+      "emitCJS": true
     }
   }
 }
