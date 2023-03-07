@@ -6,7 +6,7 @@ import { defu } from 'defu'
 import { callWithNuxt } from '#app'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
-import { refreshNuxtData, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState } from '#imports'
+import { refreshNuxtData, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState, useRoute, useContentState } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
 
 const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
@@ -14,6 +14,8 @@ const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((use
 export const useStudio = () => {
   const nuxtApp = useNuxtApp()
   const runtimeConfig = useRuntimeConfig().public.studio || {}
+  const route = useRoute()
+  const { pages: contentPagesCache } = useContentState()
 
   // App config (required)
   const initialAppConfig = useDefaultAppConfig()
@@ -165,6 +167,13 @@ export const useStudio = () => {
   }
 
   const requestRerender = () => {
+    // Remove all cached pages except current one
+    // This will force Nuxt Content DocumentDriven plugin to fetch fresh data from the API
+    for (const key in contentPagesCache.value) {
+      if (key !== route.path) {
+        delete contentPagesCache.value[key]
+      }
+    }
     callWithNuxt(nuxtApp, refreshNuxtData)
   }
 
