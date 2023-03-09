@@ -13,7 +13,7 @@ const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((use
 
 export const useStudio = () => {
   const nuxtApp = useNuxtApp()
-  const { studio, content } = useRuntimeConfig().public
+  const { studioConfig, contentConfig } = useRuntimeConfig().public
   const route = useRoute()
 
   // App config (required)
@@ -114,7 +114,7 @@ export const useStudio = () => {
     const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
     // Fetch preview data from station
     await $fetch<PreviewResponse>('api/projects/preview/sync', {
-      baseURL: studio?.apiURL,
+      baseURL: studioConfig?.apiURL,
       method: 'POST',
       params: {
         token: previewToken.value
@@ -130,7 +130,7 @@ export const useStudio = () => {
     document.body.appendChild(el)
     createApp(ContentPreviewMode, {
       previewToken,
-      apiURL: studio?.apiURL,
+      apiURL: studioConfig?.apiURL,
       syncPreview,
       requestPreviewSyncAPI: requestPreviewSynchronization
     }).mount(el)
@@ -166,10 +166,10 @@ export const useStudio = () => {
   }
 
   const requestRerender = () => {
-    if (content?.documentDriven) {
+    if (contentConfig?.documentDriven) {
       // Remove all cached pages except current one
       // This will force Nuxt Content DocumentDriven plugin to fetch fresh data from the API
-      const { pages } = callWithNuxt(nuxtApp, useContentState)
+      const { pages } = callWithNuxt<any>(nuxtApp, useContentState)
       for (const key in pages.value) {
         if (key !== route.path) {
           delete pages.value[key]
@@ -180,7 +180,7 @@ export const useStudio = () => {
   }
 
   return {
-    apiURL: studio?.apiURL,
+    apiURL: studioConfig?.apiURL,
     contentStorage: storage,
 
     syncPreviewFiles,
