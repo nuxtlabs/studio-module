@@ -6,7 +6,7 @@ import { defu } from 'defu'
 import { callWithNuxt } from '#app'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
-import { refreshNuxtData, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState, useRoute, useContentState } from '#imports'
+import { refreshNuxtData, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState, useRoute, useContentState, queryContent } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
 
 const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
@@ -23,10 +23,15 @@ export const useStudio = () => {
   const storage = useState<Storage | null>('studio-client-db', () => null)
   const dbFiles = useState<PreviewFile[]>('studio-preview-db-files', () => [])
 
-  // @ts-ignore
-  nuxtApp.hook('content:storage', (_storage: Storage) => {
-    storage.value = _storage
-  })
+  if (!storage.value) {
+    // @ts-ignore
+    nuxtApp.hook('content:storage', (_storage: Storage) => {
+      storage.value = _storage
+    })
+
+    // Call `queryContent` to trigger `content:storage` hook
+    queryContent('/non-existing-path').findOne()
+  }
 
   const syncPreviewFiles = async (contentStorage: Storage, files: PreviewFile[], ignoreBuiltContents = true) => {
     const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
