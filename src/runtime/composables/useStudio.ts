@@ -13,7 +13,7 @@ const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((use
 
 export const useStudio = () => {
   const nuxtApp = useNuxtApp()
-  const { studioConfig, contentConfig } = useRuntimeConfig().public
+  const { studio: studioConfig, content: contentConfig } = useRuntimeConfig().public
   const route = useRoute()
 
   // App config (required)
