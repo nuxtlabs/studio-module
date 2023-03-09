@@ -13,9 +13,8 @@ const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((use
 
 export const useStudio = () => {
   const nuxtApp = useNuxtApp()
-  const runtimeConfig = useRuntimeConfig().public.studio || {}
+  const { studioConfig, contentConfig } = useRuntimeConfig().public
   const route = useRoute()
-  const { pages: contentPagesCache } = useContentState()
 
   // App config (required)
   const initialAppConfig = useDefaultAppConfig()
@@ -115,7 +114,7 @@ export const useStudio = () => {
     const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
     // Fetch preview data from station
     await $fetch<PreviewResponse>('api/projects/preview/sync', {
-      baseURL: runtimeConfig.apiURL,
+      baseURL: studioConfig?.apiURL,
       method: 'POST',
       params: {
         token: previewToken.value
@@ -131,7 +130,7 @@ export const useStudio = () => {
     document.body.appendChild(el)
     createApp(ContentPreviewMode, {
       previewToken,
-      apiURL: runtimeConfig.apiURL,
+      apiURL: studioConfig?.apiURL,
       syncPreview,
       requestPreviewSyncAPI: requestPreviewSynchronization
     }).mount(el)
@@ -167,18 +166,21 @@ export const useStudio = () => {
   }
 
   const requestRerender = () => {
-    // Remove all cached pages except current one
-    // This will force Nuxt Content DocumentDriven plugin to fetch fresh data from the API
-    for (const key in contentPagesCache.value) {
-      if (key !== route.path) {
-        delete contentPagesCache.value[key]
+    if (contentConfig?.documentDriven) {
+      // Remove all cached pages except current one
+      // This will force Nuxt Content DocumentDriven plugin to fetch fresh data from the API
+      const { pages } = callWithNuxt<any>(nuxtApp, useContentState)
+      for (const key in pages.value) {
+        if (key !== route.path) {
+          delete pages.value[key]
+        }
       }
     }
     callWithNuxt(nuxtApp, refreshNuxtData)
   }
 
   return {
-    apiURL: runtimeConfig.apiURL,
+    apiURL: studioConfig?.apiURL,
     contentStorage: storage,
 
     syncPreviewFiles,
