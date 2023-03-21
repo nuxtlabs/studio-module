@@ -1,5 +1,5 @@
 import { defineTheme } from 'pinceau'
-import { field } from '../src/utils'
+import { field } from '../src/theme'
 
 export default defineTheme({
   color: {

@@ -1,4 +1,4 @@
-import { field } from '../src/utils'
+import { field } from '../src/theme'
 
 export default defineNuxtConfigSchema({
   appConfig: {

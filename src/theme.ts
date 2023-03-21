@@ -1,4 +1,4 @@
-import defu from 'defu'
+import { defu } from 'defu'
 import { JSType, Schema } from 'untyped'
 
 export type ConfigInputsTypes =
