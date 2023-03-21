@@ -1,6 +1,8 @@
+import { field } from '../src/utils'
+
 export default defineNuxtConfigSchema({
   appConfig: {
-    someConfig: 'schema default',
-    configFromNuxtSchema: true
+    someConfig: field({ type: 'string', default: 'schema default' }),
+    configFromNuxtSchema: field('boolean', true)
   }
 })
