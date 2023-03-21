@@ -6,14 +6,15 @@ import { defu } from 'defu'
 import { callWithNuxt } from '#app'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
-import { refreshNuxtData, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState } from '#imports'
+import { refreshNuxtData, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState, useRoute, useContentState, queryContent } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
 
 const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
 
 export const useStudio = () => {
   const nuxtApp = useNuxtApp()
-  const runtimeConfig = useRuntimeConfig().public.studio || {}
+  const { studio: studioConfig, content: contentConfig } = useRuntimeConfig().public
+  const route = useRoute()
 
   // App config (required)
   const initialAppConfig = useDefaultAppConfig()
@@ -22,10 +23,15 @@ export const useStudio = () => {
   const storage = useState<Storage | null>('studio-client-db', () => null)
   const dbFiles = useState<PreviewFile[]>('studio-preview-db-files', () => [])
 
-  // @ts-ignore
-  nuxtApp.hook('content:storage', (_storage: Storage) => {
-    storage.value = _storage
-  })
+  if (!storage.value) {
+    // @ts-ignore
+    nuxtApp.hook('content:storage', (_storage: Storage) => {
+      storage.value = _storage
+    })
+
+    // Call `queryContent` to trigger `content:storage` hook
+    queryContent('/non-existing-path').findOne()
+  }
 
   const syncPreviewFiles = async (contentStorage: Storage, files: PreviewFile[], ignoreBuiltContents = true) => {
     const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
@@ -113,7 +119,7 @@ export const useStudio = () => {
     const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
     // Fetch preview data from station
     await $fetch<PreviewResponse>('api/projects/preview/sync', {
-      baseURL: runtimeConfig.apiURL,
+      baseURL: studioConfig?.apiURL,
       method: 'POST',
       params: {
         token: previewToken.value
@@ -129,7 +135,7 @@ export const useStudio = () => {
     document.body.appendChild(el)
     createApp(ContentPreviewMode, {
       previewToken,
-      apiURL: runtimeConfig.apiURL,
+      apiURL: studioConfig?.apiURL,
       syncPreview,
       requestPreviewSyncAPI: requestPreviewSynchronization
     }).mount(el)
@@ -165,11 +171,21 @@ export const useStudio = () => {
   }
 
   const requestRerender = () => {
+    if (contentConfig?.documentDriven) {
+      // Remove all cached pages except current one
+      // This will force Nuxt Content DocumentDriven plugin to fetch fresh data from the API
+      const { pages } = callWithNuxt<any>(nuxtApp, useContentState)
+      for (const key in pages.value) {
+        if (key !== route.path) {
+          delete pages.value[key]
+        }
+      }
+    }
     callWithNuxt(nuxtApp, refreshNuxtData)
   }
 
   return {
-    apiURL: runtimeConfig.apiURL,
+    apiURL: studioConfig?.apiURL,
     contentStorage: storage,
 
     syncPreviewFiles,

@@ -1,19 +1,17 @@
 // @ts-ignore
-import { defineNuxtPlugin, useCookie, useRoute, useRuntimeConfig, queryContent } from '#imports'
+import { defineNuxtPlugin, useCookie, useRoute, useRuntimeConfig, useState } from '#imports'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const runtimeConfig = useRuntimeConfig().public.studio || {}
   const route = useRoute()
   const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
+  const storage = useState<Storage | null>('studio-client-db', () => null)
 
   async function initializePreview () {
     const useStudio = await import('../composables/useStudio').then(m => m.useStudio)
     const { mountPreviewUI } = useStudio()
 
     mountPreviewUI()
-
-    // Call `queryContent` to trigger `content:storage` hook
-    queryContent('/non-existing-path').findOne()
   }
 
   if (runtimeConfig.apiURL) {
@@ -29,6 +27,13 @@ export default defineNuxtPlugin((nuxtApp) => {
     if (route.query.preview && previewToken.value !== route.query.preview) {
       previewToken.value = String(route.query.preview)
     }
+
+    // Listen to `content:storage` hook to get storage instance
+    // There is some cases that `content:storage` hook is called before initializing preview
+    // @ts-ignore
+    nuxtApp.hook('content:storage', (_storage: Storage) => {
+      storage.value = _storage
+    })
 
     nuxtApp.hook('app:mounted', async () => {
       await initializePreview()
