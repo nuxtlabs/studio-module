@@ -19,9 +19,9 @@
       "import": "./dist/module.mjs",
       "require": "./dist/module.cjs"
     },
-    "./utils": {
-      "import": "./dist/utils.mjs",
-      "require": "./dist/utils.cjs"
+    "./theme": {
+      "import": "./dist/theme.mjs",
+      "require": "./dist/theme.cjs"
     }
   },
   "main": "./dist/module.cjs",
@@ -82,7 +82,7 @@
   "unbuild": {
     "entries": [
       "./src/module",
-      "./src/utils"
+      "./src/theme"
     ],
     "externals": [
       "untyped"
