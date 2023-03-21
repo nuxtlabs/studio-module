@@ -23,34 +23,34 @@
   "main": "./dist/module.cjs",
   "types": "./dist/types.d.ts",
   "scripts": {
-    "prepare": "nuxi prepare playground",
-    "dev": "NUXT_STUDIO_DEV_PROXY=true nuxi dev playground",
+    "prepare": "nuxt prepare playground",
+    "dev": "NUXT_STUDIO_DEV_PROXY=true nuxt dev playground",
     "build": "nuxt-module-build",
     "lint": "eslint --ext .vue,.ts,.js,.mjs .",
     "prepack": "yarn lint && yarn build",
     "release": "yarn lint && release-it"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.2.3",
+    "@nuxt/kit": "^3.3.1",
     "defu": "^6.1.2",
-    "nuxt-component-meta": "^0.4.3",
+    "nuxt-component-meta": "^0.5.1",
     "nuxt-config-schema": "^0.4.5",
     "socket.io-client": "^4.6.1",
     "ufo": "^1.1.1"
   },
   "devDependencies": {
-    "@nuxt-themes/elements-edge": "^0.0.1-fd5890e",
-    "@nuxt/content": "^2.4.3",
+    "@nuxt-themes/elements": "0.9.3",
+    "@nuxt/content": "^2.5.2",
     "@nuxt/module-builder": "^0.2.1",
-    "@nuxt/schema": "^3.2.3",
+    "@nuxt/schema": "^3.3.1",
     "@nuxtjs/color-mode": "^3.2.0",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
-    "eslint": "^8.35.0",
-    "jiti": "^1.17.1",
-    "nuxt": "^3.2.3",
+    "eslint": "^8.36.0",
+    "jiti": "^1.18.2",
+    "nuxt": "^3.3.1",
     "pinceau": "^0.18.8",
-    "release-it": "^15.7.0",
-    "typescript": "^4.9.5"
+    "release-it": "^15.9.1",
+    "typescript": "^5.0.2"
   },
   "release-it": {
     "git": {
