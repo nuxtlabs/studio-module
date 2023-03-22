@@ -176,7 +176,7 @@ export const useStudio = () => {
       const { pages } = callWithNuxt<any>(nuxtApp, useContentState)
       for (const key in pages.value) {
         if (pages.value[key]) {
-          pages.value[key] = await storage.getItem(pages.value[key].id)
+          pages.value[key] = await findContentWithId(pages.value[key]._id)
         }
       }
     }
