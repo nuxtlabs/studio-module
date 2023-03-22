@@ -170,14 +170,13 @@ export const useStudio = () => {
     await storage.value?.removeItem(`${previewToken.value}:${path}`)
   }
 
-  const requestRerender = () => {
+  const requestRerender = async () => {
     if (contentConfig?.documentDriven) {
-      // Remove all cached pages except current one
-      // This will force Nuxt Content DocumentDriven plugin to fetch fresh data from the API
+      // Update all cached pages
       const { pages } = callWithNuxt<any>(nuxtApp, useContentState)
       for (const key in pages.value) {
-        if (key !== route.path) {
-          delete pages.value[key]
+        if (pages.value[key]) {
+          pages.value[key] = await storage.getItem(pages.value[key].id)
         }
       }
     }
