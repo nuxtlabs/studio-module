@@ -10,7 +10,6 @@
   ],
   "license": "UNLICENSED",
   "files": [
-    "ui",
     "dist"
   ],
   "type": "module",
