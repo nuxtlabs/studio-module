@@ -85,8 +85,7 @@ export default defineNuxtModule<ModuleOptions>({
     })
 
     // Add plugins
-    addPlugin(resolve('./runtime/plugins/preview-detector'))
-    addPlugin(resolve('./runtime/plugins/iframe.client'))
+    addPlugin(resolve('./runtime/plugins/preview.client'))
 
     // TODO: Remove workaround ASAP when Nitro supports app.config
     addPlugin(resolve('./runtime/plugins/app-config.server'))
@@ -115,6 +114,8 @@ export default defineNuxtModule<ModuleOptions>({
     addPrerenderRoutes('/__studio.json')
 
     // Install dependencies
-    await installModule('nuxt-component-meta')
+    await installModule('nuxt-component-meta', {
+      globalsOnly: true
+    })
   }
 })

@@ -9,9 +9,11 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   async function initializePreview () {
     const useStudio = await import('../composables/useStudio').then(m => m.useStudio)
-    const { mountPreviewUI } = useStudio()
+    const { mountPreviewUI, initiateIframeCommunication } = useStudio()
 
     mountPreviewUI()
+
+    initiateIframeCommunication()
   }
 
   if (runtimeConfig.apiURL) {
