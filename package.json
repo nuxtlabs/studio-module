@@ -3,7 +3,7 @@
   "version": "0.9.1",
   "homepage": "https://github.com/nuxtlabs/studio.nuxt.com/tree/dev/modules/studio",
   "repository": "https://github.com/nuxtlabs/studio.nuxt.com",
-  "packageManager": "pnpm@7.20.0",
+  "packageManager": "pnpm@7.30.1",
   "keywords": [
     "nuxt",
     "studio"
