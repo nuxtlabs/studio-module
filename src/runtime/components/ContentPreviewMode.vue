@@ -33,18 +33,11 @@ const previewReady = ref(false)
 const error = ref('')
 let socket: Socket
 
-const closePreviewMode = async () => {
+const closePreviewMode = () => {
   useCookie('previewToken').value = ''
   useRoute().query.preview = ''
-  await navigateTo(useRoute().path)
-  nextTick(() => {
-    refreshNuxtData()
-  })
 
-  open.value = false
-  error.value = ''
-  // Cleans up body classes for live preview
-  document.body.classList.remove(...previewClasses)
+  window.location.reload()
 }
 
 const sync = async (data: PreviewResponse) => {
