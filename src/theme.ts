@@ -161,6 +161,9 @@ export function field (
     type
   ) as StudioFieldData
 
+  // Init tags
+  if (!result.tags) { result.tags = [] }
+
   // Cast `icon` into its tag
   if (result.icon) {
     result.tags.push(`@studioIcon ${result.icon}`)
