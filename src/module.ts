@@ -87,23 +87,8 @@ export default defineNuxtModule<ModuleOptions>({
     // Add plugins
     addPlugin(resolve('./runtime/plugins/preview.client'))
 
-    // TODO: Remove workaround ASAP when Nitro supports app.config
-    addPlugin(resolve('./runtime/plugins/app-config.server'))
-
     // Register components
-    addComponentsDir({
-      path: resolve('./runtime/components')
-    })
-
-    // Ensure `/__app_config.json` is a valid route in the app
-    extendPages((pages) => {
-      pages.push({
-        name: '__app_config.json',
-        path: '/__app_config.json',
-        file: resolve('./runtime/pages/empty'),
-        children: []
-      })
-    })
+    addComponentsDir({ path: resolve('./runtime/components') })
 
     // Add server route to know Studio is enabled
     addServerHandler({
