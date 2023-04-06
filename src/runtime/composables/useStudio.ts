@@ -267,7 +267,7 @@ export const useStudio = () => {
           requestRerender()
           break
         }
-        case 'nuxt-studio:draft:sync': {
+        case 'nuxt-studio:preview:sync': {
           syncPreview(payload)
           break
         }
