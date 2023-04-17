@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref, onUnmounted, nextTick, Transition } from 'vue'
-import { refreshNuxtData, useCookie, useRoute, navigateTo, useNuxtApp, useRouter } from '#app'
+import { onMounted, ref, onUnmounted, Transition } from 'vue'
+import { useCookie, useRoute, useNuxtApp, useRouter } from '#app'
 import type { Socket } from 'socket.io-client'
 import type { PreviewResponse } from '../../../types'
 
 const props = defineProps({
   previewToken: {
-    type: Object,
+    type: String,
     required: true
   },
   apiURL: {
@@ -36,6 +36,7 @@ let socket: Socket
 const closePreviewMode = () => {
   useCookie('previewToken').value = ''
   useRoute().query.preview = ''
+  window.sessionStorage.removeItem('previewToken')
 
   window.location.reload()
 }
@@ -70,7 +71,7 @@ onMounted(async () => {
   socket = io.connect(`${props.apiURL}/preview`, {
     transports: ['websocket', 'polling'],
     auth: {
-      token: props.previewToken.value
+      token: props.previewToken
     }
   })
 
