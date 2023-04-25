@@ -33,7 +33,7 @@ export default eventHandler(async () => {
 
   const appConfig = useAppConfig()
   const runtimeConfig = useRuntimeConfig()
-  const { app, appConfigSchema, content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment } } = runtimeConfig
+  const { app, appConfigSchema, content: { sources, ignores, locales, highlight, navigation, documentDriven, experimental } } = runtimeConfig
 
   // Support for __pinceau_tokens_{schema|config}.json
   const hasPinceau = runtimeConfig?.pinceau?.studio
@@ -56,7 +56,7 @@ export default eventHandler(async () => {
     tokensConfigSchema,
     tokensConfig,
     // @nuxt/content
-    content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment },
+    content: { sources, ignores, locales, highlight, navigation, documentDriven, experimental },
     // nuxt-component-meta
     components: filteredComponents
   }
