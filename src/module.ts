@@ -30,13 +30,6 @@ export default defineNuxtModule<ModuleOptions>({
         default: schema.default?.appConfig
       }
     })
-    // Support custom ~/.studio/app.config.json
-    nuxt.hook('app:resolve', (appCtx) => {
-      const studioAppConfigPath = resolveAlias('~/.studio/app.config.json')
-      if (existsSync(studioAppConfigPath)) {
-        appCtx.configs.unshift(studioAppConfigPath)
-      }
-    })
     await installModule('nuxt-config-schema')
 
     // Only enable Studio in production build

@@ -6,7 +6,7 @@ import { defu } from 'defu'
 import { callWithNuxt } from '#app'
 import type { RouteLocationNormalized } from 'vue-router'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
-import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
+import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles, isConfigFile } from '../utils'
 import { refreshNuxtData, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
 import type { PreviewFile, PreviewResponse } from '~~/../types'
 import { FileChangeMessagePayload } from '~~/../types'
@@ -101,7 +101,7 @@ export const useStudio = () => {
     const mergedFiles = mergeDraft(data.files, data.additions, data.deletions)
 
     // Handle content files
-    const contentFiles = mergedFiles.filter(item => !item.path.startsWith(StudioConfigRoot))
+    const contentFiles = mergedFiles.filter(item => !(isConfigFile(item.path, StudioConfigFiles.appConfig) || isConfigFile(item.path, StudioConfigFiles.tokensConfig)))
     await syncPreviewFiles(storage.value, contentFiles, (data.files || []).length !== 0)
 
     // Handle `.studio/app.config.json`
@@ -273,22 +273,23 @@ export const useStudio = () => {
         }
         case 'nuxt-studio:config:file-changed': {
           const { additions = [], deletions = [] } = payload as FileChangeMessagePayload
+
           // Handle `.studio/app.config.json`
-          const appConfig = additions.find(item => item.path === StudioConfigFiles.appConfig)
+          const appConfig = additions.find(item => isConfigFile(item.path, StudioConfigFiles.appConfig))
           if (appConfig) {
             syncPreviewAppConfig(appConfig?.parsed)
           }
-          const shouldRemoveAppConfig = deletions.find(item => item.path === StudioConfigFiles.appConfig)
+          const shouldRemoveAppConfig = deletions.find(item => isConfigFile(item.path, StudioConfigFiles.appConfig))
           if (shouldRemoveAppConfig) {
             syncPreviewAppConfig(undefined)
           }
 
           // Handle `.studio/tokens.config.json`
-          const tokensConfig = additions.find(item => item.path === StudioConfigFiles.tokensConfig)
+          const tokensConfig = additions.find(item => isConfigFile(item.path, StudioConfigFiles.tokensConfig))
           if (tokensConfig) {
             syncPreviewTokensConfig(tokensConfig?.parsed)
           }
-          const shouldRemoveTokensConfig = deletions.find(item => item.path === StudioConfigFiles.tokensConfig)
+          const shouldRemoveTokensConfig = deletions.find(item => isConfigFile(item.path, StudioConfigFiles.tokensConfig))
           if (shouldRemoveTokensConfig) {
             syncPreviewTokensConfig(undefined)
           }
