@@ -1,8 +1,8 @@
 export * from './files'
 
 export const StudioConfigFiles = {
-  appConfig: 'app.config',
-  tokensConfig: 'tokens.config'
+  appConfig: 'app.config.ts',
+  tokensConfig: 'tokens.config.ts'
 }
 
 export const isConfigFile = (itemPath: string, configPath: string) => itemPath.match(/(\.ts|\.js)$/) && itemPath.slice(0, -3) === configPath
