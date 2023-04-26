@@ -2,14 +2,12 @@ import { createApp } from 'vue'
 import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 import { defu } from 'defu'
-// @ts-ignore
-import { callWithNuxt } from '#app'
 import type { RouteLocationNormalized } from 'vue-router'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
+import { callWithNuxt } from '#app'
 import { refreshNuxtData, useAppConfig, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
-import type { PreviewFile, PreviewResponse } from '~~/../types'
-import { FileChangeMessagePayload } from '~~/../types'
+import type { PreviewFile, PreviewResponse, FileChangeMessagePayload } from '~~/../types'
 
 const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
 
@@ -297,26 +295,34 @@ export const useStudio = () => {
       }
     })
 
-    // @ts-ignore
-    nuxtApp.hook('content:document-driven:finish', ({ route, page, dedup }) => {
-      if (dedup || isDocumentDrivenInitialHook.value) {
-        isDocumentDrivenInitialHook.value = false
+    nuxtApp.hook('page:finish', () => {
+      const renderedContents = Array.from(window.document.querySelectorAll('[data-content-id]'))
+        .map(el => el.getAttribute('data-content-id')!)
+
+      const contentIds = Array
+        .from(new Set([route.meta.studio_page_contentId as string, ...renderedContents]))
+        .filter(Boolean)
+
+      if (route.meta.studio_page_ignore) {
         return
       }
 
-      // Ignore if navigating from editor
-      if (page && editorSelectedPath.value === page._path) {
+      if (editorSelectedPath.value === contentIds[0]) {
         editorSelectedPath.value = ''
         return
       }
 
-      window.parent.postMessage({
-        type: 'nuxt-studio:preview:document-driven:finish',
-        payload: {
-          ...routePayload(route),
-          contentId: page?._id
-        }
-      }, '*')
+      window.openContentInStudioEditor(contentIds, { navigate: true })
+    })
+
+    // @ts-ignore
+    nuxtApp.hook('content:document-driven:finish', ({ route, page, dedup }) => {
+      route.meta.studio_page_contentId = page?._id
+      route.meta.studio_page_ignore = dedup || isDocumentDrivenInitialHook.value
+
+      if (route.meta.studio_page_ignore) {
+        isDocumentDrivenInitialHook.value = false
+      }
     })
 
     // @ts-ignore
@@ -325,13 +331,18 @@ export const useStudio = () => {
         type: 'nuxt-studio:preview:ready',
         payload: routePayload(useRoute())
       }, '*')
-
-      router?.afterEach((to: any) => {
-        window.parent.postMessage({
-          type: 'nuxt-studio:preview:route-changed',
-          payload: routePayload(to)
-        }, '*')
-      })
     })
+
+    // Inject Utils to window
+    window.openContentInStudioEditor = (contentIds: string[], data = {}) => {
+      window.parent.postMessage({
+        type: 'nuxt-studio:preview:route',
+        payload: {
+          ...routePayload(route),
+          contentIds,
+          ...data
+        }
+      }, '*')
+    }
   }
 }
