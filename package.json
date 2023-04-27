@@ -1,5 +1,5 @@
 {
-  "name": "studio-module-tahul-test",
+  "name": "@nuxthq/studio",
   "version": "0.11.0",
   "homepage": "https://github.com/nuxtlabs/studio.nuxt.com/tree/dev/modules/studio",
   "repository": "https://github.com/nuxtlabs/studio.nuxt.com",
