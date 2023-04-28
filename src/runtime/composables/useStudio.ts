@@ -296,23 +296,7 @@ export const useStudio = () => {
     })
 
     nuxtApp.hook('page:finish', () => {
-      const renderedContents = Array.from(window.document.querySelectorAll('[data-content-id]'))
-        .map(el => el.getAttribute('data-content-id')!)
-
-      const contentIds = Array
-        .from(new Set([route.meta.studio_page_contentId as string, ...renderedContents]))
-        .filter(Boolean)
-
-      if (route.meta.studio_page_ignore) {
-        return
-      }
-
-      if (editorSelectedPath.value === contentIds[0]) {
-        editorSelectedPath.value = ''
-        return
-      }
-
-      window.openContentInStudioEditor(contentIds, { navigate: true })
+      detectRenderedContents()
     })
 
     // @ts-ignore
@@ -331,9 +315,34 @@ export const useStudio = () => {
         type: 'nuxt-studio:preview:ready',
         payload: routePayload(useRoute())
       }, '*')
+
+      setTimeout(() => {
+        // Initial sync
+        detectRenderedContents()
+      }, 100)
     })
 
     // Inject Utils to window
+    function detectRenderedContents () {
+      const renderedContents = Array.from(window.document.querySelectorAll('[data-content-id]'))
+        .map(el => el.getAttribute('data-content-id')!)
+
+      const contentIds = Array
+        .from(new Set([route.meta.studio_page_contentId as string, ...renderedContents]))
+        .filter(Boolean)
+
+      if (route.meta.studio_page_ignore) {
+        return
+      }
+
+      if (editorSelectedPath.value === contentIds[0]) {
+        editorSelectedPath.value = ''
+        return
+      }
+
+      window.openContentInStudioEditor(contentIds, { navigate: true, pageContentId: route.meta.studio_page_contentId as string })
+    }
+
     window.openContentInStudioEditor = (contentIds: string[], data = {}) => {
       window.parent.postMessage({
         type: 'nuxt-studio:preview:route',

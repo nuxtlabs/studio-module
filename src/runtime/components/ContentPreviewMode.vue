@@ -56,10 +56,11 @@ const sync = async (data: PreviewResponse) => {
   }
 
   previewReady.value = true
+  // Remove query params in url to refresh page (in case of 404 with no SPA fallback)
+  await router.replace({ query: {} })
+
   // @ts-ignore
   nuxtApp.callHook('nuxt-studio:preview:ready')
-  // Remove query params in url to refresh page (in case of 404 with no SPA fallback)
-  router.replace({ query: {} })
 
   if (window.parent && window.self !== window.parent) {
     socket.disconnect()
