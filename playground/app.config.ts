@@ -1,4 +1,5 @@
 export default defineAppConfig({
+  // @ts-ignore
   someConfig: 'user config',
   alpine: {
     title: 'Alpine',
@@ -29,6 +30,7 @@ export default defineAppConfig({
     socials: {
       twitter: 'nuxtlabs',
       instagram: 'atinuxt',
+      // @ts-ignore
       linkedin: {
         icon: 'uil:linkedin',
         label: 'LinkedIn',

@@ -9,7 +9,7 @@ interface FilesHandlerOptions {
 }
 
 export default (option: FilesHandlerOptions) => eventHandler(async (event) => {
-  const path = event.req.url
+  const path = event.node.req.url
   const { rootDir } = option
   const filePath = withoutTrailingSlash(rootDir + path)
 
@@ -56,21 +56,21 @@ export default (option: FilesHandlerOptions) => eventHandler(async (event) => {
   }
 })
 
-function ignoreNotfound (err) {
+function ignoreNotfound (err: any) {
   return err.code === 'ENOENT' || err.code === 'EISDIR' ? null : err
 }
 
-function readdir (dir) {
+function readdir (dir: string) {
   return fsp.readdir(dir, { withFileTypes: true }).catch(ignoreNotfound).then(r => r || [])
 }
 
-async function readdirRecursive (dir, ignore, parent: any = {}) {
+async function readdirRecursive (dir: string, ignore: any, parent: any = {}) {
   if (ignore && ignore(dir)) {
     return []
   }
   const entries = await readdir(dir)
   const files = parent?.children || []
-  await Promise.all(entries.map(async (entry) => {
+  await Promise.all(entries.map(async (entry: any) => {
     const entryPath = resolve(dir, entry.name)
     if (entry.isDirectory() && !ignore(entry.name)) {
       const dir = {
