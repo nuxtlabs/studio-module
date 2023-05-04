@@ -3,9 +3,9 @@ import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 import { defu } from 'defu'
 import type { RouteLocationNormalized } from 'vue-router'
+import { callWithNuxt } from '#app'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
-import { callWithNuxt } from '#app'
 import { refreshNuxtData, useAppConfig, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
 import type { PreviewFile, PreviewResponse, FileChangeMessagePayload } from '~~/../types'
 
@@ -300,13 +300,8 @@ export const useStudio = () => {
     })
 
     // @ts-ignore
-    nuxtApp.hook('content:document-driven:finish', ({ route, page, dedup }) => {
+    nuxtApp.hook('content:document-driven:finish', ({ route, page }) => {
       route.meta.studio_page_contentId = page?._id
-      route.meta.studio_page_ignore = dedup || isDocumentDrivenInitialHook.value
-
-      if (route.meta.studio_page_ignore) {
-        isDocumentDrivenInitialHook.value = false
-      }
     })
 
     // @ts-ignore
@@ -331,10 +326,6 @@ export const useStudio = () => {
         .from(new Set([route.meta.studio_page_contentId as string, ...renderedContents]))
         .filter(Boolean)
 
-      if (route.meta.studio_page_ignore) {
-        return
-      }
-
       if (editorSelectedPath.value === contentIds[0]) {
         editorSelectedPath.value = ''
         return
@@ -345,7 +336,7 @@ export const useStudio = () => {
 
     window.openContentInStudioEditor = (contentIds: string[], data = {}) => {
       window.parent.postMessage({
-        type: 'nuxt-studio:preview:route',
+        type: 'nuxt-studio:preview:navigate',
         payload: {
           ...routePayload(route),
           contentIds,
