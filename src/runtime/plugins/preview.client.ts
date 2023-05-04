@@ -1,4 +1,3 @@
-// @ts-ignore
 import { defineNuxtPlugin, useCookie, useRoute, useRuntimeConfig, useState } from '#imports'
 
 export default defineNuxtPlugin((nuxtApp) => {

@@ -1,5 +1,5 @@
 import { defu } from 'defu'
-import { JSType, Schema } from 'untyped'
+import type { JSType, Schema } from 'untyped'
 
 export type ConfigInputsTypes =
   | Exclude<JSType, 'symbol' | 'function' | 'any' | 'bigint'>
