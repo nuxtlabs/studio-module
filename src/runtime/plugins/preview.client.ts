@@ -1,4 +1,3 @@
-// @ts-ignore
 import { defineNuxtPlugin, useCookie, useRoute, useRuntimeConfig, useState } from '#imports'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -28,6 +27,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     if (route.query.preview && previewToken.value !== route.query.preview) {
       previewToken.value = String(route.query.preview)
+      window.sessionStorage.setItem('previewToken', String(route.query.preview))
     }
 
     // Listen to `content:storage` hook to get storage instance

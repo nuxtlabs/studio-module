@@ -2,14 +2,12 @@ import { createApp } from 'vue'
 import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 import { defu } from 'defu'
-// @ts-ignore
-import { callWithNuxt } from '#app'
 import type { RouteLocationNormalized } from 'vue-router'
+import { callWithNuxt } from '#app'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
-import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles, isConfigFile } from '../utils'
-import { refreshNuxtData, useAppConfig, useCookie, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
-import type { PreviewFile, PreviewResponse } from '~~/../types'
-import { FileChangeMessagePayload } from '~~/../types'
+import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles } from '../utils'
+import { refreshNuxtData, useAppConfig, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
+import type { PreviewFile, PreviewResponse, FileChangeMessagePayload } from '~~/../types'
 
 const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
 
@@ -36,18 +34,18 @@ export const useStudio = () => {
   }
 
   const syncPreviewFiles = async (contentStorage: Storage, files: PreviewFile[], ignoreBuiltContents = true) => {
-    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
+    const previewToken = window.sessionStorage.getItem('previewToken')
     // Remove previous preview data
-    const keys: string[] = await contentStorage.getKeys(`${previewToken.value}:`)
+    const keys: string[] = await contentStorage.getKeys(`${previewToken}:`)
     await Promise.all(keys.map(key => contentStorage.removeItem(key)))
 
     // Set preview meta
     const sources = new Set<string>(files.map(file => file.parsed!._id.split(':').shift()!))
-    await contentStorage.setItem(`${previewToken.value}$`, JSON.stringify({ ignoreSources: Array.from(sources) }))
+    await contentStorage.setItem(`${previewToken}$`, JSON.stringify({ ignoreSources: Array.from(sources) }))
 
     // Handle content files
     await Promise.all(
-      files.map(item => contentStorage.setItem(`${previewToken.value}:${item.parsed!._id}`, JSON.stringify(item.parsed)))
+      files.map(item => contentStorage.setItem(`${previewToken}:${item.parsed!._id}`, JSON.stringify(item.parsed)))
     )
   }
 
@@ -118,19 +116,19 @@ export const useStudio = () => {
   }
 
   const requestPreviewSynchronization = async () => {
-    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
+    const previewToken = window.sessionStorage.getItem('previewToken')
     // Fetch preview data from station
     await $fetch<PreviewResponse>('api/projects/preview/sync', {
       baseURL: studioConfig?.apiURL,
       method: 'POST',
       params: {
-        token: previewToken.value
+        token: previewToken
       }
     }) as any
   }
 
   const mountPreviewUI = () => {
-    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
+    const previewToken = window.sessionStorage.getItem('previewToken')
     // Show loading
     const el = document.createElement('div')
     el.id = '__nuxt_preview_wrapper'
@@ -145,12 +143,12 @@ export const useStudio = () => {
 
   // Content Helpers
   const findContentWithId = async (path: string): Promise<ParsedContent | null> => {
-    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
+    const previewToken = window.sessionStorage.getItem('previewToken')
     if (!path) {
       return null
     }
     path = path.replace(/\/$/, '')
-    let content = await storage.value?.getItem(`${previewToken.value}:${path}`)
+    let content = await storage.value?.getItem(`${previewToken}:${path}`)
     if (!content) {
       content = await storage.value?.getItem(`cached:${path}`)
     }
@@ -161,15 +159,15 @@ export const useStudio = () => {
   }
 
   const updateContent = (content: PreviewFile) => {
-    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
+    const previewToken = window.sessionStorage.getItem('previewToken')
     if (!storage.value) { return }
 
-    storage.value.setItem(`${previewToken.value}:${content.parsed?._id}`, JSON.stringify(content.parsed))
+    storage.value.setItem(`${previewToken}:${content.parsed?._id}`, JSON.stringify(content.parsed))
   }
 
   const removeContentWithId = async (path: string) => {
-    const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
-    await storage.value?.removeItem(`${previewToken.value}:${path}`)
+    const previewToken = window.sessionStorage.getItem('previewToken')
+    await storage.value?.removeItem(`${previewToken}:${path}`)
   }
 
   const requestRerender = async () => {
@@ -298,26 +296,13 @@ export const useStudio = () => {
       }
     })
 
+    nuxtApp.hook('page:finish', () => {
+      detectRenderedContents()
+    })
+
     // @ts-ignore
-    nuxtApp.hook('content:document-driven:finish', ({ route, page, dedup }) => {
-      if (dedup || isDocumentDrivenInitialHook.value) {
-        isDocumentDrivenInitialHook.value = false
-        return
-      }
-
-      // Ignore if navigating from editor
-      if (page && editorSelectedPath.value === page._path) {
-        editorSelectedPath.value = ''
-        return
-      }
-
-      window.parent.postMessage({
-        type: 'nuxt-studio:preview:document-driven:finish',
-        payload: {
-          ...routePayload(route),
-          contentId: page?._id
-        }
-      }, '*')
+    nuxtApp.hook('content:document-driven:finish', ({ route, page }) => {
+      route.meta.studio_page_contentId = page?._id
     })
 
     // @ts-ignore
@@ -327,12 +312,38 @@ export const useStudio = () => {
         payload: routePayload(useRoute())
       }, '*')
 
-      router?.afterEach((to: any) => {
-        window.parent.postMessage({
-          type: 'nuxt-studio:preview:route-changed',
-          payload: routePayload(to)
-        }, '*')
-      })
+      setTimeout(() => {
+        // Initial sync
+        detectRenderedContents()
+      }, 100)
     })
+
+    // Inject Utils to window
+    function detectRenderedContents () {
+      const renderedContents = Array.from(window.document.querySelectorAll('[data-content-id]'))
+        .map(el => el.getAttribute('data-content-id')!)
+
+      const contentIds = Array
+        .from(new Set([route.meta.studio_page_contentId as string, ...renderedContents]))
+        .filter(Boolean)
+
+      if (editorSelectedPath.value === contentIds[0]) {
+        editorSelectedPath.value = ''
+        return
+      }
+
+      window.openContentInStudioEditor(contentIds, { navigate: true, pageContentId: route.meta.studio_page_contentId as string })
+    }
+
+    window.openContentInStudioEditor = (contentIds: string[], data = {}) => {
+      window.parent.postMessage({
+        type: 'nuxt-studio:preview:navigate',
+        payload: {
+          ...routePayload(route),
+          contentIds,
+          ...data
+        }
+      }, '*')
+    }
   }
 }

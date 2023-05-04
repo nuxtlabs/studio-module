@@ -1,9 +1,7 @@
 import type { ComponentMeta } from 'vue-component-meta'
 import { eventHandler } from 'h3'
 import { joinURL } from 'ufo'
-// @ts-ignore
 import { version } from '../../../../package.json'
-// @ts-ignore
 import { useRuntimeConfig, useAppConfig } from '#imports'
 // @ts-ignore
 import components from '#nuxt-component-meta/nitro'
@@ -33,7 +31,7 @@ export default eventHandler(async () => {
 
   const appConfig = useAppConfig()
   const runtimeConfig = useRuntimeConfig()
-  const { app, appConfigSchema, content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment } } = runtimeConfig
+  const { app, appConfigSchema, content: { sources, ignores, locales, highlight, navigation, documentDriven, experimental } } = runtimeConfig
 
   // Support for __pinceau_tokens_{schema|config}.json
   const hasPinceau = runtimeConfig?.pinceau?.studio
@@ -56,7 +54,7 @@ export default eventHandler(async () => {
     tokensConfigSchema,
     tokensConfig,
     // @nuxt/content
-    content: { sources, ignores, locales, highlight, navigation, documentDriven, experiment },
+    content: { sources, ignores, locales, highlight, navigation, documentDriven, experimental },
     // nuxt-component-meta
     components: filteredComponents
   }
