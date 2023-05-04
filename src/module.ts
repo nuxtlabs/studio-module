@@ -32,12 +32,12 @@ export default defineNuxtModule<ModuleOptions>({
     })
 
     // Support custom ~/.studio/app.config.json
-    // nuxt.hook('app:resolve', (appCtx) => {
-    //   const studioAppConfigPath = resolveAlias('~/.studio/app.config.json')
-    //   if (existsSync(studioAppConfigPath)) {
-    //     appCtx.configs.unshift(studioAppConfigPath)
-    //   }
-    // })
+    nuxt.hook('app:resolve', (appCtx) => {
+      const studioAppConfigPath = resolveAlias('~/.studio/app.config.json')
+      if (existsSync(studioAppConfigPath)) {
+        appCtx.configs.unshift(studioAppConfigPath)
+      }
+    })
 
     // Only enable Studio in production build
     if (options.enabled === 'production' && nuxt.options.dev === true) {
