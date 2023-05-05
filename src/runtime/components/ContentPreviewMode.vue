@@ -55,6 +55,12 @@ const sync = async (data: PreviewResponse) => {
     return
   }
 
+  // Ensure that preview token is set in cookie
+  // This is needed for cases that user wants to exit preview mode before preview is ready
+  if (!useCookie('previewToken').value) {
+    return
+  }
+
   previewReady.value = true
   // Remove query params in url to refresh page (in case of 404 with no SPA fallback)
   await router.replace({ query: {} })
