@@ -2,7 +2,7 @@
 import { onMounted, ref, onUnmounted, Transition } from 'vue'
 import type { Socket } from 'socket.io-client'
 import { useCookie, useRoute, useNuxtApp, useRouter } from '#app'
-import type { PreviewResponse } from '../../../types'
+import type { PreviewResponse } from '../types'
 
 const props = defineProps({
   previewToken: {

@@ -25,10 +25,10 @@ export default defineNuxtPlugin((nuxtApp) => {
       return
     }
 
-    if (route.query.preview && previewToken.value !== route.query.preview) {
+    if (route.query.preview) {
       previewToken.value = String(route.query.preview)
-      window.sessionStorage.setItem('previewToken', String(route.query.preview))
     }
+    window.sessionStorage.setItem('previewToken', String(previewToken.value))
 
     // Listen to `content:storage` hook to get storage instance
     // There is some cases that `content:storage` hook is called before initializing preview
