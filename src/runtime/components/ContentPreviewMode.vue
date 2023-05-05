@@ -2,7 +2,7 @@
 import { onMounted, ref, onUnmounted, Transition } from 'vue'
 import type { Socket } from 'socket.io-client'
 import { useCookie, useRoute, useNuxtApp, useRouter } from '#app'
-import type { PreviewResponse } from '../../../types'
+import type { PreviewResponse } from '../types'
 
 const props = defineProps({
   previewToken: {
@@ -52,6 +52,12 @@ const sync = async (data: PreviewResponse) => {
   // If data is not updated, it means the storage is not ready yet and we should try again
   if (!isUpdated) {
     setTimeout(() => sync(data), 1000)
+    return
+  }
+
+  // Ensure that preview token is set in cookie
+  // This is needed for cases that user wants to exit preview mode before preview is ready
+  if (!useCookie('previewToken').value) {
     return
   }
 
