@@ -3,7 +3,7 @@ import { defineNuxtConfig } from 'nuxt/config'
 export default defineNuxtConfig({
   extends: '@nuxt-themes/alpine',
   alias: {
-    '@nuxthq/studio': '../src/module',
+    '@nuxthq/studio': '../src/module'
   },
   $schema: {
     appConfig: {
