@@ -36,27 +36,27 @@
     "release": "yarn lint && release-it"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.4.2",
+    "@nuxt/kit": "^3.4.3",
     "defu": "^6.1.2",
     "nuxt-component-meta": "^0.5.1",
     "nuxt-config-schema": "^0.4.6",
     "socket.io-client": "^4.6.1",
-    "ufo": "^1.1.1"
+    "ufo": "^1.1.2"
   },
   "devDependencies": {
     "@nuxt-themes/alpine": "^1.5.0",
     "@nuxt-themes/elements": "0.9.4",
     "@nuxt/content": "^2.6.0",
-    "@nuxt/module-builder": "^0.3.0",
-    "@nuxt/schema": "^3.4.2",
+    "@nuxt/module-builder": "^0.3.1",
+    "@nuxt/schema": "^3.4.3",
     "@nuxtjs/color-mode": "^3.2.0",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
-    "@types/node": "^18.16.1",
-    "eslint": "^8.39.0",
+    "@types/node": "^20.1.2",
+    "eslint": "^8.40.0",
     "jiti": "^1.18.2",
-    "nuxt": "^3.4.2",
+    "nuxt": "^3.4.3",
     "pinceau": "^0.18.9",
-    "release-it": "^15.10.1",
+    "release-it": "^15.10.3",
     "typescript": "^5.0.4"
   },
   "release-it": {
