@@ -1,8 +1,8 @@
 import { existsSync } from 'node:fs'
 import { defu } from 'defu'
-import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler, resolveAlias, extendPages } from '@nuxt/kit'
+import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler, resolveAlias } from '@nuxt/kit'
 
-const log = logger.withScope('@nuxt/studio')
+const log = logger.withTag('@nuxt/studio')
 
 export interface ModuleOptions {
   /**
@@ -30,7 +30,14 @@ export default defineNuxtModule<ModuleOptions>({
         default: schema.default?.appConfig
       }
     })
-    await installModule('nuxt-config-schema')
+
+    // Support custom ~/.studio/app.config.json
+    nuxt.hook('app:resolve', (appCtx) => {
+      const studioAppConfigPath = resolveAlias('~/.studio/app.config.json')
+      if (existsSync(studioAppConfigPath)) {
+        appCtx.configs.unshift(studioAppConfigPath)
+      }
+    })
 
     // Only enable Studio in production build
     if (options.enabled === 'production' && nuxt.options.dev === true) {
@@ -92,6 +99,7 @@ export default defineNuxtModule<ModuleOptions>({
     addPrerenderRoutes('/__studio.json')
 
     // Install dependencies
+    await installModule('nuxt-config-schema')
     await installModule('nuxt-component-meta', {
       globalsOnly: true
     })

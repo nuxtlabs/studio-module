@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, onUnmounted, Transition } from 'vue'
-import { useCookie, useRoute, useNuxtApp, useRouter } from '#app'
 import type { Socket } from 'socket.io-client'
+import { useCookie, useRoute, useNuxtApp, useRouter } from '#app'
 import type { PreviewResponse } from '../../../types'
 
 const props = defineProps({
@@ -56,10 +56,11 @@ const sync = async (data: PreviewResponse) => {
   }
 
   previewReady.value = true
+  // Remove query params in url to refresh page (in case of 404 with no SPA fallback)
+  await router.replace({ query: {} })
+
   // @ts-ignore
   nuxtApp.callHook('nuxt-studio:preview:ready')
-  // Remove query params in url to refresh page (in case of 404 with no SPA fallback)
-  router.replace({ query: {} })
 
   if (window.parent && window.self !== window.parent) {
     socket.disconnect()

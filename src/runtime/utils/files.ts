@@ -1,4 +1,4 @@
-import { DraftFile, PreviewFile } from '../../../types'
+import type { DraftFile, PreviewFile } from '../../../types'
 
 export const mergeDraft = (dbFiles: PreviewFile[] = [], draftAdditions: DraftFile[], draftDeletions: DraftFile[]) => {
   const additions = [...(draftAdditions || [])]
