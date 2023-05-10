@@ -1,5 +1,5 @@
 import { defu } from 'defu'
-import type { JSType, Schema } from 'untyped'
+import type { JSType, Schema, InputValue } from 'untyped'
 
 export type ConfigInputsTypes =
   | Exclude<JSType, 'symbol' | 'function' | 'any' | 'bigint'>
@@ -154,7 +154,7 @@ export type StudioFieldData =
 export function field (
   type: keyof typeof supportedFields | StudioFieldData,
   defaultValue?: any
-): Schema {
+): InputValue {
   // Custom `type` field should get overwritten by native Schema ones at this stage
   const result = defu(
     supportedFields[typeof type === 'string' ? type : type.type],
@@ -175,5 +175,7 @@ export function field (
     result.default = defaultValue
   }
 
-  return result as Schema
+  return {
+    $schema: result
+  }
 }
