@@ -7,7 +7,7 @@ import { callWithNuxt } from '#app'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles } from '../utils'
 import { refreshNuxtData, useAppConfig, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
-import type { PreviewResponse, FileChangeMessagePayload, PreviewFile } from '~~/../types'
+import type { PreviewResponse, FileChangeMessagePayload, PreviewFile } from '../types'
 
 const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
 
@@ -207,9 +207,9 @@ export const useStudio = () => {
       return
     }
     const router = useRouter()
+    const route = useRoute()
 
     const editorSelectedPath = ref('')
-    const isDocumentDrivenInitialHook = ref(true)
 
     // Evaluate route payload
     const routePayload = (route: RouteLocationNormalized) => ({
