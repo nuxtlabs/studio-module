@@ -101,11 +101,9 @@ export const useStudio = () => {
     const contentFiles = mergedFiles.filter(item => !([StudioConfigFiles.appConfig, StudioConfigFiles.tokensConfig].includes(item.path)))
     await syncPreviewFiles(storage.value, contentFiles, (data.files || []).length !== 0)
 
-    // Handle `.studio/app.config.json`
     const appConfig = mergedFiles.find(item => item.path === StudioConfigFiles.appConfig)
     syncPreviewAppConfig(appConfig?.parsed)
 
-    // Handle `.studio/tokens.config.json`
     const tokensConfig = mergedFiles.find(item => item.path === StudioConfigFiles.tokensConfig)
     syncPreviewTokensConfig(tokensConfig?.parsed)
 
@@ -271,7 +269,6 @@ export const useStudio = () => {
         case 'nuxt-studio:config:file-changed': {
           const { additions = [], deletions = [] } = payload as FileChangeMessagePayload
 
-          // Handle `.studio/app.config.json`
           const appConfig = additions.find(item => item.path === StudioConfigFiles.appConfig)
           if (appConfig) {
             syncPreviewAppConfig(appConfig?.parsed)
@@ -281,7 +278,6 @@ export const useStudio = () => {
             syncPreviewAppConfig(undefined)
           }
 
-          // Handle `.studio/tokens.config.json`
           const tokensConfig = additions.find(item => item.path === StudioConfigFiles.tokensConfig)
           if (tokensConfig) {
             syncPreviewTokensConfig(tokensConfig?.parsed)
