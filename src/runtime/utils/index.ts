@@ -5,8 +5,6 @@ export const StudioConfigFiles = {
   tokensConfig: 'tokens.config.ts'
 }
 
-export const isConfigFile = (itemPath: string, configPath: string) => itemPath.match(/(\.ts|\.js)$/) && itemPath.slice(0, -3) === configPath
-
 export const createSingleton = <T, Params extends Array<any>>(fn: () => T) => {
   let instance: T | undefined
   return (...args: Params) => {
