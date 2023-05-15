@@ -3,10 +3,10 @@ import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 import { defu } from 'defu'
 import type { RouteLocationNormalized } from 'vue-router'
-import { callWithNuxt } from '#app'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
-import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles, StudioConfigRoot } from '../utils'
+import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles } from '../utils'
 import type { PreviewFile, PreviewResponse, FileChangeMessagePayload } from '../types'
+import { callWithNuxt } from '#app'
 import { refreshNuxtData, useAppConfig, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
 
 const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
@@ -14,7 +14,6 @@ const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((use
 export const useStudio = () => {
   const nuxtApp = useNuxtApp()
   const { studio: studioConfig, content: contentConfig } = useRuntimeConfig().public
-  const route = useRoute()
 
   // App config (required)
   const initialAppConfig = useDefaultAppConfig()
@@ -99,14 +98,12 @@ export const useStudio = () => {
     const mergedFiles = mergeDraft(data.files, data.additions, data.deletions)
 
     // Handle content files
-    const contentFiles = mergedFiles.filter(item => !item.path.startsWith(StudioConfigRoot))
+    const contentFiles = mergedFiles.filter(item => !([StudioConfigFiles.appConfig, StudioConfigFiles.tokensConfig].includes(item.path)))
     await syncPreviewFiles(storage.value, contentFiles, (data.files || []).length !== 0)
 
-    // Handle `.studio/app.config.json`
     const appConfig = mergedFiles.find(item => item.path === StudioConfigFiles.appConfig)
     syncPreviewAppConfig(appConfig?.parsed)
 
-    // Handle `.studio/tokens.config.json`
     const tokensConfig = mergedFiles.find(item => item.path === StudioConfigFiles.tokensConfig)
     syncPreviewTokensConfig(tokensConfig?.parsed)
 
@@ -208,9 +205,9 @@ export const useStudio = () => {
       return
     }
     const router = useRouter()
+    const route = useRoute()
 
     const editorSelectedPath = ref('')
-    const isDocumentDrivenInitialHook = ref(true)
 
     // Evaluate route payload
     const routePayload = (route: RouteLocationNormalized) => ({
@@ -271,7 +268,7 @@ export const useStudio = () => {
         }
         case 'nuxt-studio:config:file-changed': {
           const { additions = [], deletions = [] } = payload as FileChangeMessagePayload
-          // Handle `.studio/app.config.json`
+
           const appConfig = additions.find(item => item.path === StudioConfigFiles.appConfig)
           if (appConfig) {
             syncPreviewAppConfig(appConfig?.parsed)
@@ -281,7 +278,6 @@ export const useStudio = () => {
             syncPreviewAppConfig(undefined)
           }
 
-          // Handle `.studio/tokens.config.json`
           const tokensConfig = additions.find(item => item.path === StudioConfigFiles.tokensConfig)
           if (tokensConfig) {
             syncPreviewTokensConfig(tokensConfig?.parsed)

@@ -5,11 +5,6 @@ export default defineNuxtConfig({
   alias: {
     '@nuxthq/studio': '../src/module'
   },
-  $schema: {
-    appConfig: {
-      configFromNuxtConfig: true
-    }
-  },
   modules: [
     // TODO: module functions are not supported yet
     '../src/module'

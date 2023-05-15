@@ -1,9 +1,8 @@
 export * from './files'
 
-export const StudioConfigRoot = '.studio'
 export const StudioConfigFiles = {
-  appConfig: `${StudioConfigRoot}/app.config.json`,
-  tokensConfig: `${StudioConfigRoot}/tokens.config.json`
+  appConfig: 'app.config.ts',
+  tokensConfig: 'tokens.config.ts'
 }
 
 export const createSingleton = <T, Params extends Array<any>>(fn: () => T) => {

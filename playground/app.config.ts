@@ -1,6 +1,5 @@
 export default defineAppConfig({
   // @ts-ignore
-  someConfig: 'user config',
   alpine: {
     title: 'Alpine',
     description: 'The minimalist blog theme',

@@ -30,6 +30,7 @@ export default defineNuxtModule<ModuleOptions>({
         default: schema.default?.appConfig
       }
     })
+
     // Support custom ~/.studio/app.config.json
     nuxt.hook('app:resolve', (appCtx) => {
       const studioAppConfigPath = resolveAlias('~/.studio/app.config.json')
