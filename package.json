@@ -33,7 +33,8 @@
     "build": "nuxt-module-build",
     "lint": "eslint --ext .vue,.ts,.js,.mjs .",
     "prepack": "yarn lint && yarn build",
-    "release": "yarn lint && release-it"
+    "release": "yarn lint && release-it",
+    "pre:release": "yarn lint && release-it --preRelease"
   },
   "dependencies": {
     "@nuxt/kit": "^3.4.3",
