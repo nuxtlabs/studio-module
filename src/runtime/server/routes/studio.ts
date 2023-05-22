@@ -31,7 +31,7 @@ export default eventHandler(async () => {
 
   const appConfig = useAppConfig()
   const runtimeConfig = useRuntimeConfig()
-  const { app, appConfigSchema, content: { sources, ignores, locales, highlight, navigation, documentDriven, experimental } } = runtimeConfig
+  const { app, appConfigSchema, studio, content: { sources, ignores, locales, highlight, navigation, documentDriven, experimental } } = runtimeConfig
 
   // Support for __pinceau_tokens_{schema|config}.json
   const hasPinceau = runtimeConfig?.pinceau?.studio
@@ -47,6 +47,7 @@ export default eventHandler(async () => {
   return {
     // Studio version
     version,
+    tokens: studio?.publicToken,
     // app.config
     appConfigSchema: appConfigSchema || {},
     appConfig,
