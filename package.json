@@ -22,7 +22,7 @@
     "./theme": {
       "import": "./dist/theme.mjs",
       "require": "./dist/theme.cjs",
-      "types": "./dist/theme.d.ts"
+      "types": "./theme.d.ts"
     }
   },
   "main": "./dist/module.cjs",
