@@ -72,14 +72,15 @@
   "pnpm": {
     "peerDependencyRules": {
       "allowedVersions": {
-        "vue": "^3.2.0"
+        "vue": "*"
       },
       "ignoreMissing": [
         "prosemirror-*",
         "@babel/core",
         "webpack",
         "axios",
-        "postcss"
+        "postcss",
+        "vue"
       ]
     }
   },
