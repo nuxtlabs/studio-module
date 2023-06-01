@@ -10,7 +10,8 @@
   ],
   "license": "UNLICENSED",
   "files": [
-    "dist"
+    "dist",
+    "theme.d.ts"
   ],
   "type": "module",
   "exports": {
