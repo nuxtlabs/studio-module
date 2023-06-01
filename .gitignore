@@ -10,8 +10,13 @@ node_modules
 .cache
 
 # Yarn
-**/.yarn/cache
-**/.yarn/*state*
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # Generated dirs
 dist
@@ -33,9 +38,6 @@ coverage
 *.lcov
 .nyc_output
 
-# VSCode
-.vscode
-
 # Intellij idea
 *.iml
 .idea
@@ -49,3 +51,6 @@ coverage
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# VSCode
+.history

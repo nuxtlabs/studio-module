@@ -1,153 +1,110 @@
-import { stat } from 'fs/promises'
-import { withoutTrailingSlash } from 'ufo'
+import { existsSync } from 'node:fs'
 import { defu } from 'defu'
-import { defineNuxtModule, installModule, addServerHandler, addPlugin, extendViteConfig, addComponentsDir, createResolver, logger } from '@nuxt/kit'
-import meta from 'nuxt-component-meta'
+import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler, resolveAlias } from '@nuxt/kit'
 
-const log = logger.withScope('@nuxt/studio')
+const log = logger.withTag('@nuxt/studio')
 
-export interface ModuleOptions {}
+export interface ModuleOptions {
+  /**
+   * Enable Studio mode
+   * @default: 'production'
+   **/
+  enabled: 'production' | true
+}
 
 export interface ModuleHooks {}
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
+    name: 'studio',
     configKey: 'studio'
   },
-  defaults: {},
-  async setup (_options, nuxt) {
+  defaults: {
+    enabled: 'production'
+  },
+  async setup (options, nuxt) {
+    // @ts-ignore
+    nuxt.hook('schema:resolved', (schema: any) => {
+      nuxt.options.runtimeConfig.appConfigSchema = {
+        properties: schema.properties?.appConfig,
+        default: schema.default?.appConfig
+      }
+    })
+
+    // Support custom ~/.studio/app.config.json
+    nuxt.hook('app:resolve', (appCtx) => {
+      const studioAppConfigPath = resolveAlias('~/.studio/app.config.json')
+      if (existsSync(studioAppConfigPath)) {
+        appCtx.configs.unshift(studioAppConfigPath)
+      }
+    })
+
+    // Only enable Studio in production build
+    if (options.enabled === 'production' && nuxt.options.dev === true) {
+      return
+    }
+
+    const contentModule = '@nuxt/content'
+    // Check Content module is installed
+    if (
+      !nuxt.options.runtimeConfig.content &&
+      !nuxt.options.modules.includes(contentModule)
+    ) {
+      log.warn('Could not find `@nuxt/content` module. Please install it to enable preview mode.')
+      return
+    }
+    // Check Content module version
+    const contentModuleVersion = await import(contentModule)
+      .then(m => m.default || m)
+      .then((m: any) => m.getMeta())
+      .then(m => m.version)
+      .catch(() => '0')
+    if (contentModuleVersion < '2.1.1') {
+      log.warn('Please update `@nuxt/content` to version 2.1.1 or higher to enable preview mode.')
+      return
+    }
+
+    // Check Pinceau module activated
+    // @ts-ignore
+    nuxt.hook('pinceau:options', (options) => {
+      options.studio = true
+    })
+
     const { resolve } = createResolver(import.meta.url)
 
-    nuxt.options.runtimeConfig.public.studio = defu(nuxt.options.runtimeConfig.public.studio, {
-      apiURL: process.env.NUXT_PUBLIC_STUDIO_API_URL || 'https://api.nuxt.com'
-    })
-
-    nuxt.hook('nitro:config', (nitroConfig) => {
-      nitroConfig.storage = nitroConfig.storage || {}
-      nitroConfig.storage['content:source:preview'] = {
-        driver: resolve('./runtime/server/preview-driver.mjs') as any,
-        baseURL: nuxt.options.runtimeConfig.public.studio.apiURL
-      }
-      // Inline module runtime in Nitro bundle
-      nitroConfig.externals = defu(nitroConfig.externals, {
-        inline: [resolve('./runtime')]
-      })
-      nitroConfig.alias['#studio/server/utils'] = resolve('./runtime/server/utils')
-    })
-
-    // @ts-ignore
-    await installModule(meta)
-
-    // TODO: All below could be simplified with `extends: @nuxt/studio` with a separate chunk
-    addComponentsDir({
-      path: resolve('./runtime/components')
-    })
-
-    addServerHandler({
-      method: 'get',
-      route: '/api/_studio',
-      handler: resolve('./runtime/server/api/index')
-    })
-    addServerHandler({
-      method: 'get',
-      route: '/api/_studio/components',
-      handler: resolve('./runtime/server/api/components')
-    })
-
-    // Dev server handlers (tree & content management)
-    if (nuxt.options.dev) {
-      nuxt.options.nitro.alias = nuxt.options.nitro.alias || {}
-      nuxt.options.nitro.alias['#studio/server/utils'] = resolve('./runtime/server/utils')
-      addServerHandler({
-        method: 'get',
-        route: '/api/_studio/content/files',
-        handler: resolve('./runtime/server/api/content/files.get')
-      })
-      addServerHandler({
-        method: 'get',
-        route: '/api/_studio/content/navigation',
-        handler: resolve('./runtime/server/api/content/navigation.get')
-      })
-      addServerHandler({
-        method: 'get',
-        route: '/api/_studio/content/tree',
-        handler: resolve('./runtime/server/api/content/tree.get')
-      })
-      addServerHandler({
-        method: 'get',
-        route: '/api/_studio/content/**:id',
-        handler: resolve('./runtime/server/api/content/[id].get')
-      })
-      // TODO: sould be removed, seems that /api/_studio/content/1.index.md sends back a 405
-      addServerHandler({
-        method: 'get',
-        route: '/api/_studio/content/:id',
-        handler: resolve('./runtime/server/api/content/[id].get')
-      })
-      addServerHandler({
-        method: 'post',
-        route: '/api/_studio/content/:id',
-        handler: resolve('./runtime/server/api/content/[id].post')
-      })
-      addServerHandler({
-        method: 'delete',
-        route: '/api/_studio/content/:id',
-        handler: resolve('./runtime/server/api/content/[id].delete')
-      })
+    const apiURL = process.env.NUXT_PUBLIC_STUDIO_API_URL || process.env.STUDIO_API || 'https://api.nuxt.studio'
+    const publicToken = process.env.NUXT_PUBLIC_STUDIO_TOKENS
+    nuxt.options.runtimeConfig.studio = nuxt.options.runtimeConfig.studio || {
+      publicToken
     }
-
-    addPlugin(resolve('./runtime/plugins/iframe.client'))
-    addPlugin(resolve('./runtime/plugins/preview-detector'))
-
-    if (!nuxt.options.dev) {
-      nuxt.options.nitro.prerender = nuxt.options.nitro.prerender || {}
-      nuxt.options.nitro.prerender.routes = nuxt.options.nitro.prerender.routes || []
-      nuxt.options.nitro.prerender.routes.push('/api/_studio/components')
-      nuxt.options.nitro.prerender.routes.push('/api/_studio')
-    }
+    nuxt.options.runtimeConfig.public.studio = defu(nuxt.options.runtimeConfig.public.studio, { apiURL })
 
     extendViteConfig((config) => {
       config.optimizeDeps = config.optimizeDeps || {}
       config.optimizeDeps.include = config.optimizeDeps.include || []
-      config.optimizeDeps.include.push(...[
-        'socket.io-client'
-      ])
+      config.optimizeDeps.include.push(
+        'socket.io-client', 'slugify'
+      )
     })
 
-    // Serve Studio Client /_studio/ using Nitro
-    const studioUI = resolve('../ui/.output/public')
-    const dirStat = await stat(studioUI).catch(() => null)
-    // Production mode
-    if (dirStat?.isDirectory()) {
-      nuxt.options.nitro.publicAssets = nuxt.options.nitro.publicAssets || []
-      nuxt.options.nitro.publicAssets.push({
-        baseURL: '/_studio/',
-        dir: studioUI
-      })
-      // Production API?
-      // TODO: this does not work and throw this error
-      // Cannot start nuxt:  Cannot find module 'studio.nuxt.com/module/app/.output/server/node_modules/node-fetch-native/dist/polyfill.cjs'
-      // const studioServer = await import('../app/.output/server/index.mjs')
-      // console.log('studioServer', studioServer)
-      // addServerHandler(studioServer)
+    // Add plugins
+    addPlugin(resolve('./runtime/plugins/preview.client'))
 
-      nuxt.hook('listen', (_, listener) => {
-        const viewerUrl = `${withoutTrailingSlash(listener.url)}/_studio/`
-        // eslint-disable-next-line no-console
-        console.log(`  > Studio: \`${viewerUrl}\`\n`)
-      })
-    } else {
-      // Studio Development mode
-      // TODO: would be possible with extends supporting an separate app entrypoint
-      log.warn('Could not inject Nuxt Studio application, please run `yarn build`')
-      log.info([
-        'To develop Nuxt Studio:',
-        '  - Change directory to `./module`',
-        '  - Run `yarn play`',
-        '  - Copy `app/.env.example` to `app/.env` and adjust based on playground port',
-        '  - Run `yarn dev` on another terminal and open studio url',
-        ''
-      ].join('\n'))
-    }
+    // Register components
+    addComponentsDir({ path: resolve('./runtime/components') })
+
+    // Add server route to know Studio is enabled
+    addServerHandler({
+      method: 'get',
+      route: '/__studio.json',
+      handler: resolve('./runtime/server/routes/studio')
+    })
+    addPrerenderRoutes('/__studio.json')
+
+    // Install dependencies
+    await installModule('nuxt-config-schema')
+    await installModule('nuxt-component-meta', {
+      globalsOnly: true
+    })
   }
 })

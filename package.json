@@ -1,15 +1,15 @@
 {
   "name": "@nuxthq/studio",
-  "version": "0.1.0",
+  "version": "0.13.0",
   "homepage": "https://github.com/nuxtlabs/studio.nuxt.com/tree/dev/modules/studio",
   "repository": "https://github.com/nuxtlabs/studio.nuxt.com",
+  "packageManager": "pnpm@7.30.1",
   "keywords": [
     "nuxt",
     "studio"
   ],
   "license": "UNLICENSED",
   "files": [
-    "ui",
     "dist"
   ],
   "type": "module",
@@ -28,46 +28,71 @@
   "main": "./dist/module.cjs",
   "types": "./dist/types.d.ts",
   "scripts": {
-    "play": "nuxi dev playground",
-    "dev": "nuxi dev ui",
-    "dev:prepare": "nuxi prepare ui",
-    "build": "yarn dev:prepare && yarn build:module && yarn build:ui",
-    "build:ui": "NITRO_PRESET=node nuxi build ui",
-    "build:module": "nuxt-module-build"
+    "prepare": "nuxt prepare playground",
+    "dev": "NUXT_STUDIO_DEV_PROXY=true nuxt dev playground",
+    "build": "nuxt-module-build",
+    "lint": "eslint --ext .vue,.ts,.js,.mjs .",
+    "prepack": "yarn lint && yarn build",
+    "release": "yarn lint && release-it",
+    "pre:release": "yarn lint && release-it --preRelease"
   },
   "dependencies": {
-    "@nuxt/kit": "npm:@nuxt/kit-edge@latest",
-    "nuxt-component-meta": "^0.1.9"
+    "@nuxt/kit": "^3.4.3",
+    "defu": "^6.1.2",
+    "nuxt-component-meta": "^0.5.1",
+    "nuxt-config-schema": "^0.4.6",
+    "socket.io-client": "^4.6.1",
+    "ufo": "^1.1.2"
   },
   "devDependencies": {
-    "@milkdown/core": "^6.3.2",
-    "@milkdown/ctx": "^6.3.2",
-    "@milkdown/plugin-collaborative": "^6.3.2",
-    "@milkdown/plugin-cursor": "^6.3.2",
-    "@milkdown/plugin-emoji": "^6.3.2",
-    "@milkdown/plugin-history": "^6.3.2",
-    "@milkdown/plugin-listener": "^6.3.2",
-    "@milkdown/plugin-math": "^6.3.2",
-    "@milkdown/plugin-slash": "^6.3.2",
-    "@milkdown/plugin-tooltip": "^6.3.2",
-    "@milkdown/plugin-trailing": "^6.3.2",
-    "@milkdown/preset-commonmark": "^6.3.2",
-    "@milkdown/preset-gfm": "^6.3.2",
-    "@milkdown/prose": "^6.3.2",
-    "@milkdown/theme-pack-helper": "^6.3.2",
-    "@milkdown/utils": "^6.3.2",
-    "@milkdown/vue": "^6.3.2",
-    "@nuxt-themes/elements-edge": "^0.0.1-ac24120",
-    "@nuxt/content": "npm:@nuxt/content-edge@latest",
-    "@nuxt/module-builder": "^0.1.7",
-    "@nuxthq/ui": "npm:@nuxthq/ui-edge@latest",
-    "jiti": "^1.14.0",
-    "nuxt": "npm:nuxt3@latest",
-    "remark-mdc": "^1.0.4",
-    "shiki-es": "^0.1.2",
-    "socket.io-client": "^4.5.1",
-    "splitpanes": "^3.1.1",
-    "y-websocket": "^1.4.3",
-    "yjs": "^13.5.40"
+    "@nuxt-themes/alpine": "^1.5.0",
+    "@nuxt-themes/elements": "0.9.4",
+    "@nuxt/content": "^2.6.0",
+    "@nuxt/module-builder": "^0.3.1",
+    "@nuxt/schema": "^3.4.3",
+    "@nuxtjs/color-mode": "^3.2.0",
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@types/node": "^20.1.2",
+    "eslint": "^8.40.0",
+    "jiti": "^1.18.2",
+    "nuxt": "^3.4.3",
+    "pinceau": "^0.18.9",
+    "release-it": "^15.10.3",
+    "typescript": "^5.0.4"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore(release): release v${version}"
+    },
+    "github": {
+      "release": true,
+      "releaseName": "v${version}"
+    }
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "vue": "^3.2.0"
+      },
+      "ignoreMissing": [
+        "prosemirror-*",
+        "@babel/core",
+        "webpack",
+        "axios",
+        "postcss"
+      ]
+    }
+  },
+  "unbuild": {
+    "entries": [
+      "./src/module",
+      "./src/theme"
+    ],
+    "externals": [
+      "untyped"
+    ],
+    "rollup": {
+      "emitCJS": true
+    }
   }
 }

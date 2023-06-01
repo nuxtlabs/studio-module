@@ -1,3 +1,8 @@
 {
-  "extends": "./ui/.nuxt/tsconfig.json"
+  "extends": "./playground/.nuxt/tsconfig.json",
+  "exclude": [
+    "node_modules",
+    ".nuxt",
+    "dist"
+  ]
 }

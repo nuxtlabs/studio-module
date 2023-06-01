@@ -1,48 +1,156 @@
-<script setup>
-import { onMounted, ref, onUnmounted } from 'vue'
-import { refreshNuxtData } from '#imports'
+<script setup lang="ts">
+import { onMounted, ref, onUnmounted, Transition } from 'vue'
+import type { Socket } from 'socket.io-client'
+import { useCookie, useRoute, useNuxtApp, useRouter } from '#app'
+import type { PreviewResponse } from '../types'
 
-const { previewToken, apiURL } = defineProps({
+const props = defineProps({
   previewToken: {
-    type: Object,
+    type: String,
     required: true
   },
   apiURL: {
     type: String,
     required: true
+  },
+  syncPreview: {
+    type: Function,
+    required: true
+  },
+  requestPreviewSyncAPI: {
+    type: Function,
+    required: true
   }
 })
 
 const previewClasses = ['__nuxt_preview', '__preview_enabled']
+
+const nuxtApp = useNuxtApp()
+const router = useRouter()
 const open = ref(true)
 const refreshing = ref(false)
-const ready = ref(false)
+const previewReady = ref(false)
+const error = ref('')
+let socket: Socket
 
 const closePreviewMode = () => {
-  open.value = false
-  // TODO: refactor this to use composable for closing the preview mode
-  // eslint-disable-next-line vue/no-mutating-props
-  previewToken.value = null
+  useCookie('previewToken').value = ''
+  useRoute().query.preview = ''
+  window.sessionStorage.removeItem('previewToken')
 
-  // Cleans up body classes for live preview
-  document.body.classList.remove(...previewClasses)
+  window.location.reload()
+}
 
-  refreshNuxtData()
+const sync = async (data: PreviewResponse) => {
+  const isUpdated = await props.syncPreview(data)
+
+  if (previewReady.value === true) {
+    // Preview already ready, no need to sync again
+    return
+  }
+
+  // If data is not updated, it means the storage is not ready yet and we should try again
+  if (!isUpdated) {
+    setTimeout(() => sync(data), 1000)
+    return
+  }
+
+  // Ensure that preview token is set in cookie
+  // This is needed for cases that user wants to exit preview mode before preview is ready
+  if (!useCookie('previewToken').value) {
+    return
+  }
+
+  previewReady.value = true
+  // Remove query params in url to refresh page (in case of 404 with no SPA fallback)
+  await router.replace({ query: {} })
+
+  // @ts-ignore
+  nuxtApp.callHook('nuxt-studio:preview:ready')
+
+  if (window.parent && window.self !== window.parent) {
+    socket.disconnect()
+  }
 }
 
 onMounted(async () => {
   const io = await import('socket.io-client')
-  const socket = io.connect(`${apiURL}/preview:${previewToken.value}`, {
-    transports: ['websocket', 'polling']
+  socket = io.connect(`${props.apiURL}/preview`, {
+    transports: ['websocket', 'polling'],
+    auth: {
+      token: props.previewToken
+    }
   })
-  ready.value = true
+
+  let syncTimeout: ReturnType<typeof setTimeout> | null
+  socket.on('connect', () => {
+    syncTimeout = setTimeout(() => {
+      if (!previewReady.value) {
+        syncTimeout = setTimeout(() => {
+          error.value = 'Preview sync timed out'
+          previewReady.value = false
+        }, 30000)
+
+        socket.emit('draft:requestSync')
+      }
+    }, 30000)
+  })
+
+  const clearSyncTimeout = () => {
+    if (syncTimeout) {
+      clearTimeout(syncTimeout)
+      syncTimeout = null
+    }
+  }
+
+  // Client should receive draft:sync event on connect
+  socket.on('draft:sync', async (data) => {
+    clearSyncTimeout()
+
+    // If no data is received, it means the draft is not ready yet
+    if (!data) {
+      // Call init to request draft sync via api
+      try {
+        // Wait for draft:ready and then request sync
+        socket.once('draft:ready', () => {
+          socket.emit('draft:requestSync')
+        })
+
+        await props.requestPreviewSyncAPI()
+      } catch (e: any) {
+        clearSyncTimeout()
+
+        switch (e.response.status) {
+          case 404:
+            error.value = 'Preview draft not found'
+            previewReady.value = false
+            break
+          default:
+            error.value = 'An error occurred while syncing preview'
+            previewReady.value = false
+        }
+      }
+      return
+    }
+
+    sync(data)
+  })
+
+  socket.on('draft:unauthorized', () => {
+    clearSyncTimeout()
+    error.value = 'Unauthorized preview token'
+    previewReady.value = false
+  })
+  socket.on('disconnect', () => {
+    clearSyncTimeout()
+  })
 
   // Adds body classes for live preview
   document.body.classList.add(...previewClasses)
 
-  socket.on('draft:update', async () => {
+  socket.on('draft:update', (data) => {
     refreshing.value = true
-    await refreshNuxtData()
+    props.syncPreview(data)
     refreshing.value = false
   })
 })
@@ -54,18 +162,60 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="open" id="__nuxt_preview" :class="{ __preview_ready: ready, __preview_refreshing: refreshing }">
-    <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50.0016 71.0999h29.2561c.9293.0001 1.8422-.241 2.6469-.6992.8047-.4582 1.4729-1.1173 1.9373-1.9109.4645-.7936.7088-1.6939.7083-2.6102-.0004-.9162-.2455-1.8163-.7106-2.6095L64.192 29.713c-.4644-.7934-1.1325-1.4523-1.937-1.9105-.8046-.4581-1.7173-.6993-2.6463-.6993-.9291 0-1.8418.2412-2.6463.6993-.8046.4582-1.4726 1.1171-1.937 1.9105l-5.0238 8.5861-9.8224-16.7898c-.4648-.7934-1.1332-1.4522-1.938-1.9102-.8047-.4581-1.7176-.6992-2.6468-.6992-.9292 0-1.842.2411-2.6468.6992-.8048.458-1.4731 1.1168-1.9379 1.9102L6.56062 63.2701c-.46512.7932-.71021 1.6933-.71061 2.6095-.00041.9163.24389 1.8166.70831 2.6102.46443.7936 1.1326 1.4527 1.93732 1.9109.80473.4582 1.71766.6993 2.64686.6992h18.3646c7.2763 0 12.6422-3.1516 16.3345-9.3002l8.9642-15.3081 4.8015-8.1925 14.4099 24.6083H54.8058l-4.8042 8.1925ZM29.2077 62.899l-12.8161-.0028L35.603 30.0869l9.5857 16.4047-6.418 10.9645c-2.4521 3.9894-5.2377 5.4429-9.563 5.4429Z" fill="currentColor" />
-    </svg>
-    <span>Preview mode enabled</span>
-    <button @click="closePreviewMode">
-      Close
-    </button>
+  <div>
+    <div v-if="open" id="__nuxt_preview" :class="{ __preview_ready: previewReady, __preview_refreshing: refreshing }">
+      <template v-if="previewReady">
+        <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50.0016 71.0999h29.2561c.9293.0001 1.8422-.241 2.6469-.6992.8047-.4582 1.4729-1.1173 1.9373-1.9109.4645-.7936.7088-1.6939.7083-2.6102-.0004-.9162-.2455-1.8163-.7106-2.6095L64.192 29.713c-.4644-.7934-1.1325-1.4523-1.937-1.9105-.8046-.4581-1.7173-.6993-2.6463-.6993-.9291 0-1.8418.2412-2.6463.6993-.8046.4582-1.4726 1.1171-1.937 1.9105l-5.0238 8.5861-9.8224-16.7898c-.4648-.7934-1.1332-1.4522-1.938-1.9102-.8047-.4581-1.7176-.6992-2.6468-.6992-.9292 0-1.842.2411-2.6468.6992-.8048.458-1.4731 1.1168-1.9379 1.9102L6.56062 63.2701c-.46512.7932-.71021 1.6933-.71061 2.6095-.00041.9163.24389 1.8166.70831 2.6102.46443.7936 1.1326 1.4527 1.93732 1.9109.80473.4582 1.71766.6993 2.64686.6992h18.3646c7.2763 0 12.6422-3.1516 16.3345-9.3002l8.9642-15.3081 4.8015-8.1925 14.4099 24.6083H54.8058l-4.8042 8.1925ZM29.2077 62.899l-12.8161-.0028L35.603 30.0869l9.5857 16.4047-6.418 10.9645c-2.4521 3.9894-5.2377 5.4429-9.563 5.4429Z" fill="currentColor" />
+        </svg>
+        <span>Preview mode enabled</span>
+        <button @click="closePreviewMode">
+          Close
+        </button>
+      </template>
+    </div>
+    <Transition name="preview-loading">
+      <div v-if="open && !previewReady && !error">
+        <div id="__preview_background" />
+        <div id="__preview_loader">
+          <svg id="__preview_loading_icon" width="32" height="32" viewBox="0 0 24 24">
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"
+            />
+          </svg>
+          <p>Initializing the preview...</p>
+          <button @click="closePreviewMode">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </Transition>
+    <Transition name="preview-loading">
+      <div v-if="error">
+        <div id="__preview_background" />
+        <div id="__preview_loader">
+          <p>{{ error }}</p>
+          <button @click="closePreviewMode">
+            Exit preview
+          </button>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <style>
+body.__preview_enabled {
+  padding-bottom: 50px;
+}
+</style>
+
+<style scoped>
 #__nuxt_preview {
   height: 50px;
   display: flex;
@@ -84,10 +234,63 @@ onUnmounted(() => {
   border-top: 1px #eee solid;
   transition: bottom 0.3s ease-in-out;
   font-size: 16px;
+  z-index: 10000;
 }
 #__nuxt_preview.__preview_ready {
   bottom: 0;
 }
+
+#__preview_background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+#__preview_loader {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.4rem;
+  z-index: 50;
+  color: black;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+#__preview_loader p {
+  margin: 10px 0;
+}
+
+.dark #__preview_background,
+.dark-mode #__preview_background {
+  background: rgba(0, 0, 0, 0.3);
+}
+.dark #__preview_loader,
+.dark-mode #__preview_loader {
+  color: white;
+}
+
+.preview-loading-enter-active,
+.preview-loading-leave-active {
+  transition: opacity 0.4s;
+}
+.preview-loading-enter,
+.preview-loading-leave-to {
+  opacity: 0;
+}
+
+#__preview_loading_icon {
+  animation: spin 1s linear infinite;
+}
+
 .dark #__nuxt_preview,
 .dark-mode #__nuxt_preview {
   background: rgba(0, 0, 0, 0.3);
@@ -104,11 +307,11 @@ onUnmounted(() => {
 .dark-mode #__nuxt_preview svg {
   color: white;
 }
-#__nuxt_preview button {
+button {
   cursor: pointer;
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 4px 10px;
-  border-radius: 5px;
+  border-radius: 3px;
   background: transparent;
   margin-left: 5px;
   margin-right: 8px;
@@ -122,6 +325,20 @@ onUnmounted(() => {
   display: inline-block;
   width: auto;
   margin: 0;
+}
+button:hover {
+  color: rgba(0, 0, 0, 0.9);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+.dark-mode button,
+.dark button {
+  color: lightgray;
+  border-color: rgba(255, 255, 255, 0.2)
+}
+.dark-mode button:hover,
+.dark button:hover {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.4)
 }
 #__nuxt_preview button:hover,
 #__nuxt_preview button:focus {
@@ -148,11 +365,11 @@ onUnmounted(() => {
 #__nuxt_preview.__preview_refreshing svg,
 #__nuxt_preview.__preview_refreshing span,
 #__nuxt_preview.__preview_refreshing button {
-  -webkit-animation: nuxt_pulsate 1s ease-out;
-  -webkit-animation-iteration-count: infinite;
+  animation: nuxt_pulsate 1s ease-out;
+  animation-iteration-count: infinite;
   opacity: 0.5;
 }
-@-webkit-keyframes nuxt_pulsate {
+@keyframes nuxt_pulsate {
   0% {
       opacity: 1;
   }
@@ -161,6 +378,15 @@ onUnmounted(() => {
   }
   100% {
       opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
   }
 }
 </style>

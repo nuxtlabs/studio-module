@@ -1,16 +1,18 @@
-import { defineNuxtConfig } from 'nuxt'
-import nuxtStudio from '../src/module'
+import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
-  extends: '@nuxt-themes/elements-edge',
+  extends: '@nuxt-themes/alpine',
+  alias: {
+    '@nuxthq/studio': '../src/module'
+  },
   modules: [
-    nuxtStudio,
-    '@nuxt/content'
+    // TODO: module functions are not supported yet
+    '../src/module'
   ],
-  content: {
-    documentDriven: true,
-    highlight: {
-      theme: 'dracula'
-    }
+  studio: {
+    enabled: true
   }
+  // app: {
+  //   baseURL: '/test/'
+  // }
 })
