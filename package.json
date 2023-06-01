@@ -32,9 +32,9 @@
     "dev": "NUXT_STUDIO_DEV_PROXY=true nuxt dev playground",
     "build": "nuxt-module-build",
     "lint": "eslint --ext .vue,.ts,.js,.mjs .",
-    "prepack": "yarn lint && yarn build",
-    "release": "yarn lint && release-it",
-    "pre:release": "yarn lint && release-it --preRelease"
+    "prepack": "pnpm lint && pnpm build",
+    "release": "pnpm lint && release-it",
+    "pre:release": "pnpm lint && release-it --preRelease"
   },
   "dependencies": {
     "@nuxt/kit": "^3.4.3",
