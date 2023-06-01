@@ -16,7 +16,13 @@
   "exports": {
     ".": {
       "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs"
+      "require": "./dist/module.cjs",
+      "types": "./dist/module.d.ts"
+    },
+    "./theme": {
+      "import": "./dist/theme.mjs",
+      "require": "./dist/theme.cjs",
+      "types": "./theme.d.ts"
     }
   },
   "main": "./dist/module.cjs",
