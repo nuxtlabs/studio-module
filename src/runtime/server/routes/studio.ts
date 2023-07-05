@@ -33,6 +33,19 @@ export default eventHandler(async () => {
   const runtimeConfig = useRuntimeConfig()
   const { app, appConfigSchema, studio, content: { sources, ignores, locales, highlight, navigation, documentDriven, experimental } } = runtimeConfig
 
+  // Delete GitHub tokens for multiple source to avoid exposing them
+  const safeSources: any = {}
+  Object.keys(sources).forEach(name => {
+    const { driver, prefix, base, repo, branch, dir } = sources[name] || {}
+    safeSources[name] = {
+      driver,
+      prefix,
+      base,
+      repo,
+      branch,
+      dir
+    }
+  })
   // Support for __pinceau_tokens_{schema|config}.json
   const hasPinceau = runtimeConfig?.pinceau?.studio
   let tokensConfig: any
@@ -55,7 +68,7 @@ export default eventHandler(async () => {
     tokensConfigSchema,
     tokensConfig,
     // @nuxt/content
-    content: { sources, ignores, locales, highlight, navigation, documentDriven, experimental },
+    content: { sources: safeSources, ignores, locales, highlight, navigation, documentDriven, experimental },
     // nuxt-component-meta
     components: filteredComponents
   }
