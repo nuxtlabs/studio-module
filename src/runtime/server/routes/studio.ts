@@ -34,8 +34,10 @@ export default eventHandler(async () => {
   const { app, appConfigSchema, studio, content: { sources, ignores, locales, highlight, navigation, documentDriven, experimental } } = runtimeConfig
 
   // Delete GitHub tokens for multiple source to avoid exposing them
-  const safeSources = (sources || []).map(({ driver, prefix, base, repo, branch, dir }: any) => {
-    return {
+  const safeSources: any = {}
+  Object.keys(sources).forEach(name => {
+    const { driver, prefix, base, repo, branch, dir } = sources[name] || {}
+    safeSources[name] = {
       driver,
       prefix,
       base,
