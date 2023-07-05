@@ -35,7 +35,7 @@ export default eventHandler(async () => {
 
   // Delete GitHub tokens for multiple source to avoid exposing them
   const safeSources: any = {}
-  Object.keys(sources).forEach(name => {
+  Object.keys(sources).forEach((name) => {
     const { driver, prefix, base, repo, branch, dir } = sources[name] || {}
     safeSources[name] = {
       driver,
