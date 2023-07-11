@@ -244,7 +244,7 @@ body.__preview_enabled {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 40;
+  z-index: 9000;
   width: 100vw;
   height: 100vh;
   background: rgba(255, 255, 255, 0.3);
@@ -261,7 +261,7 @@ body.__preview_enabled {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 1.4rem;
-  z-index: 50;
+  z-index: 9500;
   color: black;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
