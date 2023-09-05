@@ -33,11 +33,15 @@ const previewReady = ref(false)
 const error = ref('')
 let socket: Socket
 
-const closePreviewMode = () => {
+const closePreviewMode = async () => {
+  // Remove preview token from cookie and session storage
   useCookie('previewToken').value = ''
-  useRoute().query.preview = ''
   window.sessionStorage.removeItem('previewToken')
 
+  // Remove query params in url to refresh page
+  await router.replace({ query: { preview: undefined } })
+
+  // Reload page to fully exit preview mode
   window.location.reload()
 }
 
