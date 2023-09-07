@@ -234,6 +234,10 @@ export const useStudio = () => {
     })
 
     window.addEventListener('message', async (e) => {
+      if (!['https://nuxt.studio', 'https://dev.nuxt.studio'].includes(e.origin)) {
+        return
+      }
+
       const { type, payload = {} } = e.data || {}
 
       switch (type) {
