@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, nextTick } from 'vue'
 import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 import { defu } from 'defu'
@@ -177,7 +177,9 @@ export const useStudio = () => {
         }
       }
     }
-    callWithNuxt(nuxtApp, refreshNuxtData)
+    nextTick(() => {
+      callWithNuxt(nuxtApp, refreshNuxtData)
+    })
   }
 
   return {
