@@ -7,7 +7,7 @@ import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles } from '../utils'
 import type { PreviewFile, PreviewResponse, FileChangeMessagePayload } from '../types'
 import { callWithNuxt } from '#app'
-import { refreshNuxtData, useAppConfig, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
+import { useAppConfig, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
 
 const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
 
@@ -177,9 +177,8 @@ export const useStudio = () => {
         }
       }
     }
-    nextTick(() => {
-      callWithNuxt(nuxtApp, refreshNuxtData)
-    })
+    // Directly call `app:data:refresh` hook to refresh all data (!Calling `refreshNuxtData` causing some delay in data refresh!)
+    await nuxtApp.hooks.callHookParallel('app:data:refresh')
   }
 
   return {
@@ -236,7 +235,7 @@ export const useStudio = () => {
     })
 
     window.addEventListener('message', async (e) => {
-      if (!['https://nuxt.studio', 'https://dev.nuxt.studio'].includes(e.origin)) {
+      if (!['https://nuxt.studio', 'https://dev.nuxt.studio', 'http://localhost:3000'].includes(e.origin)) {
         return
       }
 
