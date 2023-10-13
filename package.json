@@ -8,7 +8,7 @@
     "nuxt",
     "studio"
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "files": [
     "dist",
     "theme.d.ts"
