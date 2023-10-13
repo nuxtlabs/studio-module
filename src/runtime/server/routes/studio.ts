@@ -31,7 +31,7 @@ export default eventHandler(async () => {
 
   const appConfig = useAppConfig()
   const runtimeConfig = useRuntimeConfig()
-  const { app, appConfigSchema, studio, content: { sources, ignores, locales, highlight, navigation, documentDriven, experimental } } = runtimeConfig
+  const { app, appConfigSchema, studio, content: { sources, ignores, locales, defaultLocale, highlight, navigation, documentDriven, experimental } } = runtimeConfig
 
   // Delete GitHub tokens for multiple source to avoid exposing them
   const safeSources: any = {}
@@ -68,7 +68,7 @@ export default eventHandler(async () => {
     tokensConfigSchema,
     tokensConfig,
     // @nuxt/content
-    content: { sources: safeSources, ignores, locales, highlight, navigation, documentDriven, experimental },
+    content: { sources: safeSources, ignores, locales, defaultLocale, highlight, navigation, documentDriven, experimental },
     // nuxt-component-meta
     components: filteredComponents
   }
