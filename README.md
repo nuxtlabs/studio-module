@@ -53,7 +53,7 @@ STUDIO_API=https://dev-api.nuxt.studio
 
 ## License
 
-- [ ] Define license
+[MIT License](./LICENSE)
 
 Copyright (c) NuxtLabs
 
