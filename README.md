@@ -1,4 +1,4 @@
-# Nuxt Studio
+# Nuxt Studio Module
 
 <!-- [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
@@ -9,8 +9,7 @@
 A new experience to build content-driven website with Nuxt.
 
 - [✨ &nbsp;Release Notes](https://github.com/nuxtlabs/studio/releases)
-- [▶️ Play online](https://nuxt.new/studio)
-- [📖 &nbsp;Documentation](https://nuxt.studio)
+- [📖 &nbsp;Documentation](https://nuxt.studio/docs/projects/setup#requirements-to-use-the-studio-editor)
 
 ## Features
 
