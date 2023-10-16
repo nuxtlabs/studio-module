@@ -298,6 +298,10 @@ export const useStudio = () => {
 
     nuxtApp.hook('page:finish', () => {
       detectRenderedContents()
+
+      if (nuxtApp.payload.prerenderedAt) {
+        requestRerender()
+      }
     })
 
     // @ts-ignore
