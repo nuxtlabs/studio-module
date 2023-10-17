@@ -14,7 +14,6 @@ A new experience to build content-driven website with Nuxt.
 ## Features
 
 - 👌&nbsp; Zero configuration to start, works with any [Nuxt 3](https://nuxt.com) project
-- 🪄&nbsp; Write your [Content](https://content.nuxt.org) with our Notion-like editor, powered by [Milkdown](https://milkdown.dev)
 - 🎨&nbsp; Edit your [Pinceau tokens](https://pinceau.dev) with generated forms
 - ⚙️&nbsp; Define your [project options](https://nuxt.com/docs/guide/directory-structure/app-config)
 - 🚀&nbsp; Works in production with live preview
