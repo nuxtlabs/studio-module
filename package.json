@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "homepage": "https://github.com/nuxtlabs/studio.nuxt.com/tree/dev/modules/studio",
   "repository": "https://github.com/nuxtlabs/studio.nuxt.com",
-  "packageManager": "pnpm@8.9.0",
+  "packageManager": "pnpm@8.9.2",
   "keywords": [
     "nuxt",
     "studio"
@@ -38,7 +38,7 @@
     "pre:release": "pnpm lint && release-it --preRelease"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.7.4",
+    "@nuxt/kit": "^3.8.0",
     "defu": "^6.1.2",
     "nuxt-component-meta": "^0.5.4",
     "nuxt-config-schema": "^0.4.6",
@@ -50,13 +50,13 @@
     "@nuxt-themes/elements": "0.9.5",
     "@nuxt/content": "^2.8.5",
     "@nuxt/module-builder": "^0.5.2",
-    "@nuxt/schema": "^3.7.4",
+    "@nuxt/schema": "^3.8.0",
     "@nuxtjs/color-mode": "^3.3.0",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "@types/node": "^20.8.5",
-    "eslint": "^8.51.0",
+    "@types/node": "^20.8.8",
+    "eslint": "^8.52.0",
     "jiti": "^1.20.0",
-    "nuxt": "^3.7.4",
+    "nuxt": "^3.8.0",
     "pinceau": "^0.20.1",
     "release-it": "^16.2.1",
     "typescript": "^5.2.2"
