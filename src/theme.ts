@@ -3,7 +3,7 @@ import type { JSType, Schema, InputValue } from 'untyped'
 
 export type ConfigInputsTypes =
   | Exclude<JSType, 'symbol' | 'function' | 'any' | 'bigint'>
-  | 'default' | 'icon' | 'file' | 'component' | 'design-token'
+  | 'default' | 'icon' | 'file' | 'media' | 'component' | 'design-token'
 
 export type DesignTokensInputsTypes = 'color' | 'size' | 'shadow' | 'size' | 'opacity' | 'font' | 'font-weight' | 'font-size' | 'letter-spacing'
 
@@ -56,14 +56,19 @@ const supportedFields: { [key in InputsTypes]: Schema } = {
   object: {
     type: 'object',
     tags: [
-      '@studioInput object',
-      '@studioInputObjectValueType icon'
+      '@studioInput object'
     ]
   },
   file: {
     type: 'string',
     tags: [
       '@studioInput file'
+    ]
+  },
+  media: {
+    type: 'string',
+    tags: [
+      '@studioInput media'
     ]
   },
   component: {
