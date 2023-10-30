@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "homepage": "https://github.com/nuxtlabs/studio.nuxt.com/tree/dev/modules/studio",
   "repository": "https://github.com/nuxtlabs/studio.nuxt.com",
-  "packageManager": "pnpm@8.9.2",
+  "packageManager": "pnpm@8.10.0",
   "keywords": [
     "nuxt",
     "studio"
@@ -48,7 +48,7 @@
   "devDependencies": {
     "@nuxt-themes/alpine": "^1.6.4",
     "@nuxt-themes/elements": "0.9.5",
-    "@nuxt/content": "^2.8.5",
+    "@nuxt/content": "^2.9.0",
     "@nuxt/module-builder": "^0.5.2",
     "@nuxt/schema": "^3.8.0",
     "@nuxtjs/color-mode": "^3.3.0",
