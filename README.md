@@ -6,17 +6,17 @@
 [![Codecov][codecov-src]][codecov-href]
 [![License][license-src]][license-href] -->
 
-A new experience to build content-driven website with Nuxt.
+Official module of [Nuxt Studio](https://nuxt.studio).
 
-- [✨ &nbsp;Release Notes](https://github.com/nuxtlabs/studio/releases)
-- [📖 &nbsp;Documentation](https://nuxt.studio/docs/projects/setup#requirements-to-use-the-studio-editor)
+A new experience to build website with [Nuxt](https://nuxt.com) and [Nuxt Content](https://content.nuxt.com/).
+
+📖&nbsp; Official [Documentation](https://nuxt.studio/docs/projects/setup#requirements-to-use-the-studio-editor)
 
 ## Features
 
-- 👌&nbsp; Zero configuration to start, works with any [Nuxt 3](https://nuxt.com) project
-- 🎨&nbsp; Edit your [Pinceau tokens](https://pinceau.dev) with generated forms
-- ⚙️&nbsp; Define your [project options](https://nuxt.com/docs/guide/directory-structure/app-config)
-- 🚀&nbsp; Works in production with live preview
+- 🚀&nbsp; Production [live preview](https://nuxt.studio/docs/studio/live-preview)
+- ⌨️&nbsp; Edit your [content](https://nuxt.studio/docs/developers/content)
+- ⚙️&nbsp; Update your [configs](https://nuxt.studio/docs/developers/app-config)
 
 ## Installation
 
@@ -36,18 +36,20 @@ export default defineNuxtConfig({
 
 ## Configuration
 
+Check out our setup [requirements](https://nuxt.studio/docs/projects/setup#requirements-to-use-the-studio-editor). 
+
 By default the Studio API is `https://api.nuxt.studio`. If you want to customise it, you can set the `STUDIO_API` environement variable.
 
 ```bash
 # .env
-STUDIO_API=https://dev-api.nuxt.studio
+STUDIO_API=http://localhost:{PORT}
 ```
 
 ### Development
 
 - Run `yarn install` to install dependencies.
 - Run `yarn dev` to start the dev server using [`playground/`](./playground/) as the project.
-- Visit http://localhost:3100/
+- Visit http://localhost:3000/
 
 ## License
 
