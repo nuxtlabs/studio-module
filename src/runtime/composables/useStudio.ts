@@ -57,6 +57,12 @@ export const useStudio = () => {
 
   const syncPreviewAppConfig = (appConfig?: any) => {
     const _appConfig = callWithNuxt(nuxtApp, useAppConfig)
+
+    // Set dynamic icons for preview if user is using @nuxt/ui
+    if (_appConfig?.ui) {
+      _appConfig.ui.icons = { ..._appConfig.ui.icons, dynamic: true }
+    }
+
     // Using `defu` to merge with initial config
     // This is important to revert to default values for missing properties
     deepAssign(_appConfig, defu(appConfig, initialAppConfig))
