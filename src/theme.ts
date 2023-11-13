@@ -148,39 +148,54 @@ const supportedFields: { [key in InputsTypes]: Schema } = {
 export type StudioFieldData =
   PartialSchema &
   {
-    type: keyof typeof supportedFields
+    type?: keyof typeof supportedFields
     icon?: string
+    fields?: { [key: string]: InputValue }
   }
 
 /**
- * Declares a Nuxt Studio compatible configuration field.
+ * Helper to build aNuxt Studio compatible configuration schema.
  * Supports all type of fields provided by Nuxt Studio and all fields supported from Untyped Schema interface.
  */
-export function field (
-  type: keyof typeof supportedFields | StudioFieldData,
-  defaultValue?: any
-): InputValue {
-  // Custom `type` field should get overwritten by native Schema ones at this stage
-  const result = defu(
-    supportedFields[typeof type === 'string' ? type : type.type],
-    type
-  ) as StudioFieldData
+export function field (schema: StudioFieldData): InputValue {
+  if (!schema.type) {
+    throw new Error(`Missing type in schema ${JSON.stringify(schema)}`)
+  }
 
-  // Init tags
-  if (!result.tags) { result.tags = [] }
+  // copy of supportedFields
+  const base = JSON.parse(JSON.stringify(supportedFields[schema.type]))
+  const result = defu(base, schema)
 
-  // Cast `icon` into its tag
+  if (!result.tags) {
+    result.tags = []
+  }
   if (result.icon) {
     result.tags.push(`@studioIcon ${result.icon}`)
     delete result.icon
   }
+  return {
+    $schema: result
+  }
+}
 
-  // Cast default value passed as 2nd parameter
-  if (defaultValue) {
-    result.default = defaultValue
+export function group (schema: StudioFieldData): InputValue {
+  const result = { ...schema }
+
+  if (result.icon) {
+    result.tags = [`@studioIcon ${result.icon}`]
+    delete result.icon
+  }
+
+  const fields: Record<string, InputValue> = {}
+  if (result.fields) {
+    for (const key of Object.keys(result.fields)) {
+      fields[key] = result.fields[key]
+    }
+    delete result.fields
   }
 
   return {
-    $schema: result
+    $schema: result,
+    ...fields
   }
 }
