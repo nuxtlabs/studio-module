@@ -111,7 +111,7 @@ export const useStudio = () => {
     const mergedFiles = mergeDraft(data.files, data.additions, data.deletions)
 
     // Handle content files
-    const contentFiles = mergedFiles.filter(item => !([StudioConfigFiles.appConfig, StudioConfigFiles.tokensConfig].includes(item.path)))
+    const contentFiles = mergedFiles.filter(item => !([StudioConfigFiles.appConfig, StudioConfigFiles.nuxtConfig, StudioConfigFiles.tokensConfig].includes(item.path)))
     await syncPreviewFiles(storage.value, contentFiles, (data.files || []).length !== 0)
 
     const appConfig = mergedFiles.find(item => item.path === StudioConfigFiles.appConfig)
