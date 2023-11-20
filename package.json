@@ -1,6 +1,6 @@
 {
   "name": "@nuxthq/studio",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "repository": "nuxtlabs/studio-module",
   "homepage": "https://nuxt.studio",
   "packageManager": "pnpm@8.10.0",
