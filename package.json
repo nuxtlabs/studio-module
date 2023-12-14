@@ -58,7 +58,7 @@
     "jiti": "^1.20.0",
     "nuxt": "^3.8.0",
     "pinceau": "^0.20.1",
-    "release-it": "^16.2.1",
+    "release-it": "^17.0.1",
     "typescript": "^5.2.2"
   },
   "release-it": {
