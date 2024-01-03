@@ -31,7 +31,7 @@ export default eventHandler(async () => {
 
   const appConfig = useAppConfig()
   const runtimeConfig = useRuntimeConfig()
-  const { app, appConfigSchema, studio, content: { sources, ignores, locales, defaultLocale, highlight, navigation, documentDriven, experimental } } = runtimeConfig
+  const { app, contentSchema, appConfigSchema, studio, content: { sources, ignores, locales, defaultLocale, highlight, navigation, documentDriven, experimental } } = runtimeConfig
 
   // Delete GitHub tokens for multiple source to avoid exposing them
   const safeSources: any = {}
@@ -61,6 +61,8 @@ export default eventHandler(async () => {
     // Studio version
     version,
     tokens: studio?.publicToken,
+    // nuxt.schema for Nuxt Content frontmatter
+    contentSchema: contentSchema || {},
     // app.config
     appConfigSchema: appConfigSchema || {},
     appConfig,

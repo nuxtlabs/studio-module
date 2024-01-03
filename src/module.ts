@@ -29,6 +29,7 @@ export default defineNuxtModule<ModuleOptions>({
         properties: schema.properties?.appConfig,
         default: schema.default?.appConfig
       }
+      nuxt.options.runtimeConfig.contentSchema = schema.properties?.content || {}
     })
 
     // Support custom ~/.studio/app.config.json
