@@ -1,13 +1,11 @@
-import { field, group } from '../src/theme'
+import { field, group } from '@nuxthq/studio/theme'
 
 export default defineNuxtSchema({
   appConfig: {
-    parent: group({
-      title: 'Parent',
-      description: 'Parent description',
+    header: group({
+      title: 'Header',
       fields: {
-        someConfig: field({ type: 'string', default: 'schema default' }),
-        configFromNuxtSchema: field({ type: 'boolean' })
+        title: field({ type: 'string' })
       }
     })
   }

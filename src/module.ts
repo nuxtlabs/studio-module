@@ -10,6 +10,17 @@ export interface ModuleOptions {
    * @default: 'production'
    **/
   enabled: 'production' | true
+  /**
+   * Studio project(s) to link
+   *
+   * If you have multiple projects, you can use an array of strings.
+   *
+   * @example 'team-slug/project-slug'
+   * or
+   * @example ['team-slug/project-slug', 'team-slug/project-slug-2']
+   * @default: ''
+   **/
+  project: string | string[]
 }
 
 export interface ModuleHooks {}
@@ -20,7 +31,8 @@ export default defineNuxtModule<ModuleOptions>({
     configKey: 'studio'
   },
   defaults: {
-    enabled: 'production'
+    enabled: 'production',
+    project: ''
   },
   async setup (options, nuxt) {
     // @ts-ignore
@@ -75,9 +87,10 @@ export default defineNuxtModule<ModuleOptions>({
 
     const apiURL = process.env.NUXT_PUBLIC_STUDIO_API_URL || process.env.STUDIO_API || 'https://api.nuxt.studio'
     const publicToken = process.env.NUXT_PUBLIC_STUDIO_TOKENS
-    nuxt.options.runtimeConfig.studio = nuxt.options.runtimeConfig.studio || {
-      publicToken
-    }
+    nuxt.options.runtimeConfig.studio = defu(nuxt.options.runtimeConfig.studio, {
+      publicToken,
+      project: options.project
+    })
     nuxt.options.runtimeConfig.public.studio = defu(nuxt.options.runtimeConfig.public.studio, { apiURL })
 
     extendViteConfig((config) => {
@@ -103,7 +116,6 @@ export default defineNuxtModule<ModuleOptions>({
     addPrerenderRoutes('/__studio.json')
 
     // Install dependencies
-    await installModule('nuxt-config-schema')
     await installModule('nuxt-component-meta', {
       globalsOnly: true
     })

@@ -1,18 +1,33 @@
+import { consola } from 'consola'
 import { defineNuxtConfig } from 'nuxt/config'
 
+const url = ''
 export default defineNuxtConfig({
-  extends: '@nuxt-themes/alpine',
-  alias: {
-    '@nuxthq/studio': '../src/module'
-  },
-  modules: [
-    // TODO: module functions are not supported yet
-    '../src/module'
-  ],
+  extends: '@nuxt/ui-pro',
+  modules: ['@nuxt/ui', '@nuxt/content', '../src/module', "@nuxt/image"],
   studio: {
-    enabled: true
+    enabled: true,
+    project: 'studio/studio-module'
+  },
+  hooks: {
+    // Set all components to global
+    'components:extend': (components) => {
+      // components.forEach(component => {
+      //   if (component.pascalName[0] === 'U') {
+      //     component.global = true
+      //   }
+      // })
+    },
+    'listen': async (_, { getURLs }) => {
+      const urls = await getURLs()
+      const tunnelURL = urls.find(u => u.type === 'tunnel')
+      if (!tunnelURL) return consola.warn('Could not get Tunnel URL')
+      consola.box(
+        'Nuxt Studio Playground Ready.\n\n' +
+        '1. Go to https://nuxt.studio/@studio/studio-module\n' +
+        '2. Paste `'+tunnelURL.url+'` in the Deployed URL field\n' +
+        '3. Play with the Studio Playground!'
+      )
+    }
   }
-  // app: {
-  //   baseURL: '/test/'
-  // }
 })
