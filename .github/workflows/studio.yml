@@ -32,5 +32,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Prepare playground
+        run: npx nuxt prepare playground
+
       - name: Build
         run: pnpm build
