@@ -1,12 +1,15 @@
 {
   "name": "@nuxthq/studio",
+  "description": "Nuxt Studio is a visual editor for content-driven Nuxt application with Markdown.",
   "version": "1.0.6",
   "repository": "nuxtlabs/studio-module",
   "homepage": "https://nuxt.studio",
   "packageManager": "pnpm@8.10.0",
   "keywords": [
     "nuxt",
-    "studio"
+    "studio",
+    "nuxtcms",
+    "nuxtcontent"
   ],
   "license": "MIT",
   "files": [
@@ -29,37 +32,34 @@
   "main": "./dist/module.cjs",
   "types": "./dist/types.d.ts",
   "scripts": {
-    "prepare": "nuxt prepare playground",
-    "dev": "NUXT_STUDIO_DEV_PROXY=true nuxt dev playground",
-    "build": "nuxt-module-build",
-    "lint": "eslint --ext .vue,.ts,.js,.mjs .",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxt prepare playground",
+    "dev": "nuxt dev playground --tunnel",
+    "build": "nuxt-module-build build",
+    "lint": "eslint .",
     "prepack": "pnpm lint && pnpm build",
     "release": "pnpm lint && release-it",
     "pre:release": "pnpm lint && release-it --preRelease"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.8.0",
+    "@nuxt/kit": "^3.9.0",
     "defu": "^6.1.3",
     "nuxt-component-meta": "^0.6.0",
-    "nuxt-config-schema": "^0.4.6",
-    "socket.io-client": "^4.7.2",
-    "ufo": "^1.3.1"
+    "socket.io-client": "^4.7.3",
+    "ufo": "^1.3.2"
   },
   "devDependencies": {
-    "@nuxt-themes/alpine": "^1.6.4",
-    "@nuxt-themes/elements": "0.9.5",
-    "@nuxt/content": "^2.9.0",
-    "@nuxt/module-builder": "^0.5.2",
-    "@nuxt/schema": "^3.8.0",
-    "@nuxtjs/color-mode": "^3.3.0",
-    "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "@types/node": "^20.8.9",
-    "eslint": "^8.52.0",
-    "jiti": "^1.20.0",
-    "nuxt": "^3.8.0",
-    "pinceau": "^0.20.1",
-    "release-it": "^16.2.1",
-    "typescript": "^5.2.2"
+    "@nuxt/content": "^2.10.0",
+    "@nuxt/eslint-config": "^0.2.0",
+    "@nuxt/image": "^1.1.0",
+    "@nuxt/module-builder": "^0.5.5",
+    "@nuxt/schema": "^3.9.0",
+    "@nuxt/ui-pro": "^0.6.1",
+    "@types/node": "^20.10.6",
+    "consola": "^3.2.3",
+    "eslint": "^8.56.0",
+    "nuxt": "^3.9.0",
+    "release-it": "^17.0.1",
+    "typescript": "^5.3.3"
   },
   "release-it": {
     "git": {
@@ -76,7 +76,6 @@
         "vue": "*"
       },
       "ignoreMissing": [
-        "prosemirror-*",
         "@babel/core",
         "webpack",
         "axios",

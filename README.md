@@ -8,7 +8,7 @@
 
 Official module of [Nuxt Studio](https://nuxt.studio).
 
-A new experience to build website with [Nuxt](https://nuxt.com) and [Nuxt Content](https://content.nuxt.com/).
+Edit your websites made with [Nuxt Content](https://content.nuxt.com/), in production on any device.
 
 📖&nbsp; Official [Documentation](https://nuxt.studio/docs/projects/setup#requirements-to-use-the-studio-editor)
 
@@ -20,13 +20,20 @@ A new experience to build website with [Nuxt](https://nuxt.com) and [Nuxt Conten
 
 ## Installation
 
+Install the dependency to you project:
+
 ```bash
+# NPM
+npm install --save-dev @nuxthq/studio
+# Yarn
 yarn add --dev @nuxthq/studio
+# pnpm
+pnpm add --save-dev @nuxthq/studio
 ```
 
 Then, register the module in your `nuxt.config.ts`:
 
-```js
+```ts
 export default defineNuxtConfig({
   modules: [
     '@nuxthq/studio'
@@ -47,8 +54,9 @@ STUDIO_API=http://localhost:{PORT}
 
 ### Development
 
-- Run `yarn install` to install dependencies.
-- Run `yarn dev` to start the dev server using [`playground/`](./playground/) as the project.
+- Run `pnpm i` to install dependencies.
+- Run `pnpm dev:prepare` to prepare the module in development mode.
+- Run `pnpm dev` to start the dev server using [`playground/`](./playground/) as the project.
 - Visit http://localhost:3000/
 
 ## License
