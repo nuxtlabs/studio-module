@@ -8,7 +8,7 @@
 
 Official module of [Nuxt Studio](https://nuxt.studio).
 
-Edit your websites made [Nuxt Content](https://content.nuxt.com/), in production on any device.
+Edit your websites made with [Nuxt Content](https://content.nuxt.com/), in production on any device.
 
 📖&nbsp; Official [Documentation](https://nuxt.studio/docs/projects/setup#requirements-to-use-the-studio-editor)
 
