@@ -1,7 +1,6 @@
 import { consola } from 'consola'
 import { defineNuxtConfig } from 'nuxt/config'
 
-const url = ''
 export default defineNuxtConfig({
   extends: '@nuxt/ui-pro',
   modules: ['@nuxt/ui', '@nuxt/content', '../src/module', "@nuxt/image"],
