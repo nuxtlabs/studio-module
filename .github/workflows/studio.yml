@@ -1,11 +1,8 @@
-name: Publish Studio (dev)
+name: Publish Studio (Nightly)
 on:
   push:
     branches:
       - dev
-    paths:
-      - '.github/workflows/studio.yml'
-      - '**'
 jobs:
   ci:
     strategy:
@@ -21,7 +18,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 20
+          registry-url: "https://registry.npmjs.org/"
+          cache: "pnpm"
 
       - uses: pnpm/action-setup@v2.4.0
         name: Install pnpm
@@ -32,8 +31,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Prepare playground
-        run: npx nuxt prepare playground
+      - name: Prepare
+        run: pnpm dev:prepare
 
       - name: Build
         run: pnpm build
