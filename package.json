@@ -9,7 +9,9 @@
   "homepage": "https://nuxt.studio",
   "packageManager": "pnpm@8.14.0",
   "keywords": [
+    "vue",
     "nuxt",
+    "markdown",
     "studio",
     "nuxtcms",
     "nuxtcontent"
