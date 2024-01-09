@@ -52,6 +52,14 @@ By default the Studio API is `https://api.nuxt.studio`. If you want to customise
 STUDIO_API=http://localhost:{PORT}
 ```
 
+## Nightly Builds
+
+You can install the latest nightly build of the Studio module by running:
+
+```bash
+npm i @nuxthq/studio@nightly
+```
+
 ### Development
 
 - Run `pnpm i` to install dependencies.
