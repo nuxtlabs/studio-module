@@ -14,7 +14,7 @@ interface NuxtComponentMeta {
 }
 
 export default eventHandler(async () => {
-  const componentsIgnoredPrefix = ['Content', 'DocumentDriven', 'Markdown', 'Prose']
+  const componentsIgnoredPrefix = ['Content', 'DocumentDriven', 'Markdown']
   const filteredComponents = (Object.values(components) as NuxtComponentMeta[])
     .filter(c => c.global && !componentsIgnoredPrefix.some(prefix => c.pascalName.startsWith(prefix)))
     .map(({ pascalName, filePath, meta }) => {
