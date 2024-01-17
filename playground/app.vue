@@ -4,13 +4,15 @@ const { data: navigation } = useAsyncData('navigation', () => fetchContentNaviga
 </script>
 
 <template>
-  <UHeader
-    :title="appConfig.title"
-    :links="mapContentNavigation(navigation)"
-  />
-  <UMain>
-    <UContainer>
-      <NuxtPage />
-    </UContainer>
-  </UMain>
+  <div>
+    <UHeader
+      :title="appConfig.title"
+      :links="mapContentNavigation(navigation)"
+    />
+    <UMain>
+      <UContainer>
+        <NuxtPage />
+      </UContainer>
+    </UMain>
+  </div>
 </template>

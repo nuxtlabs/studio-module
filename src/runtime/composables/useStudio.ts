@@ -3,6 +3,7 @@ import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 import { createDefu } from 'defu'
 import type { RouteLocationNormalized } from 'vue-router'
+import type { AppConfig } from 'nuxt/schema'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles } from '../utils'
 import type { PreviewFile, PreviewResponse, FileChangeMessagePayload } from '../types'
@@ -39,7 +40,7 @@ export const useStudio = () => {
     queryContent('/non-existing-path').findOne()
   }
 
-  const syncPreviewFiles = async (contentStorage: Storage, files: PreviewFile[], ignoreBuiltContents = true) => {
+  const syncPreviewFiles = async (contentStorage: Storage, files: PreviewFile[]) => {
     const previewToken = window.sessionStorage.getItem('previewToken')
     // Remove previous preview data
     const keys: string[] = await contentStorage.getKeys(`${previewToken}:`)
@@ -55,17 +56,18 @@ export const useStudio = () => {
     )
   }
 
-  const syncPreviewAppConfig = (appConfig?: any) => {
-    const _appConfig = callWithNuxt(nuxtApp, useAppConfig)
+  const syncPreviewAppConfig = (appConfig?: Record<string, any>) => {
+    const _appConfig = callWithNuxt(nuxtApp, useAppConfig) as AppConfig
 
     // Set dynamic icons for preview if user is using @nuxt/ui
     if (_appConfig?.ui) {
+      // @ts-ignore
       _appConfig.ui.icons = { ..._appConfig.ui.icons, dynamic: true }
     }
 
     // Using `defu` to merge with initial config
     // This is important to revert to default values for missing properties
-    deepAssign(_appConfig, defu(appConfig, initialAppConfig))
+    deepAssign(_appConfig, defu(appConfig as Record<string, any>, initialAppConfig))
 
     // Reset app config to initial state if no appConfig is provided
     // Makes sure that app config does not contain any preview data
@@ -78,7 +80,7 @@ export const useStudio = () => {
     // Tokens config (optional; depends on the presence of pinceauTheme provide)
     // TODO: Improve typings
     // TODO: Use `inject()` but wrong context seem to be resolved; while $pinceauTheme global property is present in `app` context
-    const themeSheet = nuxtApp?.vueApp?._context?.config?.globalProperties?.$pinceauTheme
+    const themeSheet = nuxtApp?.vueApp?._context?.config?.globalProperties?.$pinceauTheme as Record<string, any>
 
     // Pinceau might be not present, or not booted yet
     if (!themeSheet || !themeSheet?.updateTheme) { return }
@@ -112,7 +114,7 @@ export const useStudio = () => {
 
     // Handle content files
     const contentFiles = mergedFiles.filter(item => !([StudioConfigFiles.appConfig, StudioConfigFiles.nuxtConfig, StudioConfigFiles.tokensConfig].includes(item.path)))
-    await syncPreviewFiles(storage.value, contentFiles, (data.files || []).length !== 0)
+    await syncPreviewFiles(storage.value, contentFiles)
 
     const appConfig = mergedFiles.find(item => item.path === StudioConfigFiles.appConfig)
     syncPreviewAppConfig(appConfig?.parsed)
@@ -184,11 +186,17 @@ export const useStudio = () => {
     if (contentConfig?.documentDriven) {
       // Update all cached pages
       const { pages } = callWithNuxt<any>(nuxtApp, useContentState)
-      for (const key in pages.value) {
-        if (pages.value[key]) {
-          pages.value[key] = await findContentWithId(pages.value[key]._id)
+
+      const contents = await Promise.all(Object.keys(pages.value).map(async (key) => {
+        return await findContentWithId(pages.value[key]._id)
+      }))
+
+      pages.value = contents.reduce((acc, item, index) => {
+        if (item) {
+          acc[Object.keys(pages.value)[index]] = item
         }
-      }
+        return acc
+      }, {} as Record<string, ParsedContent>)
     }
     // Directly call `app:data:refresh` hook to refresh all data (!Calling `refreshNuxtData` causing some delay in data refresh!)
     await nuxtApp.hooks.callHookParallel('app:data:refresh')

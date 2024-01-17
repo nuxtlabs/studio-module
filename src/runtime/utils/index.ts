@@ -8,7 +8,7 @@ export const StudioConfigFiles = {
 
 export const createSingleton = <T, Params extends Array<any>>(fn: () => T) => {
   let instance: T | undefined
-  return (...args: Params) => {
+  return (_args?: Params) => {
     if (!instance) {
       instance = fn()
     }

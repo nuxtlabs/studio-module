@@ -60,6 +60,7 @@
     "@nuxt/module-builder": "^0.5.5",
     "@nuxt/schema": "^3.9.1",
     "@nuxt/ui-pro": "^0.6.1",
+    "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@types/node": "^20.10.7",
     "changelogen": "^0.5.5",
     "consola": "^3.2.3",
