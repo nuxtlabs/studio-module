@@ -188,6 +188,10 @@ export const useStudio = () => {
       const { pages } = callWithNuxt<any>(nuxtApp, useContentState)
 
       const contents = await Promise.all(Object.keys(pages.value).map(async (key) => {
+        if (!pages.value[key]) {
+          return null
+        }
+
         return await findContentWithId(pages.value[key]._id)
       }))
 
