@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs'
+import path from 'path'
 import { defu } from 'defu'
-import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler, resolveAlias } from '@nuxt/kit'
+import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler, resolveAlias, addVitePlugin } from '@nuxt/kit'
 
 const log = logger.withTag('@nuxt/studio')
 
@@ -100,6 +101,22 @@ export default defineNuxtModule<ModuleOptions>({
         'socket.io-client', 'slugify'
       )
     })
+
+    if (contentModuleVersion === '2.10.0') {
+      addVitePlugin({
+        name: 'content-resolver',
+        enforce: 'pre',
+        resolveId (id, importer) {
+          if (id.endsWith('.mjs') && ((importer || '').includes('@nuxt/content/dist') || id.includes('@nuxt/content/dist'))) {
+            id = id
+              .replace('.mjs', '.js')
+              .replace(/^\/node_modules/, './node_modules/')
+
+            return path.resolve(path.dirname(importer || __dirname), id.replace('.mjs', '.js'))
+          }
+        }
+      })
+    }
 
     // Add plugins
     addPlugin(resolve('./runtime/plugins/preview.client'))

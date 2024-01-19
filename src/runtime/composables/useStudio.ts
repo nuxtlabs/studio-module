@@ -8,7 +8,7 @@ import { callWithNuxt } from '#app'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles } from '../utils'
 import type { PreviewFile, PreviewResponse, FileChangeMessagePayload } from '../types'
-import { useAppConfig, useNuxtApp, useRuntimeConfig, useState, useContentState, ref, toRaw, useRoute, useRouter } from '#imports'
+import { useAppConfig, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
 
 const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
 
@@ -36,8 +36,8 @@ export const useStudio = () => {
       storage.value = _storage
     })
 
-    // Call "app:data:refresh" to trigger `content:storage` hook
-    nuxtApp.hooks.callHookParallel('app:data:refresh')
+    // Call `queryContent` to trigger `content:storage` hook
+    queryContent('/non-existing-path').findOne()
   }
 
   const syncPreviewFiles = async (contentStorage: Storage, files: PreviewFile[]) => {
