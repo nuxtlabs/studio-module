@@ -22,6 +22,7 @@ const defu = createDefu((obj, key, value) => {
 export const useStudio = () => {
   const nuxtApp = useNuxtApp()
   const { studio: studioConfig, content: contentConfig } = useRuntimeConfig().public
+  const contentPathMap = {} as Record<string, ParsedContent>
 
   // App config (required)
   const initialAppConfig = useDefaultAppConfig()
@@ -52,7 +53,10 @@ export const useStudio = () => {
 
     // Handle content files
     await Promise.all(
-      files.map(item => contentStorage.setItem(`${previewToken}:${item.parsed!._id}`, JSON.stringify(item.parsed)))
+      files.map((item) => {
+        contentPathMap[item.parsed!._path!] = item.parsed!
+        return contentStorage.setItem(`${previewToken}:${item.parsed!._id}`, JSON.stringify(item.parsed))
+      })
     )
   }
 
@@ -167,6 +171,12 @@ export const useStudio = () => {
     if (!content) {
       content = content = await storage.value?.getItem(path)
     }
+
+    // try finding content from contentPathMap
+    if (!content) {
+      content = contentPathMap[path || '/']
+    }
+
     return content as ParsedContent
   }
 
@@ -174,12 +184,22 @@ export const useStudio = () => {
     const previewToken = window.sessionStorage.getItem('previewToken')
     if (!storage.value) { return }
 
+    contentPathMap[content.parsed!._path!] = content.parsed!
     storage.value.setItem(`${previewToken}:${content.parsed?._id}`, JSON.stringify(content.parsed))
   }
 
   const removeContentWithId = async (path: string) => {
     const previewToken = window.sessionStorage.getItem('previewToken')
+    const content = await findContentWithId(path)
     await storage.value?.removeItem(`${previewToken}:${path}`)
+
+    if (content) {
+      delete contentPathMap[content._path!]
+      const nonDraftContent = await findContentWithId(content._id)
+      if (nonDraftContent) {
+        contentPathMap[nonDraftContent._path!] = nonDraftContent
+      }
+    }
   }
 
   const requestRerender = async () => {
@@ -188,11 +208,7 @@ export const useStudio = () => {
       const { pages } = callWithNuxt<any>(nuxtApp, useContentState)
 
       const contents = await Promise.all(Object.keys(pages.value).map(async (key) => {
-        if (!pages.value[key]) {
-          return null
-        }
-
-        return await findContentWithId(pages.value[key]._id)
+        return await findContentWithId(pages.value[key]?._id ?? key)
       }))
 
       pages.value = contents.reduce((acc, item, index) => {
