@@ -3,7 +3,7 @@ import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
   extends: '@nuxt/ui-pro',
-  modules: ['@nuxt/ui', '@nuxt/content', '../src/module', '@nuxt/image'],
+  modules: ['@nuxt/ui', '@nuxt/content', '@nuxt/image'],
   studio: {
     enabled: true,
     project: 'studio/studio-module'
@@ -12,9 +12,9 @@ export default defineNuxtConfig({
     // Set all components to global
     'components:extend': () => {
       // components.forEach(component => {
-      //   if (component.pascalName[0] === 'U') {
-      //     component.global = true
-      //   }
+      //  if (component.pascalName[0] === 'U') {
+      //    component.global = true
+      //  }
       // })
     },
     listen: async (_, { getURLs }) => {
