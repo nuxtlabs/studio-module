@@ -62,6 +62,7 @@ export default eventHandler(async () => {
     version,
     project: studio?.project,
     tokens: studio?.publicToken,
+    gitInfo: studio?.gitInfo || {},
     // nuxt.schema for Nuxt Content frontmatter
     contentSchema: contentSchema || {},
     // app.config
