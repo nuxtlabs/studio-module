@@ -23,6 +23,7 @@ export const useStudio = () => {
   const nuxtApp = useNuxtApp()
   const { studio: studioConfig, content: contentConfig } = useRuntimeConfig().public
   const contentPathMap = {} as Record<string, ParsedContent>
+  const apiURL = window.sessionStorage.getItem('previewAPI') || studioConfig?.apiURL
 
   // App config (required)
   const initialAppConfig = useDefaultAppConfig()
@@ -135,7 +136,7 @@ export const useStudio = () => {
     const previewToken = window.sessionStorage.getItem('previewToken')
     // Fetch preview data from station
     await $fetch<PreviewResponse>('api/projects/preview/sync', {
-      baseURL: studioConfig?.apiURL,
+      baseURL: apiURL,
       method: 'POST',
       params: {
         token: previewToken
@@ -151,7 +152,7 @@ export const useStudio = () => {
     document.body.appendChild(el)
     createApp(ContentPreviewMode, {
       previewToken,
-      apiURL: studioConfig?.apiURL,
+      apiURL,
       syncPreview,
       requestPreviewSyncAPI: requestPreviewSynchronization
     }).mount(el)
@@ -223,7 +224,7 @@ export const useStudio = () => {
   }
 
   return {
-    apiURL: studioConfig?.apiURL,
+    apiURL,
     contentStorage: storage,
 
     syncPreviewFiles,

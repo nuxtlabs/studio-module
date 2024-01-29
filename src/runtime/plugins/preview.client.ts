@@ -29,6 +29,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       previewToken.value = String(route.query.preview)
     }
     window.sessionStorage.setItem('previewToken', String(previewToken.value))
+    window.sessionStorage.setItem('previewAPI', typeof route.query.staging !== 'undefined' ? 'https://dev-api.nuxt.studio' : runtimeConfig.apiURL)
 
     // Listen to `content:storage` hook to get storage instance
     // There is some cases that `content:storage` hook is called before initializing preview
