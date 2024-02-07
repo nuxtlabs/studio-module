@@ -176,7 +176,7 @@ async function _getLocalGitRemote (dir: string) {
   try {
     // https://www.npmjs.com/package/parse-git-config#options
     const parseGitConfig = await import('parse-git-config' as string).then(
-      m => m.promise
+      m => m.promise || m.default || m
     ) as (opts: { path: string }) => Promise<Record<string, Record<string, string>>>
     const gitDir = await findNearestFile('.git/config', { startingFrom: dir })
     const parsed = await parseGitConfig({ path: gitDir })
