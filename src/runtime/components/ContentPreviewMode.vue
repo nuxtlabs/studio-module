@@ -37,6 +37,7 @@ const closePreviewMode = async () => {
   // Remove preview token from cookie and session storage
   useCookie('previewToken').value = ''
   window.sessionStorage.removeItem('previewToken')
+  window.sessionStorage.removeItem('previewAPI')
 
   // Remove query params in url to refresh page
   await router.replace({ query: { preview: undefined } })

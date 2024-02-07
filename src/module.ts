@@ -2,6 +2,9 @@ import { existsSync } from 'node:fs'
 import path from 'path'
 import { defu } from 'defu'
 import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler, resolveAlias, addVitePlugin } from '@nuxt/kit'
+import { findNearestFile } from 'pkg-types'
+// @ts-ignore
+import gitUrlParse from 'git-url-parse'
 
 const log = logger.withTag('@nuxt/studio')
 
@@ -88,9 +91,11 @@ export default defineNuxtModule<ModuleOptions>({
 
     const apiURL = process.env.NUXT_PUBLIC_STUDIO_API_URL || process.env.STUDIO_API || 'https://api.nuxt.studio'
     const publicToken = process.env.NUXT_PUBLIC_STUDIO_TOKENS
+    const gitInfo = await _getLocalGitInfo(nuxt.options.rootDir) || _getGitEnv() || {}
     nuxt.options.runtimeConfig.studio = defu(nuxt.options.runtimeConfig.studio as any, {
       publicToken,
-      project: options.project
+      project: options.project,
+      gitInfo
     })
     nuxt.options.runtimeConfig.public.studio = defu(nuxt.options.runtimeConfig.public.studio as any, { apiURL })
 
@@ -138,3 +143,90 @@ export default defineNuxtModule<ModuleOptions>({
     })
   }
 })
+
+// --- Utilities to get git info ---
+
+interface GitInfo {
+  // Repository name
+  name: string,
+  // Repository owner/organization
+  owner: string,
+  // Repository URL
+  url: string,
+}
+
+async function _getLocalGitInfo (rootDir: string): Promise<GitInfo | void> {
+  const remote = await _getLocalGitRemote(rootDir)
+  if (!remote) {
+    return
+  }
+
+  // https://www.npmjs.com/package/git-url-parse#clipboard-example
+  const { name, owner, source } = gitUrlParse(remote) as Record<string, string>
+  const url = `https://${source}/${owner}/${name}`
+
+  return {
+    name,
+    owner,
+    url
+  }
+}
+
+async function _getLocalGitRemote (dir: string) {
+  try {
+    // https://www.npmjs.com/package/parse-git-config#options
+    const parseGitConfig = await import('parse-git-config' as string).then(
+      m => m.promise
+    ) as (opts: { path: string }) => Promise<Record<string, Record<string, string>>>
+    const gitDir = await findNearestFile('.git/config', { startingFrom: dir })
+    const parsed = await parseGitConfig({ path: gitDir })
+    if (!parsed) {
+      return
+    }
+    const gitRemote = parsed['remote "origin"'].url
+    return gitRemote
+  } catch (err) {
+
+  }
+}
+
+function _getGitEnv (): GitInfo {
+  // https://github.com/unjs/std-env/issues/59
+  const envInfo = {
+    // Provider
+    provider: process.env.VERCEL_GIT_PROVIDER || // vercel
+     (process.env.GITHUB_SERVER_URL ? 'github' : undefined) || // github
+     '',
+    // Owner
+    owner: process.env.VERCEL_GIT_REPO_OWNER || // vercel
+      process.env.GITHUB_REPOSITORY_OWNER || // github
+      process.env.CI_PROJECT_PATH?.split('/').shift() || // gitlab
+      '',
+    // Name
+    name: process.env.VERCEL_GIT_REPO_SLUG ||
+     process.env.GITHUB_REPOSITORY?.split('/').pop() || // github
+     process.env.CI_PROJECT_PATH?.split('/').splice(1).join('/') || // gitlab
+     '',
+    // Url
+    url: process.env.REPOSITORY_URL || '' // netlify
+  }
+
+  if (!envInfo.url && envInfo.provider && envInfo.owner && envInfo.name) {
+    envInfo.url = `https://${envInfo.provider}.com/${envInfo.owner}/${envInfo.name}`
+  }
+
+  // If only url available (ex: Netlify)
+  if (!envInfo.name && !envInfo.owner && envInfo.url) {
+    try {
+      const { name, owner } = gitUrlParse(envInfo.url) as Record<string, string>
+      envInfo.name = name
+      envInfo.owner = owner
+    } catch {}
+  }
+
+  return {
+    name: envInfo.name,
+    owner: envInfo.owner,
+    url: envInfo.url
+  }
+}
