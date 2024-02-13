@@ -279,7 +279,7 @@ export const useStudio = () => {
     window.addEventListener('message', async (e) => {
       // IFRAME_MESSAGING_ALLOWED_ORIGINS format must be a comma separated string of allowed origins
       const allowedOrigins = studioConfig?.iframeMessagingAllowedOrigins?.split(',').map((origin: string) => origin.trim()) || []
-      if (!['https://nuxt.studio', 'https://dev.nuxt.studio', 'http://localhost:3000', ...allowedOrigins].includes(e.origin)) {
+      if (!['https://nuxt.studio', 'https://new.nuxt.studio', 'https://dev.new.nuxt.studio', 'https://dev.nuxt.studio', 'http://localhost:3000', ...allowedOrigins].includes(e.origin)) {
         return
       }
 
