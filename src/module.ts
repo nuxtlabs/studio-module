@@ -5,6 +5,7 @@ import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendV
 import { findNearestFile } from 'pkg-types'
 // @ts-ignore
 import gitUrlParse from 'git-url-parse'
+import { version } from '../package.json'
 
 const log = logger.withTag('@nuxt/studio')
 
@@ -94,6 +95,7 @@ export default defineNuxtModule<ModuleOptions>({
     const iframeMessagingAllowedOrigins = process.env.IFRAME_MESSAGING_ALLOWED_ORIGINS
     const gitInfo = await _getLocalGitInfo(nuxt.options.rootDir) || _getGitEnv() || {}
     nuxt.options.runtimeConfig.studio = defu(nuxt.options.runtimeConfig.studio as any, {
+      version,
       publicToken,
       project: options.project,
       gitInfo

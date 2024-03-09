@@ -1,7 +1,6 @@
 import type { ComponentMeta } from 'vue-component-meta'
 import { eventHandler } from 'h3'
 import { joinURL } from 'ufo'
-import { version } from '../../../../package.json'
 import { useRuntimeConfig, useAppConfig } from '#imports'
 // @ts-ignore
 import components from '#nuxt-component-meta/nitro'
@@ -59,7 +58,7 @@ export default eventHandler(async () => {
 
   return {
     // Studio version
-    version,
+    version: studio.version,
     project: studio?.project,
     tokens: studio?.publicToken,
     gitInfo: studio?.gitInfo || {},
