@@ -15,17 +15,6 @@ export interface ModuleOptions {
    * @default: 'production'
    **/
   enabled: 'production' | true
-  /**
-   * Studio project(s) to link
-   *
-   * If you have multiple projects, you can use an array of strings.
-   *
-   * @example 'team-slug/project-slug'
-   * or
-   * @example ['team-slug/project-slug', 'team-slug/project-slug-2']
-   * @default: ''
-   **/
-  project: string | string[]
 }
 
 export interface ModuleHooks {}
@@ -36,8 +25,7 @@ export default defineNuxtModule<ModuleOptions>({
     configKey: 'studio'
   },
   defaults: {
-    enabled: 'production',
-    project: ''
+    enabled: 'production'
   },
   async setup (options, nuxt) {
     // @ts-ignore
@@ -97,7 +85,6 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.studio = defu(nuxt.options.runtimeConfig.studio as any, {
       version,
       publicToken,
-      project: options.project,
       gitInfo
     })
     nuxt.options.runtimeConfig.public.studio = defu(nuxt.options.runtimeConfig.public.studio as any, { apiURL, iframeMessagingAllowedOrigins })

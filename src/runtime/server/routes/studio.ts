@@ -58,8 +58,12 @@ export default eventHandler(async () => {
 
   return {
     // Studio version
+<<<<<<< Updated upstream
     version: studio.version,
     project: studio?.project,
+=======
+    version,
+>>>>>>> Stashed changes
     tokens: studio?.publicToken,
     gitInfo: studio?.gitInfo || {},
     // nuxt.schema for Nuxt Content frontmatter

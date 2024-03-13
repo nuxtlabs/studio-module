@@ -5,8 +5,7 @@ export default defineNuxtConfig({
   extends: '@nuxt/ui-pro',
   modules: ['@nuxt/ui', '@nuxt/content', '../src/module', '@nuxt/image'],
   studio: {
-    enabled: true,
-    project: 'studio/studio-module'
+    enabled: true
   },
   hooks: {
     // Set all components to global
