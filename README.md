@@ -20,7 +20,7 @@ Edit your websites made with [Nuxt Content](https://content.nuxt.com/), in produ
 
 ## Installation
 
-Install the dependency to you project:
+Install the dependency to your project:
 
 ```bash
 # NPM
