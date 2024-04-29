@@ -19,6 +19,8 @@ const defu = createDefu((obj, key, value) => {
   }
 })
 
+let dbFiles: PreviewFile[] = []
+
 export const useStudio = () => {
   const nuxtApp = useNuxtApp()
   const { studio: studioConfig, content: contentConfig } = useRuntimeConfig().public
@@ -30,7 +32,6 @@ export const useStudio = () => {
   let initialTokensConfig: object
 
   const storage = useState<Storage | null>('studio-client-db', () => null)
-  const dbFiles = useState<PreviewFile[]>('studio-preview-db-files', () => [])
 
   if (!storage.value) {
     // @ts-ignore
@@ -107,13 +108,16 @@ export const useStudio = () => {
   }
 
   const syncPreview = async (data: PreviewResponse) => {
-    // Preserve db files for later use in `draft:update` events
-    dbFiles.value = data.files = data.files || dbFiles.value || []
+    // Preserve db files in case storage is not ready yet (see check below)
+    dbFiles = data.files = data.files || dbFiles || []
 
     if (!storage.value) {
       // Postpone sync if storage is not ready
       return false
     }
+
+    // Empty dbFiles array once storage is ready
+    dbFiles = []
 
     const mergedFiles = mergeDraft(data.files, data.additions, data.deletions)
 
