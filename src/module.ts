@@ -1,9 +1,9 @@
 import { existsSync } from 'node:fs'
-import path from 'path'
+import path from 'node:path'
 import { defu } from 'defu'
 import { addPrerenderRoutes, installModule, defineNuxtModule, addPlugin, extendViteConfig, createResolver, logger, addComponentsDir, addServerHandler, resolveAlias, addVitePlugin } from '@nuxt/kit'
 import { findNearestFile } from 'pkg-types'
-// @ts-ignore
+// @ts-expect-error import does exist
 import gitUrlParse from 'git-url-parse'
 import { version } from '../package.json'
 
@@ -13,7 +13,7 @@ export interface ModuleOptions {
   /**
    * Enable Studio mode
    * @default: 'production'
-   **/
+   */
   enabled: 'production' | true
 }
 
@@ -22,17 +22,17 @@ export interface ModuleHooks {}
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: 'studio',
-    configKey: 'studio'
+    configKey: 'studio',
   },
   defaults: {
-    enabled: 'production'
+    enabled: 'production',
   },
-  async setup (options, nuxt) {
-    // @ts-ignore
+  async setup(options, nuxt) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     nuxt.hook('schema:resolved', (schema: any) => {
       nuxt.options.runtimeConfig.appConfigSchema = {
         properties: schema.properties?.appConfig,
-        default: schema.default?.appConfig
+        default: schema.default?.appConfig,
       }
       nuxt.options.runtimeConfig.contentSchema = schema.properties?.content || {}
     })
@@ -53,8 +53,8 @@ export default defineNuxtModule<ModuleOptions>({
     const contentModule = '@nuxt/content'
     // Check Content module is installed
     if (
-      !nuxt.options.runtimeConfig.content &&
-      !nuxt.options.modules.includes(contentModule)
+      !nuxt.options.runtimeConfig.content
+      && !nuxt.options.modules.includes(contentModule)
     ) {
       log.warn('Could not find `@nuxt/content` module. Please install it to enable preview mode.')
       return
@@ -62,7 +62,7 @@ export default defineNuxtModule<ModuleOptions>({
     // Check Content module version
     const contentModuleVersion = await import(contentModule)
       .then(m => m.default || m)
-      .then((m: any) => m.getMeta())
+      .then(m => m.getMeta())
       .then(m => m.version)
       .catch(() => '0')
     if (contentModuleVersion < '2.1.1') {
@@ -70,8 +70,7 @@ export default defineNuxtModule<ModuleOptions>({
       return
     }
 
-    // Check Pinceau module activated
-    // @ts-ignore
+    // @ts-expect-error Check Pinceau module activated
     nuxt.hook('pinceau:options', (options) => {
       options.studio = true
     })
@@ -82,18 +81,18 @@ export default defineNuxtModule<ModuleOptions>({
     const publicToken = process.env.NUXT_PUBLIC_STUDIO_TOKENS
     const iframeMessagingAllowedOrigins = process.env.IFRAME_MESSAGING_ALLOWED_ORIGINS
     const gitInfo = await _getLocalGitInfo(nuxt.options.rootDir) || _getGitEnv() || {}
-    nuxt.options.runtimeConfig.studio = defu(nuxt.options.runtimeConfig.studio as any, {
+    nuxt.options.runtimeConfig.studio = defu(nuxt.options.runtimeConfig.studio, {
       version,
       publicToken,
-      gitInfo
+      gitInfo,
     })
-    nuxt.options.runtimeConfig.public.studio = defu(nuxt.options.runtimeConfig.public.studio as any, { apiURL, iframeMessagingAllowedOrigins })
+    nuxt.options.runtimeConfig.public.studio = defu(nuxt.options.runtimeConfig.public.studio, { apiURL, iframeMessagingAllowedOrigins })
 
     extendViteConfig((config) => {
       config.optimizeDeps = config.optimizeDeps || {}
       config.optimizeDeps.include = config.optimizeDeps.include || []
       config.optimizeDeps.include.push(
-        'socket.io-client', 'slugify'
+        'socket.io-client', 'slugify',
       )
     })
 
@@ -101,7 +100,7 @@ export default defineNuxtModule<ModuleOptions>({
       addVitePlugin({
         name: 'content-resolver',
         enforce: 'pre',
-        resolveId (id, importer) {
+        resolveId(id, importer) {
           if (id.endsWith('.mjs') && ((importer || '').includes('@nuxt/content/dist') || id.includes('@nuxt/content/dist'))) {
             id = id
               .replace('.mjs', '.js')
@@ -109,7 +108,7 @@ export default defineNuxtModule<ModuleOptions>({
 
             return path.resolve(path.dirname(importer || __dirname), id.replace('.mjs', '.js'))
           }
-        }
+        },
       })
     }
 
@@ -123,29 +122,29 @@ export default defineNuxtModule<ModuleOptions>({
     addServerHandler({
       method: 'get',
       route: '/__studio.json',
-      handler: resolve('./runtime/server/routes/studio')
+      handler: resolve('./runtime/server/routes/studio'),
     })
     addPrerenderRoutes('/__studio.json')
 
     // Install dependencies
     await installModule('nuxt-component-meta', {
-      globalsOnly: true
+      globalsOnly: true,
     })
-  }
+  },
 })
 
 // --- Utilities to get git info ---
 
 interface GitInfo {
   // Repository name
-  name: string,
+  name: string
   // Repository owner/organization
-  owner: string,
+  owner: string
   // Repository URL
-  url: string,
+  url: string
 }
 
-async function _getLocalGitInfo (rootDir: string): Promise<GitInfo | void> {
+async function _getLocalGitInfo(rootDir: string): Promise<GitInfo | undefined> {
   const remote = await _getLocalGitRemote(rootDir)
   if (!remote) {
     return
@@ -158,15 +157,15 @@ async function _getLocalGitInfo (rootDir: string): Promise<GitInfo | void> {
   return {
     name,
     owner,
-    url
+    url,
   }
 }
 
-async function _getLocalGitRemote (dir: string) {
+async function _getLocalGitRemote(dir: string) {
   try {
     // https://www.npmjs.com/package/parse-git-config#options
     const parseGitConfig = await import('parse-git-config' as string).then(
-      m => m.promise || m.default || m
+      m => m.promise || m.default || m,
     ) as (opts: { path: string }) => Promise<Record<string, Record<string, string>>>
     const gitDir = await findNearestFile('.git/config', { startingFrom: dir })
     const parsed = await parseGitConfig({ path: gitDir })
@@ -175,30 +174,31 @@ async function _getLocalGitRemote (dir: string) {
     }
     const gitRemote = parsed['remote "origin"'].url
     return gitRemote
-  } catch (err) {
-
+  }
+  catch {
+    // Ignore error
   }
 }
 
-function _getGitEnv (): GitInfo {
+function _getGitEnv(): GitInfo {
   // https://github.com/unjs/std-env/issues/59
   const envInfo = {
     // Provider
-    provider: process.env.VERCEL_GIT_PROVIDER || // vercel
-     (process.env.GITHUB_SERVER_URL ? 'github' : undefined) || // github
-     '',
+    provider: process.env.VERCEL_GIT_PROVIDER // vercel
+    || (process.env.GITHUB_SERVER_URL ? 'github' : undefined) // github
+    || '',
     // Owner
-    owner: process.env.VERCEL_GIT_REPO_OWNER || // vercel
-      process.env.GITHUB_REPOSITORY_OWNER || // github
-      process.env.CI_PROJECT_PATH?.split('/').shift() || // gitlab
-      '',
+    owner: process.env.VERCEL_GIT_REPO_OWNER // vercel
+    || process.env.GITHUB_REPOSITORY_OWNER // github
+    || process.env.CI_PROJECT_PATH?.split('/').shift() // gitlab
+    || '',
     // Name
-    name: process.env.VERCEL_GIT_REPO_SLUG ||
-     process.env.GITHUB_REPOSITORY?.split('/').pop() || // github
-     process.env.CI_PROJECT_PATH?.split('/').splice(1).join('/') || // gitlab
-     '',
+    name: process.env.VERCEL_GIT_REPO_SLUG
+    || process.env.GITHUB_REPOSITORY?.split('/').pop() // github
+    || process.env.CI_PROJECT_PATH?.split('/').splice(1).join('/') // gitlab
+    || '',
     // Url
-    url: process.env.REPOSITORY_URL || '' // netlify
+    url: process.env.REPOSITORY_URL || '', // netlify
   }
 
   if (!envInfo.url && envInfo.provider && envInfo.owner && envInfo.name) {
@@ -211,12 +211,15 @@ function _getGitEnv (): GitInfo {
       const { name, owner } = gitUrlParse(envInfo.url) as Record<string, string>
       envInfo.name = name
       envInfo.owner = owner
-    } catch {}
+    }
+    catch {
+      // Ignore error
+    }
   }
 
   return {
     name: envInfo.name,
     owner: envInfo.owner,
-    url: envInfo.url
+    url: envInfo.url,
   }
 }

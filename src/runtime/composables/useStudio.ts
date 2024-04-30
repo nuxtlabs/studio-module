@@ -4,10 +4,11 @@ import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
 import { createDefu } from 'defu'
 import type { RouteLocationNormalized } from 'vue-router'
 import type { AppConfig } from 'nuxt/schema'
-import { callWithNuxt } from '#app'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles } from '../utils'
 import type { PreviewFile, PreviewResponse, FileChangeMessagePayload } from '../types'
+// @ts-expect-error import does exist
+import { callWithNuxt } from '#app'
 import { useAppConfig, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
 
 const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
@@ -34,7 +35,6 @@ export const useStudio = () => {
   const storage = useState<Storage | null>('studio-client-db', () => null)
 
   if (!storage.value) {
-    // @ts-ignore
     nuxtApp.hook('content:storage', (_storage: Storage) => {
       storage.value = _storage
     })
@@ -58,22 +58,21 @@ export const useStudio = () => {
       files.map((item) => {
         contentPathMap[item.parsed!._path!] = item.parsed!
         return contentStorage.setItem(`${previewToken}:${item.parsed!._id}`, JSON.stringify(item.parsed))
-      })
+      }),
     )
   }
 
-  const syncPreviewAppConfig = (appConfig?: Record<string, any>) => {
+  const syncPreviewAppConfig = (appConfig?: AppConfig) => {
     const _appConfig = callWithNuxt(nuxtApp, useAppConfig) as AppConfig
 
     // Set dynamic icons for preview if user is using @nuxt/ui
     if (_appConfig?.ui) {
-      // @ts-ignore
-      _appConfig.ui.icons = { ..._appConfig.ui.icons, dynamic: true }
+      (_appConfig.ui as AppConfig).icons = { ...(_appConfig.ui as AppConfig).icons as AppConfig, dynamic: true }
     }
 
     // Using `defu` to merge with initial config
     // This is important to revert to default values for missing properties
-    deepAssign(_appConfig, defu(appConfig as Record<string, any>, initialAppConfig))
+    deepAssign(_appConfig, defu(appConfig as AppConfig, initialAppConfig))
 
     // Reset app config to initial state if no appConfig is provided
     // Makes sure that app config does not contain any preview data
@@ -82,14 +81,14 @@ export const useStudio = () => {
     }
   }
 
-  const syncPreviewTokensConfig = (tokensConfig?: any) => {
+  const syncPreviewTokensConfig = (tokensConfig?: AppConfig) => {
     // Tokens config (optional; depends on the presence of pinceauTheme provide)
     // TODO: Improve typings
     // TODO: Use `inject()` but wrong context seem to be resolved; while $pinceauTheme global property is present in `app` context
-    const themeSheet = nuxtApp?.vueApp?._context?.config?.globalProperties?.$pinceauTheme as Record<string, any>
+    const themeSheet = nuxtApp?.vueApp?._context?.config?.globalProperties?.$pinceauTheme
 
     // Pinceau might be not present, or not booted yet
-    if (!themeSheet || !themeSheet?.updateTheme) { return }
+    if (!themeSheet || !themeSheet?.updateTheme) return
 
     // Set initial tokens config on first call
     if (!initialTokensConfig) {
@@ -102,8 +101,8 @@ export const useStudio = () => {
       themeSheet.updateTheme, [
         // Using `defu` to merge with initial tokens
         // This is important to revert to default values for missing properties
-        defu(tokensConfig, initialTokensConfig)
-      ]
+        defu(tokensConfig as AppConfig, initialTokensConfig),
+      ],
     )
   }
 
@@ -143,9 +142,9 @@ export const useStudio = () => {
       baseURL: apiURL,
       method: 'POST',
       params: {
-        token: previewToken
-      }
-    }) as any
+        token: previewToken,
+      },
+    })
   }
 
   const mountPreviewUI = () => {
@@ -158,7 +157,7 @@ export const useStudio = () => {
       previewToken,
       apiURL,
       syncPreview,
-      requestPreviewSyncAPI: requestPreviewSynchronization
+      requestPreviewSyncAPI: requestPreviewSynchronization,
     }).mount(el)
   }
 
@@ -187,7 +186,7 @@ export const useStudio = () => {
 
   const updateContent = (content: PreviewFile) => {
     const previewToken = window.sessionStorage.getItem('previewToken')
-    if (!storage.value) { return }
+    if (!storage.value) return
 
     contentPathMap[content.parsed!._path!] = content.parsed!
     storage.value.setItem(`${previewToken}:${content.parsed?._id}`, JSON.stringify(content.parsed))
@@ -199,6 +198,7 @@ export const useStudio = () => {
     await storage.value?.removeItem(`${previewToken}:${path}`)
 
     if (content) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete contentPathMap[content._path!]
       const nonDraftContent = await findContentWithId(content._id)
       if (nonDraftContent) {
@@ -210,7 +210,7 @@ export const useStudio = () => {
   const requestRerender = async () => {
     if (contentConfig?.documentDriven) {
       // Update all cached pages
-      const { pages } = callWithNuxt<any>(nuxtApp, useContentState)
+      const { pages } = callWithNuxt(nuxtApp, useContentState)
 
       const contents = await Promise.all(Object.keys(pages.value).map(async (key) => {
         return await findContentWithId(pages.value[key]?._id ?? key)
@@ -243,10 +243,10 @@ export const useStudio = () => {
     requestRerender,
 
     mountPreviewUI,
-    initiateIframeCommunication
+    initiateIframeCommunication,
   }
 
-  function initiateIframeCommunication () {
+  function initiateIframeCommunication() {
     // Not in an iframe
     if (!window.parent || window.self === window.parent) {
       return
@@ -262,7 +262,7 @@ export const useStudio = () => {
       query: toRaw(route.query),
       params: toRaw(route.params),
       fullPath: route.fullPath,
-      meta: toRaw(route.meta)
+      meta: toRaw(route.meta),
     })
 
     window.addEventListener('keydown', (e) => {
@@ -274,8 +274,8 @@ export const useStudio = () => {
             metaKey: e.metaKey,
             ctrlKey: e.ctrlKey,
             shiftKey: e.shiftKey,
-            altKey: e.altKey
-          }
+            altKey: e.altKey,
+          },
         }, '*')
       }
     })
@@ -295,10 +295,12 @@ export const useStudio = () => {
           if (!content) {
           // DO not navigate to another page if content is not found
           // This makes sure that user stays on the same page when navigation through directories in the editor
-          } else if (content._partial) {
+          }
+          else if (content._partial) {
           // Partials should use as helpers for other content files, like `_dir.yml`
           // We should not navigate if content is a partial
-          } else if (content._path !== useRoute().path) {
+          }
+          else if (content._path !== useRoute().path) {
             editorSelectedPath.value = content._path!
             router.push(content._path!)
           }
@@ -352,16 +354,15 @@ export const useStudio = () => {
       }
     })
 
-    // @ts-ignore
+    // @ts-expect-error custom hook
     nuxtApp.hook('content:document-driven:finish', ({ route, page }) => {
       route.meta.studio_page_contentId = page?._id
     })
 
-    // @ts-ignore
     nuxtApp.hook('nuxt-studio:preview:ready', () => {
       window.parent.postMessage({
         type: 'nuxt-studio:preview:ready',
-        payload: routePayload(useRoute())
+        payload: routePayload(useRoute()),
       }, '*')
 
       setTimeout(() => {
@@ -371,7 +372,7 @@ export const useStudio = () => {
     })
 
     // Inject Utils to window
-    function detectRenderedContents () {
+    function detectRenderedContents() {
       const renderedContents = Array.from(window.document.querySelectorAll('[data-content-id]'))
         .map(el => el.getAttribute('data-content-id')!)
 
@@ -393,8 +394,8 @@ export const useStudio = () => {
         payload: {
           ...routePayload(route),
           contentIds,
-          ...data
-        }
+          ...data,
+        },
       }, '*')
     }
   }

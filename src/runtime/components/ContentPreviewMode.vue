@@ -1,26 +1,27 @@
 <script setup lang="ts">
-import { onMounted, ref, onUnmounted, Transition } from 'vue'
+import { onMounted, ref, onUnmounted } from 'vue'
 import type { Socket } from 'socket.io-client'
-import { useCookie, useRoute, useNuxtApp, useRouter } from '#app'
 import type { PreviewResponse } from '../types'
+// @ts-expect-error import does exist
+import { useCookie, useNuxtApp, useRouter } from '#app'
 
 const props = defineProps({
   previewToken: {
     type: String,
-    required: true
+    required: true,
   },
   apiURL: {
     type: String,
-    required: true
+    required: true,
   },
   syncPreview: {
     type: Function,
-    required: true
+    required: true,
   },
   requestPreviewSyncAPI: {
     type: Function,
-    required: true
-  }
+    required: true,
+  },
 })
 
 const previewClasses = ['__nuxt_preview', '__preview_enabled']
@@ -70,7 +71,6 @@ const sync = async (data: PreviewResponse) => {
   // Remove query params in url to refresh page (in case of 404 with no SPA fallback)
   await router.replace({ query: {} })
 
-  // @ts-ignore
   nuxtApp.callHook('nuxt-studio:preview:ready')
 
   if (window.parent && window.self !== window.parent) {
@@ -83,8 +83,8 @@ onMounted(async () => {
   socket = io.connect(`${props.apiURL}/preview`, {
     transports: ['websocket', 'polling'],
     auth: {
-      token: props.previewToken
-    }
+      token: props.previewToken,
+    },
   })
 
   let syncTimeout: ReturnType<typeof setTimeout> | null
@@ -122,7 +122,8 @@ onMounted(async () => {
         })
 
         await props.requestPreviewSyncAPI()
-      } catch (e: any) {
+      }
+      catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
         clearSyncTimeout()
 
         switch (e.response.status) {

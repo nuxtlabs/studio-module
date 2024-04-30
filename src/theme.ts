@@ -11,138 +11,138 @@ export type PickerTypes = 'media-picker' | 'icon-picker'
 
 export type InputsTypes = DesignTokensInputsTypes | ConfigInputsTypes
 
-export type PartialSchema = Pick<Schema, 'title' | 'description' | 'default' | 'required'> & { [key: string]: any }
+export type PartialSchema = Pick<Schema, 'title' | 'description' | 'default' | 'required'> & { [key: string]: unknown }
 
 const supportedFields: { [key in InputsTypes]: Schema } = {
   /**
    * Raw types
    */
-  default: {
+  'default': {
     type: 'string',
     tags: [
-      '@studioInput string'
-    ]
+      '@studioInput string',
+    ],
   },
-  string: {
+  'string': {
     type: 'string',
     tags: [
-      '@studioInput string'
-    ]
+      '@studioInput string',
+    ],
   },
-  number: {
+  'number': {
     type: 'number',
     tags: [
-      '@studioInput number'
-    ]
+      '@studioInput number',
+    ],
   },
-  boolean: {
+  'boolean': {
     type: 'boolean',
     tags: [
-      '@studioInput boolean'
-    ]
+      '@studioInput boolean',
+    ],
   },
-  array: {
+  'array': {
     type: 'array',
     tags: [
-      '@studioInput array'
-    ]
+      '@studioInput array',
+    ],
   },
   'design-token': {
     type: 'string',
     tags: [
-      '@studioInput design-token'
-    ]
+      '@studioInput design-token',
+    ],
   },
-  object: {
+  'object': {
     type: 'object',
     tags: [
-      '@studioInput object'
-    ]
+      '@studioInput object',
+    ],
   },
-  file: {
+  'file': {
     type: 'string',
     tags: [
-      '@studioInput file'
-    ]
+      '@studioInput file',
+    ],
   },
-  media: {
+  'media': {
     type: 'string',
     tags: [
-      '@studioInput media'
-    ]
+      '@studioInput media',
+    ],
   },
-  component: {
+  'component': {
     type: 'string',
     tags: [
-      '@studioInput component'
-    ]
+      '@studioInput component',
+    ],
   },
-  icon: {
+  'icon': {
     type: 'string',
     tags: [
-      '@studioInput icon'
-    ]
+      '@studioInput icon',
+    ],
   },
 
   /**
    * Design Tokens
    */
-  color: {
+  'color': {
     type: 'string',
     tags: [
       '@studioInput design-token',
-      '@studioInputTokenType color'
-    ]
+      '@studioInputTokenType color',
+    ],
   },
-  size: {
+  'size': {
     type: 'string',
     tags: [
       '@studioInput design-token',
-      '@studioInputTokenType size'
-    ]
+      '@studioInputTokenType size',
+    ],
   },
-  shadow: {
+  'shadow': {
     type: 'string',
     tags: [
       '@studioInput design-token',
-      '@studioInputTokenType shadow'
-    ]
+      '@studioInputTokenType shadow',
+    ],
   },
-  opacity: {
+  'opacity': {
     type: 'string',
     tags: [
       '@studioInput design-token',
-      '@studioInputTokenType opacity'
-    ]
+      '@studioInputTokenType opacity',
+    ],
   },
-  font: {
+  'font': {
     type: 'string',
     tags: [
       '@studioInput design-token',
-      '@studioInputTokenType font'
-    ]
+      '@studioInputTokenType font',
+    ],
   },
   'font-weight': {
     type: 'string',
     tags: [
       '@studioInput design-token',
-      '@studioInputTokenType font-weight'
-    ]
+      '@studioInputTokenType font-weight',
+    ],
   },
   'font-size': {
     type: 'string',
     tags: [
       '@studioInput design-token',
-      '@studioInputTokenType size'
-    ]
+      '@studioInputTokenType size',
+    ],
   },
   'letter-spacing': {
     type: 'string',
     tags: [
       '@studioInput design-token',
-      '@studioInputTokenType size'
-    ]
-  }
+      '@studioInputTokenType size',
+    ],
+  },
 }
 
 export type StudioFieldData =
@@ -157,7 +157,7 @@ export type StudioFieldData =
  * Helper to build aNuxt Studio compatible configuration schema.
  * Supports all type of fields provided by Nuxt Studio and all fields supported from Untyped Schema interface.
  */
-export function field (schema: StudioFieldData): InputValue {
+export function field(schema: StudioFieldData): InputValue {
   if (!schema.type) {
     throw new Error(`Missing type in schema ${JSON.stringify(schema)}`)
   }
@@ -174,11 +174,11 @@ export function field (schema: StudioFieldData): InputValue {
     delete result.icon
   }
   return {
-    $schema: result
+    $schema: result,
   }
 }
 
-export function group (schema: StudioFieldData): InputValue {
+export function group(schema: StudioFieldData): InputValue {
   const result = { ...schema }
 
   if (result.icon) {
@@ -196,6 +196,6 @@ export function group (schema: StudioFieldData): InputValue {
 
   return {
     $schema: result,
-    ...fields
+    ...fields,
   }
 }

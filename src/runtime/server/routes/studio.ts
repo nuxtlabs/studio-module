@@ -2,7 +2,7 @@ import type { ComponentMeta } from 'vue-component-meta'
 import { eventHandler } from 'h3'
 import { joinURL } from 'ufo'
 import { useRuntimeConfig, useAppConfig } from '#imports'
-// @ts-ignore
+// @ts-expect-error import does exist
 import components from '#nuxt-component-meta/nitro'
 
 interface NuxtComponentMeta {
@@ -23,8 +23,8 @@ export default eventHandler(async () => {
         meta: {
           props: meta.props,
           slots: meta.slots,
-          events: meta.events
-        }
+          events: meta.events,
+        },
       }
     })
 
@@ -33,7 +33,7 @@ export default eventHandler(async () => {
   const { app, contentSchema, appConfigSchema, studio, content: { sources, ignores, locales, defaultLocale, highlight, navigation, documentDriven, experimental } } = runtimeConfig
 
   // Delete GitHub tokens for multiple source to avoid exposing them
-  const safeSources: any = {}
+  const safeSources: Record<string, unknown> = {}
   Object.keys(sources).forEach((name) => {
     const { driver, prefix, base, repo, branch, dir } = sources[name] || {}
     safeSources[name] = {
@@ -42,17 +42,16 @@ export default eventHandler(async () => {
       base,
       repo,
       branch,
-      dir
+      dir,
     }
   })
-  // Support for __pinceau_tokens_{schema|config}.json
   const hasPinceau = runtimeConfig?.pinceau?.studio
-  let tokensConfig: any
-  let tokensConfigSchema: any
+  let tokensConfig
+  let tokensConfigSchema
   if (hasPinceau) {
-    // @ts-ignore
+    // @ts-expect-error Support for __pinceau_tokens_{schema|config}.json
     tokensConfig = await $fetch.native(joinURL(app.baseURL, '/__pinceau_tokens_config.json')).then(r => r.json())
-    // @ts-ignore
+    // @ts-expect-error Support for __pinceau_tokens_{schema|config}.json
     tokensConfigSchema = await $fetch.native(joinURL(app.baseURL, '/__pinceau_tokens_schema.json')).then(r => r.json())
   }
 
@@ -72,6 +71,6 @@ export default eventHandler(async () => {
     // @nuxt/content
     content: { sources: safeSources, ignores, locales, defaultLocale, highlight, navigation, documentDriven, experimental },
     // nuxt-component-meta
-    components: filteredComponents
+    components: filteredComponents,
   }
 })

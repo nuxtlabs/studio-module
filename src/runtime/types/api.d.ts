@@ -10,7 +10,7 @@ export interface DraftFile {
   parsed?: ParsedContent
   new?: boolean
   oldPath?: string
-  pathMeta?: Record<string, any>
+  pathMeta?: Record<string, unknown>
 }
 
 export interface PreviewResponse {

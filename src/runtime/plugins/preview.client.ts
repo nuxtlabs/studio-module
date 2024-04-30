@@ -1,12 +1,14 @@
 import { defineNuxtPlugin, useCookie, useRoute, useRuntimeConfig, useState } from '#imports'
+// @ts-expect-error import does exist
+import type { NuxtApp } from '#app'
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
   const runtimeConfig = useRuntimeConfig().public.studio || {}
   const route = useRoute()
   const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
   const storage = useState<Storage | null>('studio-client-db', () => null)
 
-  async function initializePreview () {
+  async function initializePreview() {
     const useStudio = await import('../composables/useStudio').then(m => m.useStudio)
     const { mountPreviewUI, initiateIframeCommunication } = useStudio()
 
@@ -33,7 +35,6 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     // Listen to `content:storage` hook to get storage instance
     // There is some cases that `content:storage` hook is called before initializing preview
-    // @ts-ignore
     nuxtApp.hook('content:storage', (_storage: Storage) => {
       storage.value = _storage
     })

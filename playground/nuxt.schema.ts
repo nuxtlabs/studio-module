@@ -5,8 +5,8 @@ export default defineNuxtSchema({
     header: group({
       title: 'Header',
       fields: {
-        title: field({ type: 'string' })
-      }
-    })
-  }
+        title: field({ type: 'string' }),
+      },
+    }),
+  },
 })

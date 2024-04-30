@@ -19,7 +19,8 @@ export const mergeDraft = (dbFiles: PreviewFile[] = [], draftAdditions: DraftFil
       if (oldPathExistInCache) {
         mergedFiles.push({ path: addition.path, parsed: addition.parsed })
         // Update exsiting renamed file data
-      } else {
+      }
+      else {
         const file = mergedFiles.find(f => f.path === addition.oldPath)
         if (file) {
           file.path = addition.path
@@ -27,7 +28,8 @@ export const mergeDraft = (dbFiles: PreviewFile[] = [], draftAdditions: DraftFil
           // If file is also modified, set draft content
           if (addition.parsed) {
             file.parsed = addition.parsed
-          } else if (addition.pathMeta) {
+          }
+          else if (addition.pathMeta) {
             // Apply new path metadata
             ['_file', '_path', '_id', '_locale'].forEach((key) => {
               file.parsed![key] = addition.pathMeta![key]
@@ -36,10 +38,12 @@ export const mergeDraft = (dbFiles: PreviewFile[] = [], draftAdditions: DraftFil
         }
       }
       // File has been added
-    } else if (addition.new) {
+    }
+    else if (addition.new) {
       mergedFiles.push({ path: addition.path, parsed: addition.parsed })
       // File has been modified
-    } else {
+    }
+    else {
       const file = mergedFiles.find(f => f.path === addition.path)
       if (file) {
         Object.assign(file, { path: addition.path, parsed: addition.parsed })
