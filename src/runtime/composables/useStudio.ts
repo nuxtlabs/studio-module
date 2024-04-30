@@ -7,7 +7,6 @@ import type { AppConfig } from 'nuxt/schema'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
 import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles } from '../utils'
 import type { PreviewFile, PreviewResponse, FileChangeMessagePayload } from '../types'
-// @ts-expect-error import does exist
 import { callWithNuxt } from '#app'
 import { useAppConfig, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
 
@@ -35,6 +34,7 @@ export const useStudio = () => {
   const storage = useState<Storage | null>('studio-client-db', () => null)
 
   if (!storage.value) {
+    // @ts-expect-error custom hook
     nuxtApp.hook('content:storage', (_storage: Storage) => {
       storage.value = _storage
     })
@@ -62,17 +62,17 @@ export const useStudio = () => {
     )
   }
 
-  const syncPreviewAppConfig = (appConfig?: AppConfig) => {
+  const syncPreviewAppConfig = (appConfig?: ParsedContent) => {
     const _appConfig = callWithNuxt(nuxtApp, useAppConfig) as AppConfig
 
     // Set dynamic icons for preview if user is using @nuxt/ui
     if (_appConfig?.ui) {
-      (_appConfig.ui as AppConfig).icons = { ...(_appConfig.ui as AppConfig).icons as AppConfig, dynamic: true }
+      (_appConfig.ui as Record<string, unknown>).icons = { ...(_appConfig.ui as Record<string, unknown>).icons as AppConfig, dynamic: true }
     }
 
     // Using `defu` to merge with initial config
     // This is important to revert to default values for missing properties
-    deepAssign(_appConfig, defu(appConfig as AppConfig, initialAppConfig))
+    deepAssign(_appConfig, defu(appConfig as ParsedContent, initialAppConfig))
 
     // Reset app config to initial state if no appConfig is provided
     // Makes sure that app config does not contain any preview data
@@ -81,27 +81,29 @@ export const useStudio = () => {
     }
   }
 
-  const syncPreviewTokensConfig = (tokensConfig?: AppConfig) => {
+  const syncPreviewTokensConfig = (tokensConfig?: ParsedContent) => {
     // Tokens config (optional; depends on the presence of pinceauTheme provide)
     // TODO: Improve typings
     // TODO: Use `inject()` but wrong context seem to be resolved; while $pinceauTheme global property is present in `app` context
-    const themeSheet = nuxtApp?.vueApp?._context?.config?.globalProperties?.$pinceauTheme
+    const themeSheet = nuxtApp?.vueApp?._context?.config?.globalProperties?.$pinceauTheme as Record<string, unknown>
 
     // Pinceau might be not present, or not booted yet
     if (!themeSheet || !themeSheet?.updateTheme) return
 
     // Set initial tokens config on first call
     if (!initialTokensConfig) {
-      initialTokensConfig = JSON.parse(JSON.stringify(themeSheet?.theme.value || {}))
+      initialTokensConfig = JSON.parse(JSON.stringify((themeSheet?.theme as Record<string, unknown>).value || {}))
     }
 
     // Call updateTheme with new config
     callWithNuxt(
       nuxtApp,
-      themeSheet.updateTheme, [
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      themeSheet.updateTheme as any,
+      [
         // Using `defu` to merge with initial tokens
         // This is important to revert to default values for missing properties
-        defu(tokensConfig as AppConfig, initialTokensConfig),
+        defu(tokensConfig as ParsedContent, initialTokensConfig),
       ],
     )
   }
@@ -125,10 +127,10 @@ export const useStudio = () => {
     await syncPreviewFiles(storage.value, contentFiles)
 
     const appConfig = mergedFiles.find(item => item.path === StudioConfigFiles.appConfig)
-    syncPreviewAppConfig(appConfig?.parsed)
+    syncPreviewAppConfig(appConfig?.parsed as ParsedContent)
 
     const tokensConfig = mergedFiles.find(item => item.path === StudioConfigFiles.tokensConfig)
-    syncPreviewTokensConfig(tokensConfig?.parsed)
+    syncPreviewTokensConfig(tokensConfig?.parsed as ParsedContent)
 
     requestRerender()
 
@@ -209,7 +211,7 @@ export const useStudio = () => {
 
   const requestRerender = async () => {
     if (contentConfig?.documentDriven) {
-      // Update all cached pages
+      // @ts-expect-error Update all cached pages
       const { pages } = callWithNuxt(nuxtApp, useContentState)
 
       const contents = await Promise.all(Object.keys(pages.value).map(async (key) => {
@@ -359,6 +361,7 @@ export const useStudio = () => {
       route.meta.studio_page_contentId = page?._id
     })
 
+    // @ts-expect-error custom hook
     nuxtApp.hook('nuxt-studio:preview:ready', () => {
       window.parent.postMessage({
         type: 'nuxt-studio:preview:ready',

@@ -1,8 +1,6 @@
 import { defineNuxtPlugin, useCookie, useRoute, useRuntimeConfig, useState } from '#imports'
-// @ts-expect-error import does exist
-import type { NuxtApp } from '#app'
 
-export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
+export default defineNuxtPlugin((nuxtApp) => {
   const runtimeConfig = useRuntimeConfig().public.studio || {}
   const route = useRoute()
   const previewToken = useCookie('previewToken', { sameSite: 'none', secure: true })
@@ -35,6 +33,7 @@ export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
 
     // Listen to `content:storage` hook to get storage instance
     // There is some cases that `content:storage` hook is called before initializing preview
+    // @ts-expect-error custom hook
     nuxtApp.hook('content:storage', (_storage: Storage) => {
       storage.value = _storage
     })

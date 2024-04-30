@@ -81,7 +81,7 @@ export default defineNuxtModule<ModuleOptions>({
     const publicToken = process.env.NUXT_PUBLIC_STUDIO_TOKENS
     const iframeMessagingAllowedOrigins = process.env.IFRAME_MESSAGING_ALLOWED_ORIGINS
     const gitInfo = await _getLocalGitInfo(nuxt.options.rootDir) || _getGitEnv() || {}
-    nuxt.options.runtimeConfig.studio = defu(nuxt.options.runtimeConfig.studio, {
+    nuxt.options.runtimeConfig.studio = defu(nuxt.options.runtimeConfig.studio as Record<string, unknown>, {
       version,
       publicToken,
       gitInfo,

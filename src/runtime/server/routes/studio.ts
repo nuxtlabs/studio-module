@@ -30,12 +30,13 @@ export default eventHandler(async () => {
 
   const appConfig = useAppConfig()
   const runtimeConfig = useRuntimeConfig()
-  const { app, contentSchema, appConfigSchema, studio, content: { sources, ignores, locales, defaultLocale, highlight, navigation, documentDriven, experimental } } = runtimeConfig
+  const { app, contentSchema, appConfigSchema, studio, content } = runtimeConfig
+  const { sources, ignores, locales, defaultLocale, highlight, navigation, documentDriven, experimental } = content as Record<string, unknown>
 
   // Delete GitHub tokens for multiple source to avoid exposing them
   const safeSources: Record<string, unknown> = {}
-  Object.keys(sources).forEach((name) => {
-    const { driver, prefix, base, repo, branch, dir } = sources[name] || {}
+  Object.keys(sources as Record<string, unknown>).forEach((name) => {
+    const { driver, prefix, base, repo, branch, dir } = (sources as Record<string, unknown>)[name] as Record<string, unknown> || {}
     safeSources[name] = {
       driver,
       prefix,
@@ -45,7 +46,7 @@ export default eventHandler(async () => {
       dir,
     }
   })
-  const hasPinceau = runtimeConfig?.pinceau?.studio
+  const hasPinceau = (runtimeConfig?.pinceau as Record<string, unknown>)?.studio
   let tokensConfig
   let tokensConfigSchema
   if (hasPinceau) {
@@ -57,9 +58,9 @@ export default eventHandler(async () => {
 
   return {
     // Studio version
-    version: studio.version,
-    tokens: studio?.publicToken,
-    gitInfo: studio?.gitInfo || {},
+    version: (studio as Record<string, unknown>)?.version,
+    tokens: (studio as Record<string, unknown>)?.publicToken,
+    gitInfo: (studio as Record<string, unknown>)?.gitInfo || {},
     // nuxt.schema for Nuxt Content frontmatter
     contentSchema: contentSchema || {},
     // app.config

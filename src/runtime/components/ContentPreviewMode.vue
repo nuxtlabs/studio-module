@@ -2,7 +2,6 @@
 import { onMounted, ref, onUnmounted } from 'vue'
 import type { Socket } from 'socket.io-client'
 import type { PreviewResponse } from '../types'
-// @ts-expect-error import does exist
 import { useCookie, useNuxtApp, useRouter } from '#app'
 
 const props = defineProps({
@@ -71,6 +70,7 @@ const sync = async (data: PreviewResponse) => {
   // Remove query params in url to refresh page (in case of 404 with no SPA fallback)
   await router.replace({ query: {} })
 
+  // @ts-expect-error custom hook
   nuxtApp.callHook('nuxt-studio:preview:ready')
 
   if (window.parent && window.self !== window.parent) {

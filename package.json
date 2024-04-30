@@ -39,6 +39,7 @@
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxt prepare playground",
     "dev": "nuxt dev playground --tunnel",
     "build": "nuxt-module-build build",
+    "typecheck": "nuxi typecheck",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepack": "pnpm lint && pnpm build",
