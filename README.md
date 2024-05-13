@@ -23,12 +23,7 @@ Edit your websites made with [Nuxt Content](https://content.nuxt.com/), in produ
 Install the dependency to your project:
 
 ```bash
-# NPM
-npm install --save-dev @nuxthq/studio
-# Yarn
-yarn add --dev @nuxthq/studio
-# pnpm
-pnpm add --save-dev @nuxthq/studio
+npx nuxi@latest module add studio
 ```
 
 Then, register the module in your `nuxt.config.ts`:
@@ -57,7 +52,7 @@ STUDIO_API=http://localhost:{PORT}
 You can install the latest nightly build of the Studio module by running:
 
 ```bash
-npm i @nuxthq/studio@nightly
+npx nuxi@latest module add studio
 ```
 
 ### Development
