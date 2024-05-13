@@ -295,12 +295,11 @@ export const useStudio = () => {
         case 'nuxt-studio:editor:file-selected': {
           const content = await findContentWithId(payload.path)
           if (!content) {
-          // DO not navigate to another page if content is not found
-          // This makes sure that user stays on the same page when navigation through directories in the editor
-          }
-          else if (content._partial) {
-          // Partials should use as helpers for other content files, like `_dir.yml`
-          // We should not navigate if content is a partial
+            // Do not navigate to another page if content is not found
+            // This makes sure that user stays on the same page when navigation through directories in the editor
+          } else if (content._partial || !String(payload.path).endsWith('.md')) {
+            // Partials and non-markdown files should use as helpers for other content files, like `_dir.yml`
+            // We should not navigate if content is a partial or non-markdown file
           }
           else if (content._path !== useRoute().path) {
             editorSelectedPath.value = content._path!
