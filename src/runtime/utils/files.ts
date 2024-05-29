@@ -9,8 +9,12 @@ export const mergeDraft = (dbFiles: PreviewFile[] = [], draftAdditions: DraftFil
 
   // Merge darft additions
   for (const addition of additions) {
+    // File is new
+    if (addition.new) {
+      mergedFiles.push({ path: addition.path, parsed: addition.parsed })
+    }
     // File has been renamed
-    if (addition.oldPath) {
+    else if (addition.oldPath) {
       // Remove old file from deletions (only display renamed one)
       deletions.splice(deletions.findIndex(d => d.path === addition.oldPath), 1)
 
@@ -39,10 +43,7 @@ export const mergeDraft = (dbFiles: PreviewFile[] = [], draftAdditions: DraftFil
       }
       // File has been added
     }
-    else if (addition.new) {
-      mergedFiles.push({ path: addition.path, parsed: addition.parsed })
-      // File has been modified
-    }
+    // File has been modified
     else {
       const file = mergedFiles.find(f => f.path === addition.path)
       if (file) {
