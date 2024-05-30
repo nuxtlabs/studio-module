@@ -49,6 +49,9 @@ export const mergeDraft = (dbFiles: PreviewFile[] = [], draftAdditions: DraftFil
       if (file) {
         Object.assign(file, { path: addition.path, parsed: addition.parsed })
       }
+      else {
+        mergedFiles.push({ path: addition.path, parsed: addition.parsed })
+      }
     }
   }
 
