@@ -1,60 +1,40 @@
 import { createApp } from 'vue'
-import type { Storage } from 'unstorage'
 import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
-import { createDefu } from 'defu'
 import type { RouteLocationNormalized } from 'vue-router'
 import type { AppConfig } from 'nuxt/schema'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
-import { createSingleton, deepAssign, deepDelete, mergeDraft, StudioConfigFiles } from '../utils'
+import { createSingleton, deepAssign, deepDelete, defu, mergeDraft, StudioConfigFiles } from '../utils'
 import type { PreviewFile, PreviewResponse, FileChangeMessagePayload } from '../types'
+import { useContentStorage } from './useContentStorage'
 import { callWithNuxt } from '#app'
-import { useAppConfig, useNuxtApp, useRuntimeConfig, useState, useContentState, queryContent, ref, toRaw, useRoute, useRouter } from '#imports'
+import { useAppConfig, useNuxtApp, useRuntimeConfig, useContentState, ref, toRaw, useRoute, useRouter } from '#imports'
 
 const useDefaultAppConfig = createSingleton(() => JSON.parse(JSON.stringify((useAppConfig()))))
-
-const defu = createDefu((obj, key, value) => {
-  if (Array.isArray(obj[key]) && Array.isArray(value)) {
-    obj[key] = value
-    return true
-  }
-})
 
 let dbFiles: PreviewFile[] = []
 
 export const useStudio = () => {
   const nuxtApp = useNuxtApp()
+  const { storage, findContentItem, updateContentItem, removeContentItem, removeAllContentItems, setPreviewMetaItems } = useContentStorage()
   const { studio: studioConfig, content: contentConfig } = useRuntimeConfig().public
-  const contentPathMap = {} as Record<string, ParsedContent>
   const apiURL = window.sessionStorage.getItem('previewAPI') || studioConfig?.apiURL
 
   // App config (required)
   const initialAppConfig = useDefaultAppConfig()
-  const storage = useState<Storage | null>('studio-client-db', () => null)
 
-  if (!storage.value) {
-    nuxtApp.hook('content:storage', (_storage: Storage) => {
-      storage.value = _storage
-    })
+  const syncPreviewFiles = async (files: PreviewFile[]) => {
+    const previewToken = window.sessionStorage.getItem('previewToken') as string
 
-    // Call `queryContent` to trigger `content:storage` hook
-    queryContent('/non-existing-path').findOne()
-  }
-
-  const syncPreviewFiles = async (contentStorage: Storage, files: PreviewFile[]) => {
-    const previewToken = window.sessionStorage.getItem('previewToken')
     // Remove previous preview data
-    const keys: string[] = await contentStorage.getKeys(`${previewToken}:`)
-    await Promise.all(keys.map(key => contentStorage.removeItem(key)))
+    removeAllContentItems(previewToken)
 
     // Set preview meta
-    const sources = new Set<string>(files.map(file => file.parsed!._id.split(':').shift()!))
-    await contentStorage.setItem(`${previewToken}$`, JSON.stringify({ ignoreSources: Array.from(sources) }))
+    setPreviewMetaItems(previewToken, files)
 
     // Handle content files
     await Promise.all(
-      files.map((item) => {
-        contentPathMap[item.parsed!._path!] = item.parsed!
-        return contentStorage.setItem(`${previewToken}:${item.parsed!._id}`, JSON.stringify(item.parsed))
+      files.map((file) => {
+        updateContentItem(previewToken, file)
       }),
     )
   }
@@ -94,7 +74,7 @@ export const useStudio = () => {
 
     // Handle content files
     const contentFiles = mergedFiles.filter(item => !([StudioConfigFiles.appConfig, StudioConfigFiles.nuxtConfig].includes(item.path)))
-    await syncPreviewFiles(storage.value, contentFiles)
+    await syncPreviewFiles(contentFiles)
 
     const appConfig = mergedFiles.find(item => item.path === StudioConfigFiles.appConfig)
     syncPreviewAppConfig(appConfig?.parsed as ParsedContent)
@@ -130,58 +110,12 @@ export const useStudio = () => {
     }).mount(el)
   }
 
-  // Content Helpers
-  const findContentWithId = async (path: string): Promise<ParsedContent | null> => {
-    const previewToken = window.sessionStorage.getItem('previewToken')
-    if (!path) {
-      return null
-    }
-    path = path.replace(/\/$/, '')
-    let content = await storage.value?.getItem(`${previewToken}:${path}`)
-    if (!content) {
-      content = await storage.value?.getItem(`cached:${path}`)
-    }
-    if (!content) {
-      content = content = await storage.value?.getItem(path)
-    }
-
-    // try finding content from contentPathMap
-    if (!content) {
-      content = contentPathMap[path || '/']
-    }
-
-    return content as ParsedContent
-  }
-
-  const updateContent = (content: PreviewFile) => {
-    const previewToken = window.sessionStorage.getItem('previewToken')
-    if (!storage.value) return
-
-    contentPathMap[content.parsed!._path!] = content.parsed!
-    storage.value.setItem(`${previewToken}:${content.parsed?._id}`, JSON.stringify(content.parsed))
-  }
-
-  const removeContentWithId = async (path: string) => {
-    const previewToken = window.sessionStorage.getItem('previewToken')
-    const content = await findContentWithId(path)
-    await storage.value?.removeItem(`${previewToken}:${path}`)
-
-    if (content) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete contentPathMap[content._path!]
-      const nonDraftContent = await findContentWithId(content._id)
-      if (nonDraftContent) {
-        contentPathMap[nonDraftContent._path!] = nonDraftContent
-      }
-    }
-  }
-
   const requestRerender = async () => {
     if (contentConfig?.documentDriven) {
       const { pages } = callWithNuxt(nuxtApp, useContentState)
 
       const contents = await Promise.all(Object.keys(pages.value).map(async (key) => {
-        return await findContentWithId(pages.value[key]?._id ?? key)
+        return await findContentItem(pages.value[key]?._id ?? key)
       }))
 
       pages.value = contents.reduce((acc, item, index) => {
@@ -196,19 +130,6 @@ export const useStudio = () => {
   }
 
   return {
-    apiURL,
-    contentStorage: storage,
-
-    syncPreviewFiles,
-    syncPreviewAppConfig,
-    requestPreviewSynchronization,
-
-    findContentWithId,
-    updateContent,
-    removeContentWithId,
-
-    requestRerender,
-
     mountPreviewUI,
     initiateIframeCommunication,
   }
@@ -258,7 +179,7 @@ export const useStudio = () => {
 
       switch (type) {
         case 'nuxt-studio:editor:file-selected': {
-          const content = await findContentWithId(payload.path)
+          const content = await findContentItem(payload.path)
           if (!content) {
             // Do not navigate to another page if content is not found
             // This makes sure that user stays on the same page when navigation through directories in the editor
@@ -273,13 +194,15 @@ export const useStudio = () => {
           }
           break
         }
+        case 'nuxt-studio:editor:media-changed':
         case 'nuxt-studio:editor:file-changed': {
+          const previewToken = window.sessionStorage.getItem('previewToken') as string
           const { additions = [], deletions = [] } = payload as FileChangeMessagePayload
           for (const addition of additions) {
-            await updateContent(addition)
+            await updateContentItem(previewToken, addition)
           }
           for (const deletion of deletions) {
-            await removeContentWithId(deletion.path)
+            await removeContentItem(previewToken, deletion.path)
           }
           requestRerender()
           break
