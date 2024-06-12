@@ -3,7 +3,6 @@ export * from './files'
 export const StudioConfigFiles = {
   appConfig: 'app.config.ts',
   nuxtConfig: 'nuxt.config.ts',
-  tokensConfig: 'tokens.config.ts',
 }
 
 export const createSingleton = <T, Params extends Array<unknown>>(fn: () => T) => {

@@ -1,6 +1,5 @@
 import type { ComponentMeta } from 'vue-component-meta'
 import { eventHandler } from 'h3'
-import { joinURL } from 'ufo'
 import { useRuntimeConfig, useAppConfig } from '#imports'
 // @ts-expect-error import does exist
 import components from '#nuxt-component-meta/nitro'
@@ -30,7 +29,7 @@ export default eventHandler(async () => {
 
   const appConfig = useAppConfig()
   const runtimeConfig = useRuntimeConfig()
-  const { app, contentSchema, appConfigSchema, studio, content } = runtimeConfig
+  const { contentSchema, appConfigSchema, studio, content } = runtimeConfig
   const { sources, ignores, locales, defaultLocale, highlight, navigation, documentDriven, experimental } = content as Record<string, unknown>
 
   // Delete GitHub tokens for multiple source to avoid exposing them
@@ -46,15 +45,6 @@ export default eventHandler(async () => {
       dir,
     }
   })
-  const hasPinceau = (runtimeConfig?.pinceau as Record<string, unknown>)?.studio
-  let tokensConfig
-  let tokensConfigSchema
-  if (hasPinceau) {
-    // @ts-expect-error Support for __pinceau_tokens_{schema|config}.json
-    tokensConfig = await $fetch.native(joinURL(app.baseURL, '/__pinceau_tokens_config.json')).then(r => r.json())
-    // @ts-expect-error Support for __pinceau_tokens_{schema|config}.json
-    tokensConfigSchema = await $fetch.native(joinURL(app.baseURL, '/__pinceau_tokens_schema.json')).then(r => r.json())
-  }
 
   return {
     // Studio version
@@ -66,9 +56,6 @@ export default eventHandler(async () => {
     // app.config
     appConfigSchema: appConfigSchema || {},
     appConfig,
-    // tokens.config
-    tokensConfigSchema,
-    tokensConfig,
     // @nuxt/content
     content: { sources: safeSources, ignores, locales, defaultLocale, highlight, navigation, documentDriven, experimental },
     // nuxt-component-meta
