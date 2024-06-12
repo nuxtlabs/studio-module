@@ -207,10 +207,6 @@ export const useStudio = () => {
           requestRerender()
           break
         }
-        case 'nuxt-studio:preview:sync': {
-          syncPreview(payload)
-          break
-        }
         case 'nuxt-studio:config:file-changed': {
           const { additions = [], deletions = [] } = payload as FileChangeMessagePayload
 
