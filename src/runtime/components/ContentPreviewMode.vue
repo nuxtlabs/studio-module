@@ -47,15 +47,14 @@ const closePreviewMode = async () => {
 }
 
 const sync = async (data: PreviewResponse) => {
-  const isUpdated = await props.syncPreview(data)
+  const storageReady = await props.syncPreview(data)
 
   if (previewReady.value === true) {
     // Preview already ready, no need to sync again
     return
   }
 
-  // If data is not updated, it means the storage is not ready yet and we should try again
-  if (!isUpdated) {
+  if (!storageReady) {
     setTimeout(() => sync(data), 1000)
     return
   }
@@ -70,7 +69,6 @@ const sync = async (data: PreviewResponse) => {
   // Remove query params in url to refresh page (in case of 404 with no SPA fallback)
   await router.replace({ query: {} })
 
-  // @ts-expect-error custom hook
   nuxtApp.callHook('nuxt-studio:preview:ready')
 
   if (window.parent && window.self !== window.parent) {

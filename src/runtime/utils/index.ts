@@ -1,9 +1,18 @@
+import { createDefu } from 'defu'
+
 export * from './files'
 
 export const StudioConfigFiles = {
   appConfig: 'app.config.ts',
   nuxtConfig: 'nuxt.config.ts',
 }
+
+export const defu = createDefu((obj, key, value) => {
+  if (Array.isArray(obj[key]) && Array.isArray(value)) {
+    obj[key] = value
+    return true
+  }
+})
 
 export const createSingleton = <T, Params extends Array<unknown>>(fn: () => T) => {
   let instance: T | undefined
