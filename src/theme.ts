@@ -3,144 +3,74 @@ import type { JSType, Schema, InputValue } from 'untyped'
 
 export type ConfigInputsTypes =
   | Exclude<JSType, 'symbol' | 'function' | 'any' | 'bigint'>
-  | 'default' | 'icon' | 'file' | 'media' | 'component' | 'design-token'
-
-export type DesignTokensInputsTypes = 'color' | 'size' | 'shadow' | 'size' | 'opacity' | 'font' | 'font-weight' | 'font-size' | 'letter-spacing'
+  | 'default' | 'icon' | 'file' | 'media' | 'component'
 
 export type PickerTypes = 'media-picker' | 'icon-picker'
 
-export type InputsTypes = DesignTokensInputsTypes | ConfigInputsTypes
-
 export type PartialSchema = Pick<Schema, 'title' | 'description' | 'default' | 'required'> & { [key: string]: unknown }
 
-const supportedFields: { [key in InputsTypes]: Schema } = {
+const supportedFields: { [key in ConfigInputsTypes]: Schema } = {
   /**
    * Raw types
    */
-  'default': {
+  default: {
     type: 'string',
     tags: [
       '@studioInput string',
     ],
   },
-  'string': {
+  string: {
     type: 'string',
     tags: [
       '@studioInput string',
     ],
   },
-  'number': {
+  number: {
     type: 'number',
     tags: [
       '@studioInput number',
     ],
   },
-  'boolean': {
+  boolean: {
     type: 'boolean',
     tags: [
       '@studioInput boolean',
     ],
   },
-  'array': {
+  array: {
     type: 'array',
     tags: [
       '@studioInput array',
     ],
   },
-  'design-token': {
-    type: 'string',
-    tags: [
-      '@studioInput design-token',
-    ],
-  },
-  'object': {
+  object: {
     type: 'object',
     tags: [
       '@studioInput object',
     ],
   },
-  'file': {
+  file: {
     type: 'string',
     tags: [
       '@studioInput file',
     ],
   },
-  'media': {
+  media: {
     type: 'string',
     tags: [
       '@studioInput media',
     ],
   },
-  'component': {
+  component: {
     type: 'string',
     tags: [
       '@studioInput component',
     ],
   },
-  'icon': {
+  icon: {
     type: 'string',
     tags: [
       '@studioInput icon',
-    ],
-  },
-
-  /**
-   * Design Tokens
-   */
-  'color': {
-    type: 'string',
-    tags: [
-      '@studioInput design-token',
-      '@studioInputTokenType color',
-    ],
-  },
-  'size': {
-    type: 'string',
-    tags: [
-      '@studioInput design-token',
-      '@studioInputTokenType size',
-    ],
-  },
-  'shadow': {
-    type: 'string',
-    tags: [
-      '@studioInput design-token',
-      '@studioInputTokenType shadow',
-    ],
-  },
-  'opacity': {
-    type: 'string',
-    tags: [
-      '@studioInput design-token',
-      '@studioInputTokenType opacity',
-    ],
-  },
-  'font': {
-    type: 'string',
-    tags: [
-      '@studioInput design-token',
-      '@studioInputTokenType font',
-    ],
-  },
-  'font-weight': {
-    type: 'string',
-    tags: [
-      '@studioInput design-token',
-      '@studioInputTokenType font-weight',
-    ],
-  },
-  'font-size': {
-    type: 'string',
-    tags: [
-      '@studioInput design-token',
-      '@studioInputTokenType size',
-    ],
-  },
-  'letter-spacing': {
-    type: 'string',
-    tags: [
-      '@studioInput design-token',
-      '@studioInputTokenType size',
     ],
   },
 }

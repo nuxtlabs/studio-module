@@ -144,7 +144,7 @@ onMounted(async () => {
 
   socket.on('draft:unauthorized', () => {
     clearSyncTimeout()
-    error.value = 'Unauthorized preview token'
+    error.value = 'Unauthorized preview'
     previewReady.value = false
   })
   socket.on('disconnect', () => {

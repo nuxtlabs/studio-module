@@ -29,12 +29,9 @@ export const useStudio = () => {
 
   // App config (required)
   const initialAppConfig = useDefaultAppConfig()
-  let initialTokensConfig: object
-
   const storage = useState<Storage | null>('studio-client-db', () => null)
 
   if (!storage.value) {
-    // @ts-expect-error custom hook
     nuxtApp.hook('content:storage', (_storage: Storage) => {
       storage.value = _storage
     })
@@ -81,33 +78,6 @@ export const useStudio = () => {
     }
   }
 
-  const syncPreviewTokensConfig = (tokensConfig?: ParsedContent) => {
-    // Tokens config (optional; depends on the presence of pinceauTheme provide)
-    // TODO: Improve typings
-    // TODO: Use `inject()` but wrong context seem to be resolved; while $pinceauTheme global property is present in `app` context
-    const themeSheet = nuxtApp?.vueApp?._context?.config?.globalProperties?.$pinceauTheme as Record<string, unknown>
-
-    // Pinceau might be not present, or not booted yet
-    if (!themeSheet || !themeSheet?.updateTheme) return
-
-    // Set initial tokens config on first call
-    if (!initialTokensConfig) {
-      initialTokensConfig = JSON.parse(JSON.stringify((themeSheet?.theme as Record<string, unknown>).value || {}))
-    }
-
-    // Call updateTheme with new config
-    callWithNuxt(
-      nuxtApp,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      themeSheet.updateTheme as any,
-      [
-        // Using `defu` to merge with initial tokens
-        // This is important to revert to default values for missing properties
-        defu(tokensConfig as ParsedContent, initialTokensConfig),
-      ],
-    )
-  }
-
   const syncPreview = async (data: PreviewResponse) => {
     // Preserve db files in case storage is not ready yet (see check below)
     dbFiles = data.files = data.files || dbFiles || []
@@ -117,20 +87,17 @@ export const useStudio = () => {
       return false
     }
 
-    // Empty dbFiles array once storage is ready
+    // Empty dbFiles array once storage is ready to clear memory
     dbFiles = []
 
     const mergedFiles = mergeDraft(data.files, data.additions, data.deletions)
 
     // Handle content files
-    const contentFiles = mergedFiles.filter(item => !([StudioConfigFiles.appConfig, StudioConfigFiles.nuxtConfig, StudioConfigFiles.tokensConfig].includes(item.path)))
+    const contentFiles = mergedFiles.filter(item => !([StudioConfigFiles.appConfig, StudioConfigFiles.nuxtConfig].includes(item.path)))
     await syncPreviewFiles(storage.value, contentFiles)
 
     const appConfig = mergedFiles.find(item => item.path === StudioConfigFiles.appConfig)
     syncPreviewAppConfig(appConfig?.parsed as ParsedContent)
-
-    const tokensConfig = mergedFiles.find(item => item.path === StudioConfigFiles.tokensConfig)
-    syncPreviewTokensConfig(tokensConfig?.parsed as ParsedContent)
 
     requestRerender()
 
@@ -211,7 +178,6 @@ export const useStudio = () => {
 
   const requestRerender = async () => {
     if (contentConfig?.documentDriven) {
-      // @ts-expect-error Update all cached pages
       const { pages } = callWithNuxt(nuxtApp, useContentState)
 
       const contents = await Promise.all(Object.keys(pages.value).map(async (key) => {
@@ -235,7 +201,6 @@ export const useStudio = () => {
 
     syncPreviewFiles,
     syncPreviewAppConfig,
-    syncPreviewTokensConfig,
     requestPreviewSynchronization,
 
     findContentWithId,
@@ -334,16 +299,6 @@ export const useStudio = () => {
           if (shouldRemoveAppConfig) {
             syncPreviewAppConfig(undefined)
           }
-
-          const tokensConfig = additions.find(item => item.path === StudioConfigFiles.tokensConfig)
-          if (tokensConfig) {
-            syncPreviewTokensConfig(tokensConfig?.parsed)
-          }
-          const shouldRemoveTokensConfig = deletions.find(item => item.path === StudioConfigFiles.tokensConfig)
-          if (shouldRemoveTokensConfig) {
-            syncPreviewTokensConfig(undefined)
-          }
-          break
         }
       }
     })
@@ -361,7 +316,6 @@ export const useStudio = () => {
       route.meta.studio_page_contentId = page?._id
     })
 
-    // @ts-expect-error custom hook
     nuxtApp.hook('nuxt-studio:preview:ready', () => {
       window.parent.postMessage({
         type: 'nuxt-studio:preview:ready',
