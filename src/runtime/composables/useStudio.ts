@@ -73,10 +73,10 @@ export const useStudio = () => {
     const mergedFiles = mergeDraft(data.files, data.additions, data.deletions)
 
     // Handle content files
-    const contentFiles = mergedFiles.filter(item => !([StudioConfigFiles.appConfig, StudioConfigFiles.nuxtConfig].includes(item.path)))
+    const contentFiles = mergedFiles.filter(item => !([StudioConfigFiles.appConfig, StudioConfigFiles.appConfigV4, StudioConfigFiles.nuxtConfig].includes(item.path)))
     await syncPreviewFiles(contentFiles)
 
-    const appConfig = mergedFiles.find(item => item.path === StudioConfigFiles.appConfig)
+    const appConfig = mergedFiles.find(item => [StudioConfigFiles.appConfig, StudioConfigFiles.appConfigV4].includes(item.path))
     syncPreviewAppConfig(appConfig?.parsed as ParsedContent)
 
     requestRerender()
@@ -210,11 +210,11 @@ export const useStudio = () => {
         case 'nuxt-studio:config:file-changed': {
           const { additions = [], deletions = [] } = payload as FileChangeMessagePayload
 
-          const appConfig = additions.find(item => item.path === StudioConfigFiles.appConfig)
+          const appConfig = additions.find(item => [StudioConfigFiles.appConfig, StudioConfigFiles.appConfigV4].includes(item.path))
           if (appConfig) {
             syncPreviewAppConfig(appConfig?.parsed)
           }
-          const shouldRemoveAppConfig = deletions.find(item => item.path === StudioConfigFiles.appConfig)
+          const shouldRemoveAppConfig = deletions.find(item => [StudioConfigFiles.appConfig, StudioConfigFiles.appConfigV4].includes(item.path))
           if (shouldRemoveAppConfig) {
             syncPreviewAppConfig(undefined)
           }
