@@ -4,6 +4,7 @@ export * from './files'
 
 export const StudioConfigFiles = {
   appConfig: 'app.config.ts',
+  appConfigV4: 'app/app.config.ts',
   nuxtConfig: 'nuxt.config.ts',
 }
 
