@@ -1,7 +1,7 @@
 {
   "name": "@nuxthq/studio",
   "description": "Nuxt Studio is a visual editor for content-driven Nuxt application with Markdown.",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "packageManager": "pnpm@9.3.0",
   "repository": {
     "type": "git",
