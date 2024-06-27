@@ -69,6 +69,7 @@ const sync = async (data: PreviewResponse) => {
   // Remove query params in url to refresh page (in case of 404 with no SPA fallback)
   await router.replace({ query: {} })
 
+  // @ts-expect-error custom hook => keep this for typecheck in project using the module
   nuxtApp.callHook('nuxt-studio:preview:ready')
 
   if (window.parent && window.self !== window.parent) {
