@@ -82,7 +82,7 @@ export default defineNuxtModule<ModuleOptions>({
     const apiURL = process.env.NUXT_PUBLIC_STUDIO_API_URL || process.env.STUDIO_API || 'https://api.nuxt.studio'
     const publicToken = process.env.NUXT_PUBLIC_STUDIO_TOKENS
     const iframeMessagingAllowedOrigins = process.env.IFRAME_MESSAGING_ALLOWED_ORIGINS
-    const gitInfo = nuxt.options.runtimeConfig.studio.gitInfo || await _getLocalGitInfo(nuxt.options.rootDir) || _getGitEnv() || {}
+    const gitInfo = nuxt.options.runtimeConfig.studio?.gitInfo || await _getLocalGitInfo(nuxt.options.rootDir) || _getGitEnv() || {}
     nuxt.options.runtimeConfig.studio = defu(nuxt.options.runtimeConfig.studio, {
       version,
       publicToken,
