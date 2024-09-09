@@ -14,7 +14,8 @@ export interface ModuleOptions {
    * Enable Studio mode
    * @default: 'production'
    */
-  enabled: 'production' | true
+  enabled: 'production' | true,
+  gitInfo: GitInfo | null,
 }
 
 export interface ModuleHooks {}
@@ -26,6 +27,7 @@ export default defineNuxtModule<ModuleOptions>({
   },
   defaults: {
     enabled: 'production',
+    gitInfo: null,
   },
   async setup(options, nuxt) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
