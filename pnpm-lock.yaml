@@ -15,8 +15,8 @@ importers:
         specifier: ^6.1.4
         version: 6.1.4
       git-url-parse:
-        specifier: ^14.0.0
-        version: 14.1.0
+        specifier: ^15.0.0
+        version: 15.0.0
       nuxt-component-meta:
         specifier: ^0.8.1
         version: 0.8.1(magicast@0.3.5)(rollup@4.21.2)
@@ -3030,9 +3030,6 @@ packages:
 
   git-url-parse@14.0.0:
     resolution: {integrity: sha512-NnLweV+2A4nCvn4U/m2AoYu0pPKlsmhK9cknG7IMwsjFY1S2jxM+mAhsDxyxfCIGfGaD+dozsyX4b6vkYc83yQ==}
-
-  git-url-parse@14.1.0:
-    resolution: {integrity: sha512-8xg65dTxGHST3+zGpycMMFZcoTzAdZ2dOtu4vmgIfkTFnVHBxHMzBC2L1k8To7EmrSiHesT8JgPLT91VKw1B5g==}
 
   git-url-parse@15.0.0:
     resolution: {integrity: sha512-5reeBufLi+i4QD3ZFftcJs9jC26aULFLBU23FeKM/b1rI0K6ofIeAblmDVO7Ht22zTDE9+CkJ3ZVb0CgJmz3UQ==}
@@ -9417,10 +9414,6 @@ snapshots:
       parse-url: 8.1.0
 
   git-url-parse@14.0.0:
-    dependencies:
-      git-up: 7.0.0
-
-  git-url-parse@14.1.0:
     dependencies:
       git-up: 7.0.0
 
