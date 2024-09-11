@@ -10,11 +10,11 @@ Official module of [Nuxt Studio](https://nuxt.studio).
 
 Edit your websites made with [Nuxt Content](https://content.nuxt.com/), in production on any device.
 
-📖&nbsp; Official [Documentation](https://nuxt.studio/docs/projects/setup#requirements-to-use-the-studio-editor)
+📖&nbsp; Official [Documentation](https://nuxt.studio/docs/get-started/setup)
 
 ## Features
 
-- 🚀&nbsp; Production [live preview](https://nuxt.studio/docs/studio/live-preview)
+- 🚀&nbsp; Production [live preview](https://nuxt.studio/docs/projects/preview)
 - ⌨️&nbsp; Edit your [content](https://nuxt.studio/docs/developers/content)
 - ⚙️&nbsp; Update your [configs](https://nuxt.studio/docs/developers/app-config)
 
