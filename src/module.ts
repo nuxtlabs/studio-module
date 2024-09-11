@@ -14,8 +14,8 @@ export interface ModuleOptions {
    * Enable Studio mode
    * @default: 'production'
    */
-  enabled: 'production' | true,
-  gitInfo: GitInfo | null,
+  enabled: 'production' | true
+  gitInfo: GitInfo | null
 }
 
 export interface ModuleHooks {}
