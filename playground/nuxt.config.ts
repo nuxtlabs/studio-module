@@ -4,9 +4,11 @@ import { defineNuxtConfig } from 'nuxt/config'
 export default defineNuxtConfig({
   extends: '@nuxt/ui-pro',
   modules: ['@nuxt/ui', '@nuxt/content', '../src/module', '@nuxt/image'],
+
   studio: {
     enabled: true,
   },
+
   hooks: {
     // Set all components to global
     'components:extend': () => {
@@ -28,4 +30,6 @@ export default defineNuxtConfig({
       )
     },
   },
+
+  compatibilityDate: '2024-09-11',
 })
