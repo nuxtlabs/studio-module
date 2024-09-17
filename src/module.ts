@@ -18,8 +18,6 @@ export interface ModuleOptions {
   gitInfo: GitInfo | null
 }
 
-export interface ModuleHooks {}
-
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: 'studio',
@@ -187,18 +185,18 @@ function _getGitEnv(): GitInfo {
   const envInfo = {
     // Provider
     provider: process.env.VERCEL_GIT_PROVIDER // vercel
-    || (process.env.GITHUB_SERVER_URL ? 'github' : undefined) // github
-    || '',
+      || (process.env.GITHUB_SERVER_URL ? 'github' : undefined) // github
+      || '',
     // Owner
     owner: process.env.VERCEL_GIT_REPO_OWNER // vercel
-    || process.env.GITHUB_REPOSITORY_OWNER // github
-    || process.env.CI_PROJECT_PATH?.split('/').shift() // gitlab
-    || '',
+      || process.env.GITHUB_REPOSITORY_OWNER // github
+      || process.env.CI_PROJECT_PATH?.split('/').shift() // gitlab
+      || '',
     // Name
     name: process.env.VERCEL_GIT_REPO_SLUG
-    || process.env.GITHUB_REPOSITORY?.split('/').pop() // github
-    || process.env.CI_PROJECT_PATH?.split('/').splice(1).join('/') // gitlab
-    || '',
+      || process.env.GITHUB_REPOSITORY?.split('/').pop() // github
+      || process.env.CI_PROJECT_PATH?.split('/').splice(1).join('/') // gitlab
+      || '',
     // Url
     url: process.env.REPOSITORY_URL || '', // netlify
   }
