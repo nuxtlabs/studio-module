@@ -53,25 +53,25 @@
     "git-url-parse": "^15.0.0",
     "nuxt-component-meta": "^0.8.2",
     "parse-git-config": "^3.0.0",
-    "pkg-types": "^1.2.0",
-    "socket.io-client": "^4.7.5",
+    "pkg-types": "^1.2.1",
+    "socket.io-client": "^4.8.0",
     "ufo": "^1.5.4",
-    "untyped": "^1.4.2"
+    "untyped": "^1.5.1"
   },
   "devDependencies": {
-    "@nuxt/content": "^2.13.2",
-    "@nuxt/eslint": "^0.5.7",
-    "@nuxt/image": "^1.8.0",
+    "@nuxt/content": "^2.13.4",
+    "@nuxt/eslint": "^0.6.0",
+    "@nuxt/image": "^1.8.1",
     "@nuxt/module-builder": "^0.8.4",
     "@nuxt/schema": "^3.13.2",
-    "@nuxt/ui-pro": "^1.4.2",
-    "@types/node": "^22.5.5",
-    "changelogen": "^0.5.5",
+    "@nuxt/ui-pro": "^1.4.4",
+    "@types/node": "^22.7.9",
+    "changelogen": "^0.5.7",
     "consola": "^3.2.3",
-    "eslint": "^9.10.0",
+    "eslint": "^9.13.0",
     "nuxt": "^3.13.2",
-    "release-it": "^17.6.0",
-    "typescript": "^5.6.2"
+    "release-it": "^17.10.0",
+    "typescript": "^5.6.3"
   },
   "release-it": {
     "git": {
