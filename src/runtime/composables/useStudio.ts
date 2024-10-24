@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import type { ParsedContent } from '@nuxt/content/dist/runtime/types'
+import type { ParsedContent } from '@nuxt/content'
 import type { RouteLocationNormalized } from 'vue-router'
 import type { AppConfig } from 'nuxt/schema'
 import ContentPreviewMode from '../components/ContentPreviewMode.vue'
@@ -180,15 +180,23 @@ export const useStudio = () => {
       switch (type) {
         case 'nuxt-studio:editor:file-selected': {
           const content = await findContentItem(payload.path)
-          if (!content) {
+          if (!content || content._partial) {
             // Do not navigate to another page if content is not found
             // This makes sure that user stays on the same page when navigation through directories in the editor
+            // Also, We should not navigate if content is a partial
+            return
           }
-          else if (content._partial || !String(payload.path).endsWith('.md')) {
-            // Partials and non-markdown files should use as helpers for other content files, like `_dir.yml`
-            // We should not navigate if content is a partial or non-markdown file
+
+          // Ensure that the content is related to a valid route for non markdown files
+          if (!String(payload.path).endsWith('.md')) {
+            const resolvedRoute = router.resolve(content._path)
+            if (!resolvedRoute || !resolvedRoute.matched || resolvedRoute.matched.length === 0) {
+              return
+            }
           }
-          else if (content._path !== useRoute().path) {
+
+          // Navigate to the selected content
+          if (content._path !== useRoute().path) {
             editorSelectedPath.value = content._path!
             router.push(content._path!)
           }
@@ -235,6 +243,7 @@ export const useStudio = () => {
       route.meta.studio_page_contentId = page?._id
     })
 
+    // @ts-expect-error custom hook
     nuxtApp.hook('nuxt-studio:preview:ready', () => {
       window.parent.postMessage({
         type: 'nuxt-studio:preview:ready',
