@@ -5,9 +5,7 @@ export default defineNuxtConfig({
   extends: '@nuxt/ui-pro',
   modules: ['@nuxt/ui', '@nuxt/content', '../src/module', '@nuxt/image'],
 
-  studio: {
-    enabled: true,
-  },
+  compatibilityDate: '2024-09-11',
 
   hooks: {
     // Set all components to global
@@ -31,5 +29,7 @@ export default defineNuxtConfig({
     },
   },
 
-  compatibilityDate: '2024-09-11',
+  studio: {
+    enabled: true,
+  },
 })
