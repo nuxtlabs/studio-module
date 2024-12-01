@@ -40,7 +40,7 @@ export default defineNuxtConfig({
 
 Check out our setup [requirements](https://nuxt.studio/docs/projects/setup#requirements-to-use-the-studio-editor). 
 
-By default the Studio API is `https://api.nuxt.studio`. If you want to customise it, you can set the `STUDIO_API` environement variable.
+By default the Studio API is `https://api.nuxt.studio`. If you want to customise it, you can set the `STUDIO_API` environment variable.
 
 ```bash
 # .env
