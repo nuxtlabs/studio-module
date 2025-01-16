@@ -6,6 +6,10 @@
 [![Codecov][codecov-src]][codecov-href]
 [![License][license-src]][license-href] -->
 
+> [!CAUTION]
+> This module is now deprecated as it has been integrated in [Nuxt Content](https://content.nuxt.com) version 3. Check the [documentation](https://content.nuxt.com/docs/studio/setup) for more info about how to enable Studio preview with Content v3.
+> You can still use it if you're using Nuxt Content v2 but we recommend moving to the v3.
+
 Official module of [Nuxt Studio](https://nuxt.studio).
 
 Edit your websites made with [Nuxt Content](https://content.nuxt.com/), in production on any device.
