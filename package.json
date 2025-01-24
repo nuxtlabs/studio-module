@@ -70,7 +70,7 @@
     "consola": "^3.2.3",
     "eslint": "^9.13.0",
     "nuxt": "^3.13.2",
-    "release-it": "^17.10.0",
+    "release-it": "^18.1.2",
     "typescript": "^5.6.3"
   },
   "release-it": {
