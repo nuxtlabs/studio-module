@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@nuxt/content": "^2.13.4",
-    "@nuxt/eslint": "^0.6.1",
+    "@nuxt/eslint": "^1.1.0",
     "@nuxt/image": "^1.8.1",
     "@nuxt/module-builder": "^0.8.4",
     "@nuxt/schema": "^3.13.2",
