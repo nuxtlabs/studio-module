@@ -56,7 +56,7 @@
     "pkg-types": "^1.2.1",
     "socket.io-client": "^4.8.1",
     "ufo": "^1.5.4",
-    "untyped": "^1.5.1"
+    "untyped": "^2.0.0"
   },
   "devDependencies": {
     "@nuxt/content": "^2.13.4",
